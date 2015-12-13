@@ -1,7 +1,8 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/12/2015                                                                 */
 /* Last modified on 12/12/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,9 +30,23 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("DB_SERVER", "localhost");
-define("DB_USER", "order_user");
-define("DB_PASS", "ka8*Q5(8Tku.hBs");
-define("DB_NAME", "orderings");
 
+echo "<h2>Attachments</h2>";
+$attachmentsDirectoryPath = ROOT . '/private/attachments/';
+if (is_dir($attachmentsDirectoryPath)) {
+    $attachmentsFileNames = scandir($attachmentsDirectoryPath);
+    for ($i = 0; $i < count($attachmentsFileNames); $i++) {
+        if ($attachmentsFileNames[$i] !== '..' &&
+                $attachmentsFileNames[$i] !== '.' &&
+                $attachmentsFileNames[$i] !== 'index.php' &&
+                $attachmentsFileNames[$i] !== 'archived') {
+            $encryptedFilePath = $Functions->encode($attachmentsFileNames[$i]);
+            echo "<div class='file'><a href='download.php/?file=$encryptedFilePath'>$attachmentsFileNames[$i]</a>"
+            . "&nbsp;&nbsp;&nbsp;"
+            . "<a class='button attachment-buttons' href='download.php/?file=$encryptedFilePath'><img src='images/download-icon.png'/></a>"
+            . "&nbsp;&nbsp;"
+            . "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a></div>";
+        }
+    }
+}
 ?>

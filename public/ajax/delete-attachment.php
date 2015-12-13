@@ -1,7 +1,8 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/12/2015                                                                 */
 /* Last modified on 12/12/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,9 +30,40 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("DB_SERVER", "localhost");
-define("DB_USER", "order_user");
-define("DB_PASS", "ka8*Q5(8Tku.hBs");
-define("DB_NAME", "orderings");
+include ('../../private/include/include.php');
+// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
+if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+    $filecode = str_replace(' ', '', filter_input(INPUT_GET, 'file'));
+    $filepath = PRIVATE_PATH . 'private/attachments/' . $Functions->decode($filecode);
+    $archivePath = dirname($filepath) . '/archived';
+    $filename = basename($filepath);
 
+    if (!is_dir($archivePath)) {
+        mkdir($archivePath, 0755, true);
+        copy(PRIVATE_PATH . 'private/attachments/index.php', $archivePath . '/index.php');
+    }
+
+    $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $fullFilename = $filenameWithoutExtension . '.' . $extension;
+
+    $i = 1;
+    while (file_exists($archivePath . '/' . $fullFilename)) {
+        $fullFilename = $filenameWithoutExtension . '_' . $i . '.' . $extension;
+        $i++;
+    }
+
+    if (rename($filepath, $archivePath . '/' . $fullFilename)) {
+        // Html response for ajax call
+        ob_start();
+        require(PRIVATE_PATH . 'private/require/item-details-popup-window-populate-attachments.php');
+        $attachmentsList = ob_get_clean();
+        echo $attachmentsList;
+    } else {
+        // Html response for ajax call
+        echo "error";
+    }
+} else {
+    $Functions->phpRedirect('');
+}
 ?>

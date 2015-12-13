@@ -1,43 +1,52 @@
 <?php
-/* ================================================================ */
-/* Created by Engin Yapici on 10/19/2015                            */
-/* Last modified by Engin Yapici on 10/19/2015                      */
-/* Copyright Engin Yapici, 2015.                                    */
-/* enginyapici@gmail.com                                            */
-/* ================================================================ */
+/* ===================================================================================== */
+/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Created on 10/19/2015                                                                 */
+/* Last modified on 12/12/2015                                                           */
+/* ===================================================================================== */
+
+/* ===================================================================================== */
+/* The MIT License                                                                       */
+/*                                                                                       */
+/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/*                                                                                       */
+/* Permission is hereby granted, free of charge, to any person obtaining a copy          */
+/* of this software and associated documentation files (the "Software"), to deal         */
+/* in the Software without restriction, including without limitation the rights          */
+/* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell             */
+/* copies of the Software, and to permit persons to whom the Software is                 */
+/* furnished to do so, subject to the following conditions:                              */
+/*                                                                                       */
+/* The above copyright notice and this permission notice shall be included in            */
+/* all copies or substantial portions of the Software.                                   */
+/*                                                                                       */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR            */
+/* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,              */
+/* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE           */
+/* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                */
+/* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,         */
+/* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
+/* THE SOFTWARE.                                                                         */
+/* ===================================================================================== */
 ?>
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/main.js"></script>
 <link href="css/main.css" rel="stylesheet">
-
-<style type="text/css">
 <?php
 /* Getting the current file's name without the extension and checking whether
- * there is a style file with the same name. If there is, it is included in that php file.
+ * there is are css and js files with the same name. If there are, they are included.
  */
-$name = basename($_SERVER["SCRIPT_FILENAME"], '.php');
-$generic_name = substr($name, strrpos($name, '-') + 1);
-$css_file_path = dirname(__FILE__) . "/css/" . $name . ".css";
-$css_file_path_generic = dirname(__FILE__) . "/css/" . $generic_name . ".css";
-if (file_exists($css_file_path)) {
-    require_once ($css_file_path);
+$name = basename(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME'), '.php');
+
+$cssFileName = "css/" . $name . ".css";
+$cssFilePath = PUBLIC_PATH . $cssFileName;
+if (file_exists($cssFilePath)) {
+    echo "<link href='$cssFileName' rel='stylesheet'/>";
 }
 
-if (file_exists($css_file_path_generic)) {
-    require_once ($css_file_path_generic);
-}
-?>
-</style>
-<?php
-/* Getting the current file's name without the extension and checking whether
- * there is a JS file with the same name. If there is, it is included in that php file.
- */
-$js_file_path = dirname(__FILE__) . "/js/" . $name . ".js";
-$js_file_path_generic = dirname(__FILE__) . "/js/" . $generic_name . ".js";
-if (file_exists($js_file_path)) {
-    echo "<script type='text/javascript' src='js/" . $name . ".js'></script>";
-}
-if (file_exists($js_file_path_generic)) {
-    echo "<script type='text/javascript' src='js/" . $generic_name . ".js'></script>";
+$jsFileName = "js/" . $name . ".js";
+$jsFilePath = PUBLIC_PATH . $jsFileName;
+if (file_exists($jsFilePath)) {
+    echo "<script type='text/javascript' src='$jsFileName'></script>";
 }
 ?>

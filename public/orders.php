@@ -1,14 +1,37 @@
 <?php
-/* ================================================================ */
-/* Created by Engin Yapici on 11/04/2014                            */
-/* Last modified by Engin Yapici on 10/26/2015                      */
-/* Copyright Engin Yapici, 2015.                                    */
-/* enginyapici@gmail.com                                            */
-/* ================================================================ */
+/* ===================================================================================== */
+/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Created on 10/19/2015                                                                 */
+/* Last modified on 12/12/2015                                                           */
+/* ===================================================================================== */
+
+/* ===================================================================================== */
+/* The MIT License                                                                       */
+/*                                                                                       */
+/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/*                                                                                       */
+/* Permission is hereby granted, free of charge, to any person obtaining a copy          */
+/* of this software and associated documentation files (the "Software"), to deal         */
+/* in the Software without restriction, including without limitation the rights          */
+/* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell             */
+/* copies of the Software, and to permit persons to whom the Software is                 */
+/* furnished to do so, subject to the following conditions:                              */
+/*                                                                                       */
+/* The above copyright notice and this permission notice shall be included in            */
+/* all copies or substantial portions of the Software.                                   */
+/*                                                                                       */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR            */
+/* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,              */
+/* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE           */
+/* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                */
+/* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,         */
+/* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
+/* THE SOFTWARE.                                                                         */
+/* ===================================================================================== */
+
 require_once('../private/include/include.php');
-$target = 'index.php';
-if (!is_session_valid()) {
-    header("Location: /$target");
+if (!$Session->isSessionValid()) {
+    $Functions->phpRedirect('');
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -23,9 +46,9 @@ if (!is_session_valid()) {
     <body>
         <div class="gray-out-div"></div>
         <img class="progress-circle" src="images/ajax-loader.gif"/>
-        <?php require_once ('../private/require/item-details-popup-window.php'); ?>
-        <?php require_once ('../private/require/add-new-item-popup-window.php'); ?>
-        <?php require_once ('../private/require/header.php'); ?>        
+        <?php require_once (PRIVATE_PATH . 'require/item-details-popup-window.php'); ?>
+        <?php require_once (PRIVATE_PATH . 'require/add-new-item-popup-window.php'); ?>
+        <?php require_once (PRIVATE_PATH . 'require/header.php'); ?>        
         <div id="orders-main-body-wrapper" class='noselect'>
             <span id='logout-button' title='Log Out' onclick=' logoutAction();'><img src='images/logout-button.png'></img></span>
             <span id='add-new-item-button' title='Add New Item' onclick='showAddNewItemPopupWindow();'><img src='images/plus-icon.png'></img></span>
@@ -45,23 +68,24 @@ if (!is_session_valid()) {
                 ?>onclick='searchAction("clear")'>Clear</a>
                 <a class="button search-button" onclick='searchAction("search")'><img src="images/search_icon.png"/></a>
             </div>
+            <div id="orders-error-div"></div>
             <table id="orders-table">
                 <thead>
                     <tr>
-                        <td>Order No</td>
-                        <td>Description</td>
-                        <td>Vendor</td>
-                        <td>Catalog No</td>
-                        <td>Price</td>
-                        <td>Status</td>
+                        <td onclick='sortByColumn($(this))'>Order No <a>&#9650;</a></td>
+                        <td onclick='sortByColumn($(this))'>Description <a>&#9650;</a></td>
+                        <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
+                        <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
+                        <td onclick='sortByColumn($(this))'>Price <a>&#9650;</a></td>
+                        <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>
                         <td>Attachments</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php require_once ('../private/require/orders-table-body-query.php'); ?>
+                    <?php require_once (PRIVATE_PATH . 'require/orders-table-body-query.php'); ?>
                 </tbody>
             </table>
-        </div>
+            <div id='pagination-holder-div'><?php echo $pagination; ?></div>
         </div>
     </body>
 </html>

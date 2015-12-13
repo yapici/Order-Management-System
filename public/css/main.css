@@ -25,6 +25,11 @@ body {
     background-repeat: repeat;
 }
 
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .gray-out-div {
     margin: 0;
     width: 100%;
@@ -47,11 +52,10 @@ input {
 
 h1 {
     background-color: #0093d0;
-    height: 40px;
-    line-height: 40px;
+    line-height: 1.6em;
     color: white;
     font-weight: bold;
-    font-size: 140%;
+    font-size: 1.6em;
     border-bottom: 2px solid #006DBD;
     -webkit-border-top-left-radius: 4px;
     -webkit-border-top-right-radius: 4px;
@@ -62,7 +66,7 @@ h1 {
 }
 
 h2 {
-    color: #006DBD;
+    color: #0093d0;
     font-weight: bold;
     font-size: 1.4em;
     margin: 20px auto;
@@ -70,7 +74,8 @@ h2 {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
@@ -86,7 +91,8 @@ input[type="password"] {
 
 input[type="text"]:focus,
 input[type="password"]:focus,
-input[type="search"]:focus {
+input[type="search"]:focus,
+input[type="number"]:focus {
     box-shadow: 0 0 5px #0093d0;
     border: 1px solid #0093d0;
 }

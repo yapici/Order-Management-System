@@ -15,21 +15,39 @@
     margin-top: 40px;
     width: 100%;
     border-spacing: 0px;
-    border: #cccccc solid 1px;
     text-align: left;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
 }
 
 #orders-table tr td {
     padding: 6px 10px 6px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 160px;
+    text-overflow: ellipsis;
+    cursor: pointer;
 }
 
 #orders-table thead tr td {
-    background-color: #333333;
+    background-color: #444444;
     padding-top: 8px;
     padding-bottom: 8px;
-    font-size: 1.1em;
+    font-size: 1.0em;
     font-weight: bold;
     color: #ffffff;
+    border-bottom: 2px solid #222222; 
+}
+
+#orders-table thead tr td a {
+    font-size: 0.8em;
+    color: #ffffff;
+    opacity: 0.5;
+}
+
+#orders-table thead tr td:hover > a {
+    opacity: 1.0;
 }
 
 #orders-table tbody tr:nth-child(even) > td {
@@ -131,8 +149,8 @@
 /* Generic Popup Window related items*/
 
 .popup-window {
+    position: fixed;
     display: none;
-    position: absolute;
     z-index: 99999;
     padding: 0px;
     margin-top: 15%;
@@ -151,6 +169,28 @@
     font-weight: normal;
 }
 
+.popup-window-cancel-button {
+    position: absolute;
+    float: right;
+    top: 0px;
+    line-height: 2.0em;
+    font-size: 1.2em;
+    right: 5px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 2px 5px 2px 5px;
+    color: #ffffff;
+    opacity: 0.7;
+    cursor: pointer;
+    z-index: 9;
+}
+
+.popup-window-cancel-button:hover {
+    opacity: 1.0;
+}
+
 .popup-window h1 {
     margin: 0;
     margin-bottom: 20px;
@@ -160,6 +200,7 @@
 
 #item-details-popup-window {
     width: 80%;
+    min-width: 800px;
     height: auto;
     margin-top: 40px;
 }
@@ -168,16 +209,22 @@
     width: 94%;
     margin: 0 auto;
     padding: 0;
+    text-align: left;
 }
 
 #item-details-popup-window .top-panel tr td {
+    vertical-align: top;
     padding: 0px;
 }
 
 #item-details-popup-window .top-panel .left-panel,
 #item-details-popup-window .top-panel .right-panel {
-    width: 50%;
     text-align: left;
+}
+
+
+#item-details-popup-window .top-panel .right-panel {
+    padding-left: 40px;
 }
 
 
@@ -198,6 +245,13 @@
     font-weight: bold;
     padding-right: 10px;
     color: #1C4D6F;
+    white-space: nowrap;
+}
+
+#item-details-popup-window .top-panel .left-panel tr td:last-child,
+#item-details-popup-window .top-panel .right-panel tr td:last-child {
+    max-width: 400px;
+    word-wrap: break-word;
 }
 
 #item-details-popup-window .bottom-panel {
@@ -235,9 +289,16 @@
     padding: 10px 0px;
 }
 
-.delete-button {
-    padding: 3px 6px;
-    font-size: 0.8em;
+.attachment-buttons { 
+    padding: 5px 6px;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+}
+
+.attachment-buttons img {
+    width: 0.8em;
+    height: 0.8em;
 }
 
 /* Add New Item */
@@ -292,6 +353,43 @@
 #add-new-item-popup-window .top-panel .add-new-item-input-holder-td input,
 #add-new-item-popup-window .top-panel .add-new-item-input-holder-td select {
     width: 100%;
+}
+
+/* Pagination Items */
+
+#pagination-holder-div {
+    margin-top: 10px;
+}
+
+.gray-out-button {
+    font-size: 0.9em;
+    width: auto;
+    line-height: 1.3em;
+    height: 1.3em;
+    padding: 2px 4px;
+    margin-right: 2px;
+    cursor: default;
+    background: #dddddd;
+    border-bottom: 2px solid #bbbbbb; 
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+
+.gray-out-button:hover {
+    background: #dddddd;
+    border-bottom: 2px solid #bbbbbb; 
+}
+
+.page-button {
+    font-size: 0.9em;
+    line-height: 1.3em;
+    height: 1.3em;
+    padding: 2px 4px;
+    margin-right: 2px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
 }
 
 /* Misc */

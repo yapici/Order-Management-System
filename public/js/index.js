@@ -72,18 +72,21 @@ function loginUser() {
             url: "ajax/login-action.php",
             type: "POST",
             data: "email=" + email +
-                    "&password=" + password +
-                    "&session_expired_login=no",
+                    "&password=" + password,
             cache: false,
             dataType: "html",
             success: function(html_response) {
                 if (html_response.trim() === "success") {
-                    window.location = "/orders.php";
+                    window.location = "/orders";
                 } else if (html_response.trim() === "invalid_info"
                         || html_response.trim() === "wrong_combination") {
-                    error_div.html("Information you entered does not match with our records.");
+                    error_div.html("Information you entered does not match with our records");
+                } else if (html_response.trim() === "invalid_domain_name") {
+                    error_div.html("Please use your 'example' email");
+                } else if (html_response.trim() === "invalid_email_address") {
+                    error_div.html("Please enter a valid email address");
                 } else if (html_response.trim() === "no_activation") {
-                    window.location = "/activation.php";
+                    window.location = "/activation";
                 } else {
                     error_div.html(html_response);
                 }

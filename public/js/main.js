@@ -1,6 +1,6 @@
 var SERVER_FAIL_RESPONSE = 'Something went wrong with the server, please try again.';
 
-(document).ready(function() {
+$(function(){
     $('[placeholder]').focus(function() {
         var input = $(this);
         if (input.val() === input.attr('placeholder')) {
@@ -17,36 +17,6 @@ var SERVER_FAIL_RESPONSE = 'Something went wrong with the server, please try aga
             input.css('color', '#1C4D6F');
         }
     }).blur();
-
-    $('input').on('input', function() {
-        $(this).css('color', '#1C4D6F');
-    });
-
-    $(document).unbind('keydown').bind('keydown', function(event) {
-        var doPrevent = false;
-        if (event.keyCode === 8) {
-            var d = event.srcElement || event.target;
-            if ((d.tagName.toUpperCase() === 'INPUT' &&
-                    (
-                            d.type.toUpperCase() === 'TEXT' ||
-                            d.type.toUpperCase() === 'PASSWORD' ||
-                            d.type.toUpperCase() === 'FILE' ||
-                            d.type.toUpperCase() === 'EMAIL' ||
-                            d.type.toUpperCase() === 'SEARCH' ||
-                            d.type.toUpperCase() === 'DATE')
-                    ) ||
-                    d.tagName.toUpperCase() === 'TEXTAREA') {
-                doPrevent = d.readOnly || d.disabled;
-            }
-            else {
-                doPrevent = true;
-            }
-        }
-
-        if (doPrevent) {
-            event.preventDefault();
-        }
-    });
 });
 
 function logoutAction() {
@@ -63,7 +33,7 @@ function logoutAction() {
         dataType: "html",
         success: function(html_response) {
             if (html_response.trim() === 'success') {
-                window.location = "/index.php";
+                window.location = "";
             } else {
                 error_div.html('Something went wrong. Please try again.');
             }
@@ -75,31 +45,31 @@ function logoutAction() {
 
 function blockUI() {
     var block_ui_div = $(".gray-out-div");
-    block_ui_div[0].style.visibility = "visible";
+    block_ui_div.css('visibility', 'visible');
 }
 
 function unblockUI() {
     var block_ui_div = $(".gray-out-div");
-    block_ui_div[0].style.visibility = "hidden";
+    block_ui_div.css('visibility', 'hidden');
 }
 
 function showProgressCircle() {
     var progress_circle = $(".progress-circle");
     progress_circle.show();
-    progress_circle[0].style.opacity = 1;
+    progress_circle.css('opacity', 1.0);
     progress_circle.css('z-index', '9999');
 }
 
 function hideProgressCircle() {
     var progress_circle = $(".progress-circle");
-    progress_circle[0].style.opacity = 0;
+    progress_circle.css('opacity', 0.0);
     setTimeout(progress_circle.hide(), 500);
     progress_circle.css('z-index', '9');
 }
 
-// Replace characters in strings
-function replaceAll(find, replace, str) {
-    return str.replace(new RegExp(find, 'g'), replace);
+function hidePopupWindows() {
+    $(".popup-window").fadeOut();
+    unblockUI();
 }
 
 function isValidEmailAddress(emailAddress) {

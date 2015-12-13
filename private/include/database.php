@@ -1,19 +1,42 @@
 <?php
-/* ================================================================ */
-/* Created by Engin Yapici on 10/19/2015                            */
-/* Last modified by Engin Yapici on 10/19/2015                      */
-/* Copyright Engin Yapici, 2015.                                    */
-/* enginyapici@gmail.com                                            */
-/* ================================================================ */
+/* ===================================================================================== */
+/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Created on 10/19/2015                                                                 */
+/* Last modified on 12/12/2015                                                           */
+/* ===================================================================================== */
 
-$db_server = DB_SERVER;
-$db_name = DB_NAME;
-$db_user = DB_USER;
-$db_pass = DB_PASS;
+/* ===================================================================================== */
+/* The MIT License                                                                       */
+/*                                                                                       */
+/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/*                                                                                       */
+/* Permission is hereby granted, free of charge, to any person obtaining a copy          */
+/* of this software and associated documentation files (the "Software"), to deal         */
+/* in the Software without restriction, including without limitation the rights          */
+/* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell             */
+/* copies of the Software, and to permit persons to whom the Software is                 */
+/* furnished to do so, subject to the following conditions:                              */
+/*                                                                                       */
+/* The above copyright notice and this permission notice shall be included in            */
+/* all copies or substantial portions of the Software.                                   */
+/*                                                                                       */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR            */
+/* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,              */
+/* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE           */
+/* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                */
+/* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,         */
+/* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
+/* THE SOFTWARE.                                                                         */
+/* ===================================================================================== */
+
+$dbServer = DB_SERVER;
+$dbName = DB_NAME;
+$dbUser = DB_USER;
+$dbPass = DB_PASS;
 
 try {
-    $db = new PDO("mysql:host=$db_server;dbname=$db_name", $db_user, $db_pass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $Database = new PDO("mysql:host=$dbServer;dbname=$dbName", $dbUser, $dbPass);
+    $Database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo $e->getMessage();
 }

@@ -1,5 +1,9 @@
-(document).ready(function() {
-
+$(function(){
+    $("#orders-search-input").keyup(function (event) {
+        if (event.keyCode === 13) {
+            searchAction('search');
+        }
+    });
 });
 
 function hidePopupWindow() {
@@ -18,14 +22,12 @@ function showItemDetailsPopupWindow(
         costCenter,
         accountNo,
         comments,
-        requestedByUserId,
+        requestedByUsername,
         requestedDate,
-        lastUpdatedByUserId,
+        lastUpdatedByUsername,
         lastUpdatedDate,
         status) {
     blockUI();
-
-    populateUsernamesInItemDetailsPopupWindow(requestedByUserId, lastUpdatedByUserId);
 
     $("#popup-item-order-number").html("Order " + orderNo);
     $("#popup-item-description").html(description);
@@ -39,28 +41,10 @@ function showItemDetailsPopupWindow(
     $("#popup-item-comments").html(comments);
     $("#popup-item-last-updated-date").html("on " + lastUpdatedDate);
     $("#popup-item-requested-date").html("on " + requestedDate);
+    $('#popup-item-requested-by').html(requestedByUsername);
+    $("#popup-item-last-updated-by").html(lastUpdatedByUsername);
 
     $("#item-details-popup-window").fadeIn();
-}
-
-function populateUsernamesInItemDetailsPopupWindow(requestedByUserId, lastUpdatedByUserId) {
-    showProgressCircle();
-    $.ajax({
-        url: "ajax/get-usernames.php",
-        type: "GET",
-        data: "requestedByUserId=" + requestedByUserId
-                + "&lastUpdatedByUserId=" + lastUpdatedByUserId,
-        cache: false,
-        dataType: "html",
-        success: function(html_response) {
-            if (html_response !== 'fail') {
-                var usernames = html_response.split(',');
-                $('#popup-item-requested-by').html(usernames[0]);
-                $("#popup-item-last-updated-by").html(usernames[1]);
-            }
-            hideProgressCircle();
-        }
-    });
 }
 
 function showAddNewItemPopupWindow() {
@@ -108,17 +92,141 @@ function addNewItem() {
                     "&comments=" + comments,
             cache: false,
             dataType: "json",
-            success: function(json_data) {
+            success: function (json_data) {
                 if (json_data.status === 'success') {
                     $('#orders-table tbody').html(json_data.html_tbody);
                     unblockUI();
                     add_new_item_popup_window.fadeOut();
                 } else {
                     error_div.html(json_data.status);
-                    add_new_item_popup_window.css('z-index', '9999');
                 }
+                    add_new_item_popup_window.css('z-index', '9999');
                 hideProgressCircle();
             }
         });
     }
+}
+
+function deleteAttachment(filepath) {
+    var error_div = $("#item-details-popup-window-error-div");
+    showProgressCircle();
+    $.ajax({
+        url: "ajax/delete-attachment.php",
+        type: "GET",
+        data: "file=" + filepath,
+        cache: false,
+        dataType: "html",
+        success: function (html_response) {
+            if (html_response !== 'error') {
+                $("#attachments-holder").html(html_response);
+            } else {
+                error_div.html("Something went wrong, please try again later.");
+            }
+            hideProgressCircle();
+        }
+    });
+}
+
+function sortByColumn(element) {
+    var error_div = $('#orders-error-div');
+    var column = element.html().substring(0, 3);
+    showProgressCircle();
+    blockUI();
+    $.ajax({
+        url: "ajax/update-table-with-sort.php",
+        type: "GET",
+        data: "column=" + column,
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+                $('#orders-table tbody').html(json_data.html_tbody);
+                $("#pagination-holder-div").html(json_data.html_pagination);
+
+                $('#orders-table thead tr td a').html('&#9650;');
+                $('#orders-table thead tr td a').css('opacity', '0.5');
+
+                var up_or_down = json_data.up_or_down;
+
+                if (up_or_down === 'up') {
+                    element.find('a').html('&#9660;');
+                } else {
+                    element.find('a').html('&#9650;');
+                }
+                element.find('a').css('opacity', '1');
+                unblockUI();
+            } else if (json_data.status === "no_session") {
+                //showLoginPopupWindow();
+            } else {
+                error_div.html("Something went wrong, please try again later.");
+                unblockUI();
+            }
+            hideProgressCircle();
+        }
+    });
+}
+
+function searchAction(action) {
+    var error_div = $('#orders-error-div');
+    var keywords;
+    if (action === 'search') {
+        keywords = $('#orders-search-input').val();
+    } else {
+        keywords = "";
+    }
+    showProgressCircle();
+    blockUI();
+    $.ajax({
+        url: "ajax/update-table-with-search.php",
+        type: "GET",
+        data: "search_keywords=" + keywords,
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+                $('#orders-table tbody').html(json_data.html_tbody);
+                $("#pagination-holder-div").html(json_data.html_pagination);
+
+                if (action === 'search' && keywords !== "") {
+                    $('#orders-search-cancel-button').show();
+                } else {
+                    $('#orders-search-cancel-button').hide();
+                    $('#orders-search-input').val('');
+                }
+                unblockUI();
+            } else if (json_data.status === "no_session") {
+                //showLoginPopupWindow();
+            } else {
+                error_div.html("Something went wrong, please try again later.");
+                unblockUI();
+            }
+            hideProgressCircle();
+        }
+    });
+}
+
+function goToPage(page_number) {
+    var error_div = $('#orders-error-div');
+    showProgressCircle();
+    blockUI();
+    $.ajax({
+        url: "ajax/update-table-with-page-number.php",
+        type: "GET",
+        data: "page_number=" + page_number,
+        cache: false,
+        dataType: "json",
+        success: function(json_data) {
+            if (json_data.status === 'success') {
+                $('#orders-table tbody').html(json_data.html_tbody);
+                $("#pagination-holder-div").html(json_data.html_pagination);
+                unblockUI();
+            } else if (json_data.status === "no_session") {
+                //showLoginPopupWindow();
+            } else {
+                error_div.html("Something went wrong, please try again later.");
+                unblockUI();
+            }
+            hideProgressCircle();
+        }
+    });
 }
