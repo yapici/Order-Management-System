@@ -38,8 +38,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $jsonResponse['status'] = "no_session";
     } else {
         $orderId = filter_input(INPUT_GET, 'order_id');
-        require(PRIVATE_PATH . 'require/populate-attachments-echo-script.php');
-        $jsonResponse['html_response'] = $htmlResponse;
+        $jsonResponse['html_response'] = $Functions->includeAttachments($orderId);
     }
     echo json_encode($jsonResponse);
 } else {

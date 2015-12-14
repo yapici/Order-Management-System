@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -33,7 +33,7 @@ define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
 define("PRIVATE_PATH", ROOT . "/private/");
 define("PUBLIC_PATH", ROOT . "/public/");
 
-require_once(PRIVATE_PATH . "/include/constants.php");
+require_once(PRIVATE_PATH . "/include/constants.class.php");
 require_once(PRIVATE_PATH . "/include/passwords.php");
 require_once(PRIVATE_PATH . "/include/database.php");
 require_once(PRIVATE_PATH . "/include/functions.class.php");

@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -45,11 +45,14 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
     <?php
     if ($isAdmin) {
         echo "<div id='item-details-popup-window-edit-icon-wrapper'>";
-        echo "<a id='item-details-popup-window-edit-icon' onclick='toggleItemDetailsPopupInputFields(\"show\")' title='Edit Order Details'>";
+        echo "<a class='item-details-popup-window-icons' id='item-details-popup-window-edit-icon' onclick='toggleItemDetailsPopupInputFields(\"show\");' title='Edit Order Details'>";
         echo "<img src='images/edit-icon.png'/>";
         echo "</a>";
-        echo "<a id='item-details-popup-window-save-icon' onclick='toggleItemDetailsPopupInputFields(\"hide\")' title='Save Changes'>";
+        echo "<a class='item-details-popup-window-icons' id='item-details-popup-window-save-icon' onclick='toggleItemDetailsPopupInputFields(\"hide\");' title='Save Changes'>";
         echo "<img src='images/tick-icon.png'/>";
+        echo "</a>";
+        echo "<a class='item-details-popup-window-icons' id='item-details-popup-window-cancel-icon' onclick='hideEditFields();' title='Discard Changes'>";
+        echo "<img src='images/cancel-icon.png'/>";
         echo "</a>";
         echo "</div>";
     }
@@ -98,7 +101,7 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                         <td>Price:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-price"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-price" type="number"/>'; ?>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-price" type="number" step="any"/>'; ?>
                         </td>
                     </tr>                  
                 </table>
@@ -112,6 +115,7 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                             <?php
                             if ($isAdmin) {
                                 echo '<select id="item-details-popup-window-cost-center">';
+                                echo '<option></option>';
                                 echo '<option>1234ZYZ</option>';
                                 echo '<option>9876ABCD</option>';
                                 echo '</select>';
@@ -126,6 +130,7 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                             <?php
                             if ($isAdmin) {
                                 echo '<select id="item-details-popup-window-project-name">';
+                                echo '<option></option>';
                                 echo '<option>Project 1</option>';
                                 echo '<option>Project 2</option>';
                                 echo '</select>';
@@ -140,6 +145,7 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                             <?php
                             if ($isAdmin) {
                                 echo '<select id="item-details-popup-window-project-no">';
+                                echo '<option></option>';
                                 echo '<option>1234ZYZ</option>';
                                 echo '<option>9876ABCD</option>';
                                 echo '</select>';
@@ -154,6 +160,7 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                             <?php
                             if ($isAdmin) {
                                 echo '<select id="item-details-popup-window-account-no">';
+                                echo '<option></option>';
                                 echo '<option>ABCD12345XYZ</option>';
                                 echo '<option>XYZ12345ABCD</option>';
                                 echo '</select>';
@@ -189,13 +196,13 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
     <div class="bottom-panel">
         <table>
             <tr>
-                <td>Status:</td><td id="popup-item-status">Ordered</td>
+                <td>Status:</td><td id="popup-item-status"></td>
             </tr>
             <tr>
                 <td>Last Updated By:</td>
                 <td>
-                    <span id="popup-item-last-updated-by">Steve Ennis</span>
-                    <span id="popup-item-last-updated-date">on 22-Oct-2015 14:43 (GMT -05:00)</span>
+                    <span id="popup-item-last-updated-by"></span>
+                    <span id="popup-item-last-updated-date"></span>
                 </td>
             </tr>
         </table>

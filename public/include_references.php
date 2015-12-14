@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,7 +30,9 @@
 /* ===================================================================================== */
 ?>
 <script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery-ui-1.11.4.min.js"></script>
 <script src="js/main.js"></script>
+<link href="css/jquery-ui-1.11.4.min.css" rel="stylesheet">
 <link href="css/main.css" rel="stylesheet">
 <?php
 /* Getting the current file's name without the extension and checking whether

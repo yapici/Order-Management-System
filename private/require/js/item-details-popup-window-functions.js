@@ -32,6 +32,7 @@ function toggleItemDetailsPopupInputFields(showHide) {
 
         $("#item-details-popup-window-edit-icon").fadeOut();
         $("#item-details-popup-window-save-icon").fadeIn();
+        $("#item-details-popup-window-cancel-icon").fadeIn();
     } else if (showHide === "hide") {
         hideEditFields();
         updateOrderDetails();
@@ -47,6 +48,7 @@ function hideEditFields() {
 
     $("#item-details-popup-window-edit-icon").fadeIn();
     $("#item-details-popup-window-save-icon").fadeOut();
+    $("#item-details-popup-window-cancel-icon").fadeOut();
 }
 
 function updateOrderDetails() {
@@ -110,5 +112,4 @@ function updateOrderDetails() {
             hideProgressCircle();
         }
     });
-
 }

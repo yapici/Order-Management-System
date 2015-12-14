@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -66,19 +66,20 @@
         <tr>
             <td>Price (USD)<span class="red-font"> *</span></td>
             <td class="add-new-item-input-holder-td">
-                <input id="add-new-item-price" type="number"/>
+                <input id="add-new-item-price" type="number" step="any"/>
             </td>
         </tr> 
         <tr>
             <td>Date Needed<span class="red-font"> *</span></td>
             <td class="add-new-item-input-holder-td">
-                <input class="datepicker" id="add-new-item-date-needed" type="date"/>
+                <input class="datepicker" id="add-new-item-date-needed" type="text" readonly />
             </td>
         </tr>    
         <tr>
             <td>Cost Center</td>
             <td class="add-new-item-input-holder-td">
                 <select id="add-new-item-cost-center">
+                    <option></option>
                     <option>1234ZYZ</option>
                     <option>9876ABCD</option>
                 </select>
@@ -87,7 +88,8 @@
         <tr>
             <td>Project Name</td>
             <td class="add-new-item-input-holder-td">
-                <select id="add-new-item-cost-center">
+                <select id="add-new-item-project-name">
+                    <option></option>
                     <option>Project 1</option>
                     <option>Project 2</option>
                 </select>
@@ -96,16 +98,21 @@
         <tr>
             <td>Project No</td>
             <td class="add-new-item-input-holder-td">
-                <select id="add-new-item-cost-center">
-                    <option>ABCD12345XYZ</option>
-                    <option>XYZ12345ABCD</option>
+                <select id="add-new-item-project-no">
+                    <option></option>
+                    <option>1234ZYZ</option>
+                    <option>9876ABCD</option>
                 </select>
             </td>
         </tr>  
         <tr>
             <td>Account Number</td>
             <td class="add-new-item-input-holder-td">
-                <input id="add-new-item-account-no" type="text"/>
+                <select id="add-new-item-account-no">
+                    <option></option>
+                    <option>ABCD12345XYZ</option>
+                    <option>XYZ12345ABCD</option>
+                </select>
             </td>
         </tr>  
         <tr>
@@ -119,15 +126,16 @@
     <div class="bottom-panel">
         <div>
             <h2>Attachments</h2>
-            Select a file to upload:
-            <input type="file" name="file-to-upload" id="file-to-upload"/>
-            <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+            <div id="add-new-item-popup-window-file-upload-elements-wrapper">
+                Select a file to upload:
+                <input type="file" name="file-to-upload" id="file-to-upload"/>
+                <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+            </div>
             <div id="add-new-item-attachments-holder">
                 <?php
                 if (isset($_SESSION['temp-file-upload-directory'])) {
                     $orderId = $_SESSION['temp-file-upload-directory'];
-                    require(PRIVATE_PATH . 'require/populate-attachments-echo-script.php');
-                    echo $htmlResponse;
+                    echo $Functions->includeAttachments($orderId, true);
                 }
                 ?>
             </div>

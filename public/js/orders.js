@@ -89,6 +89,10 @@ function showItemDetailsPopupWindow(
 function showAddNewItemPopupWindow() {
     blockUI();
     $("#add-new-item-popup-window").fadeIn();
+
+    if (msieversion() < 10 && msieversion()) {
+        $("#add-new-item-popup-window-file-upload-elements-wrapper").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
+    }
 }
 
 function addNewItem() {
@@ -104,17 +108,22 @@ function addNewItem() {
     var project_no = $("#add-new-item-project-no").val();
     var account_no = $("#add-new-item-account-no").val();
     var comments = $("#add-new-item-comments").val();
+    var date_needed = $("#add-new-item-date-needed").val();
     var error_div = $('#add-new-item-error-div');
     error_div.html("");
     error_div.html('&nbsp;');
-    error_div.css('color', '#cc0000');
     if (description === ''
             || quantity === ''
             || uom === ''
             || vendor === ''
             || catalog_no === ''
-            || price === '') {
+            || price === ''
+            || date_needed === '') {
         error_div.html("Please fill all the mandatory fields");
+    } else if (!$.isNumeric(quantity)) {
+        error_div.html('Please enter only numberic values for the quantity.');
+    } else if (!$.isNumeric(price)) {
+        error_div.html('Please enter only numberic values for the price.');
     } else {
         add_new_item_popup_window.css('z-index', '9');
         showProgressCircle();
@@ -132,6 +141,7 @@ function addNewItem() {
                     "&project_name=" + project_name +
                     "&project_no=" + project_no +
                     "&account_no=" + account_no +
+                    "&date_needed=" + date_needed +
                     "&comments=" + comments,
             cache: false,
             dataType: "json",
@@ -160,6 +170,7 @@ function deleteAttachment(filepath) {
         cache: false,
         dataType: "html",
         success: function (html_response) {
+            alert(html_response);
             if (html_response !== 'error') {
                 if ($("#add-new-item-popup-window").is(":visible")) {
                     $("#add-new-item-attachments-holder").html(html_response);
@@ -291,7 +302,7 @@ function datepickerFunctions() {
     $(function () {
         $(document).on('focus', '.datepicker', function () {
             $(this).datepicker({
-                dateFormat: 'd-M-y',
+                dateFormat: 'mm-dd-yy',
                 onSelect: function (dateText) {
                     var input = $(this);
                     input.css('color', '#1C4D6F');
@@ -321,4 +332,15 @@ function uploadFile() {
             }
         }
     });
+}
+
+function msieversion() {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0) {      // If Internet Explorer, return version number
+        return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+    } else {
+        return false;
+    }
 }

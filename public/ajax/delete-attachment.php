@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -35,32 +35,36 @@ include ('../../private/include/include.php');
 if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     $filecode = str_replace(' ', '', filter_input(INPUT_GET, 'file'));
     $filepath = PRIVATE_PATH . 'attachments/' . $Functions->decode($filecode);
-    $archivePath = dirname($filepath) . '/archived';
-    $filename = basename($filepath);
+    $orderId = substr(dirname($filepath), strrpos(dirname($filepath), '/') + 1);
 
-    if (!is_dir($archivePath)) {
-        mkdir($archivePath, 0755, true);
-        copy(PRIVATE_PATH . 'attachments/index.php', $archivePath . '/index.php');
-    }
-
-    $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
-    $extension = pathinfo($filename, PATHINFO_EXTENSION);
-    $fullFilename = $filenameWithoutExtension . '.' . $extension;
-
-    $i = 1;
-    while (file_exists($archivePath . '/' . $fullFilename)) {
-        $fullFilename = $filenameWithoutExtension . '_' . $i . '.' . $extension;
-        $i++;
-    }
-
-    if (rename($filepath, $archivePath . '/' . $fullFilename)) {
-        // Html response for ajax call
-        $orderId = substr(dirname($filepath), strrpos(dirname($filepath), '/') + 1);
-        require(PRIVATE_PATH . 'require/populate-attachments-echo-script.php');
-        echo $htmlResponse;
+    if (isset($_SESSION['temp-file-upload-directory']) && $orderId != $_SESSION['temp-file-upload-directory'] && $_SESSION['user_type'] == '0') {
+        echo 'get_out_of_here';
     } else {
-        // Html response for ajax call
-        echo "error";
+        $archivePath = dirname($filepath) . '/archived';
+        $filename = basename($filepath);
+
+        if (!is_dir($archivePath)) {
+            mkdir($archivePath, 0755, true);
+            copy(PRIVATE_PATH . 'attachments/index.php', $archivePath . '/index.php');
+        }
+
+        $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $fullFilename = $filenameWithoutExtension . '.' . $extension;
+
+        $i = 1;
+        while (file_exists($archivePath . '/' . $fullFilename)) {
+            $fullFilename = $filenameWithoutExtension . '_' . $i . '.' . $extension;
+            $i++;
+        }
+
+        if (rename($filepath, $archivePath . '/' . $fullFilename)) {
+            // Html response for ajax call
+            echo $Functions->includeAttachments($orderId);
+        } else {
+            // Html response for ajax call
+            echo "error";
+        }
     }
 } else {
     $Functions->phpRedirect('');

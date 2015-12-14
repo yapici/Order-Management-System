@@ -6,14 +6,14 @@ $(document).ready(function() {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
         }
 
-        if (currentValue.indexOf('@example.com') < 0 && currentValue !== "TPI E-mail Address") {
+        if (currentValue.indexOf('@example.com') < 0 && currentValue !== "Example E-mail Address") {
             $(this).val(currentValue + "@example.com");
             wasTrailingTextAdded = true;
         }
         if (!wasTrailingTextAdded) {
             $(this)[0].setSelectionRange(0, 0);
         }
-        if (currentValue === "@example.com" || currentValue === "" || currentValue === "TPI E-mail Address") {
+        if (currentValue === "@example.com" || currentValue === "" || currentValue === "Example E-mail Address") {
             $(this).val('@example.com');
             $(this)[0].setSelectionRange(0, 0);
         }
@@ -24,15 +24,15 @@ $(document).ready(function() {
         error_div.html('&nbsp;');
         var currentValue = $(this).val();
         var trimmedValue = currentValue.substring(0, currentValue.indexOf('@'));
-        if (currentValue.indexOf('@') < 0 && currentValue !== "TPI E-mail Address" && currentValue !== "") {
+        if (currentValue.indexOf('@') < 0 && currentValue !== "Example E-mail Address" && currentValue !== "") {
             $(this).val(currentValue + "@example.com");
-            $(this).css('color', '#000000');
+            $(this).css('color', '#1C4D6F');
         } else if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
             $(this).val(currentValue + "@example.com");
-            $(this).css('color', '#000000');
+            $(this).css('color', '#1C4D6F');
         } else if (currentValue.indexOf('@example.com') !== 0 && trimmedValue !== "") {
-            $(this).css('color', '#000000');
+            $(this).css('color', '#1C4D6F');
         }
 
         if ($(this).val() === "@example.com") {

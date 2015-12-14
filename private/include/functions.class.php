@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -200,6 +200,37 @@ class Functions {
             $sanitizedArray[$key] = htmlspecialchars(trim(filter_input(INPUT_POST, $key)));
         }
         return $sanitizedArray;
+    }
+
+    /** @param $orderId int
+     *  @param $popupWindow string
+     *  @return $htmlResponse string
+     */
+    function includeAttachments($orderId, $showDeleteButtons = false) {
+        $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/' . $orderId;
+        error_log("Error message\n", 3, "php.log");
+        error_log($attachmentsDirectoryPath, 3, "php.log");
+        $htmlResponse = '';
+        if (is_dir($attachmentsDirectoryPath)) {
+            $attachmentsFileNames = scandir($attachmentsDirectoryPath);
+            for ($i = 0; $i < count($attachmentsFileNames); $i++) {
+                if ($attachmentsFileNames[$i] !== '..' &&
+                        $attachmentsFileNames[$i] !== '.' &&
+                        $attachmentsFileNames[$i] !== 'index.php' &&
+                        $attachmentsFileNames[$i] !== 'archived') {
+                    $encryptedFilePath = $this->encode($orderId . '/' . $attachmentsFileNames[$i]);
+                    $htmlResponse .= "<span class='file'><a href='download/$encryptedFilePath'>$attachmentsFileNames[$i]</a>";
+                    $htmlResponse .= "&nbsp;&nbsp;";
+                    $htmlResponse .= "<a class='button attachment-buttons' href='download/$encryptedFilePath'><img src='images/download-icon.png'/></a>";
+                    if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2' || $showDeleteButtons) {
+                        $htmlResponse .= "&nbsp;&nbsp;";
+                        $htmlResponse .= "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
+                    }
+                    $htmlResponse .= "</span>";
+                }
+            }
+        }
+        return $htmlResponse;
     }
 
 }

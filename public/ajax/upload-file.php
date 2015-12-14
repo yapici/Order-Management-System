@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -86,8 +86,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
                         $jsonResponse['status'] = "error";
                     } else {
                         $orderId = $_SESSION['temp-file-upload-directory'];
-                        require(PRIVATE_PATH . 'require/populate-attachments-echo-script.php');
-                        $jsonResponse['html_response'] = $htmlResponse;
+                        $jsonResponse['html_response'] = $Functions->includeAttachments($orderId, true);
                         $jsonResponse['status'] = "success";
                     }
                 } else {

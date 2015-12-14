@@ -30,6 +30,11 @@ a {
     cursor: pointer;
 }
 
+a, img {
+    border: none;
+    outline: none;
+}
+
 .gray-out-div {
     margin: 0;
     width: 100%;
@@ -87,6 +92,7 @@ input[type="date"] {
     -moz-box-sizing: border-box;
     background: #ffffff;
     border: 1px solid #cccccc;
+    color: #1C4D6F;
 }
 
 input[type="text"]:focus,
@@ -96,6 +102,7 @@ input[type="number"]:focus,
 input[type="date"]:focus {
     box-shadow: 0 0 5px #0093d0;
     border: 1px solid #0093d0;
+    color: #1C4D6F;
 }
 
 select::-ms-expand {
@@ -234,4 +241,37 @@ select {
 
 #logout-button:hover {
     background: #0063CE;
+}
+
+/* Datepicker */
+#ui-datepicker-div .ui-datepicker-next,
+#ui-datepicker-div .ui-icon-circle-triangle-e {
+    background-image: url('../images/next-icon.png');
+    opacity: 0.7;
+}
+
+#ui-datepicker-div .ui-datepicker-prev,
+#ui-datepicker-div .ui-icon-circle-triangle-w {
+    background-image: url('../images/prev-icon.png');
+    opacity: 0.7;
+}
+
+#ui-datepicker-div .ui-datepicker-next-hover,
+#ui-datepicker-div .ui-datepicker-prev-hover {
+    border: none;
+    background: transparent;
+    margin-top: 1px;
+    margin-right: 1px;
+    opacity: 1.0;
+    
+}
+
+#ui-datepicker-div .ui-datepicker-next-hover {
+    background-image: url('../images/next-icon.png');
+    margin-right: 1px;
+}
+
+#ui-datepicker-div .ui-datepicker-prev-hover {
+    background-image: url('../images/prev-icon.png');
+    margin-left: 1px;
 }

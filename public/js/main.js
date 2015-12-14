@@ -6,6 +6,7 @@ $(function(){
         if (input.val() === input.attr('placeholder')) {
             input.val('');
             input.removeClass('placeholder');
+            input.css('color', '#1C4D6F');
         }
     }).blur(function() {
         var input = $(this);

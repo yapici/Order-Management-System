@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/14/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -50,6 +50,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $projectNo = $sanitizedPostArray['project_no'];
         $accountNo = $sanitizedPostArray['account_no'];
         $comments = $sanitizedPostArray['comments'];
+        $dateNeeded = $Functions->convertStrDateToMysqlDate($sanitizedPostArray['date_needed']);
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
@@ -57,8 +58,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         // Inserting the information to the database
         $sql = "INSERT INTO orders (";
         $sql .= "description, quantity, uom, vendor, catalog_no, price, cost_center, project_name, project_no, account_no, comments, requested_by_id";
-        $sql .= ", requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status";
-        $sql .= ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql .= ", requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status, item_needed_by_date";
+        $sql .= ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         $stmt = $Database->prepare($sql);
 
@@ -80,6 +81,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(16, $username, PDO::PARAM_STR);
         $stmt->bindValue(17, $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(18, "Pending", PDO::PARAM_STR);
+        $stmt->bindValue(19, $dateNeeded, PDO::PARAM_STR);
         $result = $stmt->execute();
 
         if ($result) {
