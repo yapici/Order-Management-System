@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -28,50 +28,77 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
+
+$isAdmin = false;
+if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
+    echo "<script type='text/javascript'>";
+    require(PRIVATE_PATH . 'require/js/item-details-popup-window-functions.js');
+    echo "</script>";
+    $isAdmin = true;
+}
 ?>
 
 
 <div class="popup-window" id="item-details-popup-window">
-    <a class="popup-window-cancel-button" onclick="hidePopupWindows()">&#10006;</a>
-    <h1 id="popup-item-order-number">Order 100003</h1>
+    <a class="popup-window-cancel-button" onclick="hidePopupWindows();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">&#10006;</a>
+    <h1 id="popup-item-order-number">Order </h1>
+    <?php
+    if ($isAdmin) {
+        echo "<div id='item-details-popup-window-edit-icon-wrapper'>";
+        echo "<a id='item-details-popup-window-edit-icon' onclick='toggleItemDetailsPopupInputFields(\"show\")' title='Edit Order Details'>";
+        echo "<img src='images/edit-icon.png'/>";
+        echo "</a>";
+        echo "<a id='item-details-popup-window-save-icon' onclick='toggleItemDetailsPopupInputFields(\"hide\")' title='Save Changes'>";
+        echo "<img src='images/tick-icon.png'/>";
+        echo "</a>";
+        echo "</div>";
+    }
+    ?>
+
     <table class="top-panel">
         <tr>
             <td class="left-panel">
                 <table>
                     <tr>
                         <td>Description:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-description">GSTag Columns</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-description"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-description" type="text"/>'; ?>
                         </td>
                     </tr>      
                     <tr>
                         <td>Quantity:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-quantity">1</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-quantity"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-quantity" type="number"/>'; ?>
                         </td>
                     </tr>
                     <tr>
                         <td title="Unit of Measurement">UoM:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-uom">5/Box</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-uom"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-uom" type="text"/>'; ?>
                         </td>
                     </tr>
                     <tr>
                         <td>Vendor:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-vendor">Biorad</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-vendor"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-vendor" type="text"/>'; ?>
                         </td>
                     </tr>
                     <tr>
                         <td>Catalog No:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-catalog-no">12345</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-catalog-no"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-catalog-no" type="text"/>'; ?>
                         </td>
                     </tr>
                     <tr>
                         <td>Price:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-price">$350.00</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-price"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-price" type="number"/>'; ?>
                         </td>
                     </tr>                  
                 </table>
@@ -80,39 +107,78 @@
                 <table> 
                     <tr>
                         <td>Cost Center:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-cost-center">Bio</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-cost-center"></span>
+                            <?php
+                            if ($isAdmin) {
+                                echo '<select id="item-details-popup-window-cost-center">';
+                                echo '<option>1234ZYZ</option>';
+                                echo '<option>9876ABCD</option>';
+                                echo '</select>';
+                            }
+                            ?>
                         </td>
                     </tr>
                     <tr>
-                        <td>Project Name & No:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-cost-center">Project 1/ABC123456</span>
+                        <td>Project Name:</td>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-project-name"></span>
+                            <?php
+                            if ($isAdmin) {
+                                echo '<select id="item-details-popup-window-project-name">';
+                                echo '<option>Project 1</option>';
+                                echo '<option>Project 2</option>';
+                                echo '</select>';
+                            }
+                            ?>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td>Project No:</td>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-project-no"></span>
+                            <?php
+                            if ($isAdmin) {
+                                echo '<select id="item-details-popup-window-project-no">';
+                                echo '<option>1234ZYZ</option>';
+                                echo '<option>9876ABCD</option>';
+                                echo '</select>';
+                            }
+                            ?>
                         </td>
                     </tr>   
                     <tr>
                         <td>Account Number:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-account-no">0987654</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-account-no"></span>
+                            <?php
+                            if ($isAdmin) {
+                                echo '<select id="item-details-popup-window-account-no">';
+                                echo '<option>ABCD12345XYZ</option>';
+                                echo '<option>XYZ12345ABCD</option>';
+                                echo '</select>';
+                            }
+                            ?>
                         </td>
                     </tr>  
                     <tr>
                         <td>Comments:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-comments">None</span>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-comments"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-comments" type="text"/>'; ?>
                         </td>
                     </tr>  
                     <tr>
                         <td>Item Requested By:</td>
                         <td>
-                            <span id="popup-item-requested-by">Engin Yapici</span>
-                            <span id="popup-item-requested-date">on 22-Oct-2015 14:43 (GMT -05:00)</span>
+                            <span id="popup-item-requested-by"></span>
+                            <span id="popup-item-requested-date"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>Item Needed By:</td>
-                        <td class="add-new-item-input-holder-td">
-                            <span id="popup-item-item-needed-by"><?php echo date('d-M-Y', strtotime("+10 days")); ?></span>
+                        <td>
+                            <span id="popup-item-item-needed-by"></span>
                         </td>
                     </tr> 
                 </table>
@@ -134,13 +200,9 @@
             </tr>
         </table>
         <hr class="horizontal-divider"></hr>
-        <div id="attachments-holder">
-            <?php
-            require_once('item-details-popup-window-populate-attachments.php');
-            ?>
-        </div>
+        <div id="attachments-holder"></div>
     </div>
-    <a class="button" onclick="hidePopupWindow()">Close</a>
+    <a class="button" onclick="hidePopupWindow();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">Close</a>
     <div class="error-div" id="item-details-popup-window-error-div"></div>
 </div>
 

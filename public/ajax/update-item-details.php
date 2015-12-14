@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/26/2015                                                                 */
+/* Created on 12/13/2015                                                                 */
 /* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
@@ -50,43 +50,49 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $projectNo = $sanitizedPostArray['project_no'];
         $accountNo = $sanitizedPostArray['account_no'];
         $comments = $sanitizedPostArray['comments'];
+        $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
 
         // Inserting the information to the database
-        $sql = "INSERT INTO orders (";
-        $sql .= "description, quantity, uom, vendor, catalog_no, price, cost_center, project_name, project_no, account_no, comments, requested_by_id";
-        $sql .= ", requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status";
-        $sql .= ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "UPDATE orders SET ";
+        $sql .= "description = :description, ";
+        $sql .= "quantity = :quantity, ";
+        $sql .= "uom = :uom, ";
+        $sql .= "vendor = :vendor, ";
+        $sql .= "catalog_no = :catalog_no, ";
+        $sql .= "price = :price, ";
+        $sql .= "cost_center = :cost_center, ";
+        $sql .= "project_name = :project_name, ";
+        $sql .= "project_no = :project_no, ";
+        $sql .= "account_no = :account_no, ";
+        $sql .= "comments = :comments, ";
+        $sql .= "last_updated_by_id = :last_updated_by_id, ";
+        $sql .= "last_updated_by_username = :last_updated_by_username, ";
+        $sql .= "last_updated_datetime = :last_updated_datetime ";
+        $sql .= "WHERE id = :order_id";
 
         $stmt = $Database->prepare($sql);
 
-        $stmt->bindValue(1, $description, PDO::PARAM_STR);
-        $stmt->bindValue(2, $quantity, PDO::PARAM_STR);
-        $stmt->bindValue(3, $uom, PDO::PARAM_STR);
-        $stmt->bindValue(4, $vendor, PDO::PARAM_STR);
-        $stmt->bindValue(5, $catalogNo, PDO::PARAM_STR);
-        $stmt->bindValue(6, $price, PDO::PARAM_STR);
-        $stmt->bindValue(7, $costCenter, PDO::PARAM_STR);
-        $stmt->bindValue(8, $projectName, PDO::PARAM_STR);
-        $stmt->bindValue(9, $projectNo, PDO::PARAM_STR);
-        $stmt->bindValue(10, $accountNo, PDO::PARAM_STR);
-        $stmt->bindValue(11, $comments, PDO::PARAM_STR);
-        $stmt->bindValue(12, $userId, PDO::PARAM_STR);
-        $stmt->bindValue(13, $username, PDO::PARAM_STR);
-        $stmt->bindValue(14, $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(15, $userId, PDO::PARAM_STR);
-        $stmt->bindValue(16, $username, PDO::PARAM_STR);
-        $stmt->bindValue(17, $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(18, "Pending", PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $stmt->bindValue(':uom', $uom, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor', $vendor, PDO::PARAM_STR);
+        $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
+        $stmt->bindValue(':price', $price, PDO::PARAM_STR);
+        $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
+        $stmt->bindValue(':project_name', $projectName, PDO::PARAM_STR);
+        $stmt->bindValue(':project_no', $projectNo, PDO::PARAM_STR);
+        $stmt->bindValue(':account_no', $accountNo, PDO::PARAM_STR);
+        $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
         $result = $stmt->execute();
 
         if ($result) {
-            renameAttachmentsDirectory($Database->lastInsertId(), PRIVATE_PATH);
-            $_SESSION['pagination_page_number'] = 1;
-            $_SESSION['sort_column_name'] = "";
-            $_SESSION['search_keywords'] = "";
             ob_start();
             require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
             $jsonResponse['html_tbody'] = ob_get_clean();
@@ -101,15 +107,3 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     $Functions->phpRedirect('');
 }
 
-function renameAttachmentsDirectory($itemId, $rootPath) {
-    if (isset($_SESSION['temp-file-upload-directory'])) {
-        $oldPath = $rootPath . 'attachments/' . $_SESSION['temp-file-upload-directory'];
-        $newPath = $rootPath . 'attachments/' . $itemId;
-        
-        rename($oldPath, $newPath);
-        
-        unset($_SESSION['temp-file-upload-directory']);
-    }
-}
-
-?>

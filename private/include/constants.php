@@ -2,8 +2,8 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/12/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Created on 12/13/2015                                                                 */
+/* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,23 +30,15 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-
-echo "<h2>Attachments</h2>";
-$attachmentsDirectoryPath = ROOT . '/private/attachments/';
-if (is_dir($attachmentsDirectoryPath)) {
-    $attachmentsFileNames = scandir($attachmentsDirectoryPath);
-    for ($i = 0; $i < count($attachmentsFileNames); $i++) {
-        if ($attachmentsFileNames[$i] !== '..' &&
-                $attachmentsFileNames[$i] !== '.' &&
-                $attachmentsFileNames[$i] !== 'index.php' &&
-                $attachmentsFileNames[$i] !== 'archived') {
-            $encryptedFilePath = $Functions->encode($attachmentsFileNames[$i]);
-            echo "<div class='file'><a href='download.php/?file=$encryptedFilePath'>$attachmentsFileNames[$i]</a>"
-            . "&nbsp;&nbsp;&nbsp;"
-            . "<a class='button attachment-buttons' href='download.php/?file=$encryptedFilePath'><img src='images/download-icon.png'/></a>"
-            . "&nbsp;&nbsp;"
-            . "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a></div>";
-        }
+final class Constants {
+    const USER_TYPE_END_USER = 0;
+    const USER_TYPE_PURCHASING_PERSON = 1;
+    const USER_TYPE_ADMINISTRATOR = 2;
+    
+    private function __construct(){
+        throw new Exception("Can't get an instance of Constants");
     }
 }
-?>
+
+/* @var $Constants Constants */
+//$Constants = new Constants();

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -42,25 +42,28 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
 
         switch ($selectedColumnName) {
             case "Ord":
-                storeSortInSession('id');
+                $Functions->storeSortInSession('id');
                 break;
             case "Des":
-                storeSortInSession('description');
+                $Functions->storeSortInSession('description');
                 break;
             case "Ven":
-                storeSortInSession('vendor');
+                $Functions->storeSortInSession('vendor');
                 break;
             case "Cat":
-                storeSortInSession('catalog_no');
+                $Functions->storeSortInSession('catalog_no');
                 break;
             case "Pri":
-                storeSortInSession('price');
+                $Functions->storeSortInSession('price');
                 break;
             case "Sta":
-                storeSortInSession('status');
+                $Functions->storeSortInSession('status');
+                break;
+            case "Req":
+                $Functions->storeSortInSession('requested_by_username');
                 break;
             case "":
-                $_SESSION['sort_column_name'] = "";
+                $Functions->storeSortInSession('');
                 break;
         }
 
@@ -74,15 +77,6 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     echo json_encode($jsonResponse);
 } else {
     $Functions->phpRedirect('');
-}
-
-function storeSortInSession($columnName) {
-    if ($_SESSION['sort_column_name'] == $columnName && $_SESSION['sort_up_or_down'] == 'up') {
-        $_SESSION['sort_up_or_down'] = 'down';
-    } else {
-        $_SESSION['sort_up_or_down'] = 'up';
-        $_SESSION['sort_column_name'] = $columnName;
-    }
 }
 
 ?>

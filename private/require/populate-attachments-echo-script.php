@@ -1,7 +1,8 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/13/2015                                                                 */
 /* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,13 +30,24 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
-define("PRIVATE_PATH", ROOT . "/private/");
-define("PUBLIC_PATH", ROOT . "/public/");
-
-require_once(PRIVATE_PATH . "/include/constants.php");
-require_once(PRIVATE_PATH . "/include/passwords.php");
-require_once(PRIVATE_PATH . "/include/database.php");
-require_once(PRIVATE_PATH . "/include/functions.class.php");
-require_once(PRIVATE_PATH . "/include/session.class.php");
-?>
+$htmlResponse = "<h2>Attachments</h2>";
+$attachmentsDirectoryPath = ROOT . '/private/attachments/' . $orderId;
+if (is_dir($attachmentsDirectoryPath)) {
+    $attachmentsFileNames = scandir($attachmentsDirectoryPath);
+    for ($i = 0; $i < count($attachmentsFileNames); $i++) {
+        if ($attachmentsFileNames[$i] !== '..' &&
+                $attachmentsFileNames[$i] !== '.' &&
+                $attachmentsFileNames[$i] !== 'index.php' &&
+                $attachmentsFileNames[$i] !== 'archived') {
+            $encryptedFilePath = $Functions->encode($orderId . '/' . $attachmentsFileNames[$i]);
+            $htmlResponse .= "<span class='file'><a href='download/$encryptedFilePath'>$attachmentsFileNames[$i]</a>";
+            $htmlResponse .= "&nbsp;&nbsp;";
+            $htmlResponse .= "<a class='button attachment-buttons' href='download/$encryptedFilePath'><img src='images/download-icon.png'/></a>";
+            if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
+                $htmlResponse .= "&nbsp;&nbsp;";
+                $htmlResponse .= "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
+            }
+            $htmlResponse .= "</span>";
+        }
+    }
+}

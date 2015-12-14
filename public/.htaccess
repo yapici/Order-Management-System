@@ -2,6 +2,7 @@ RewriteEngine On
 
 RewriteRule ^$ index.php [QSA,L]
 RewriteRule ^([a-zA-Z_]+)?$ $1.php [QSA,L]
+RewriteRule ^download/(.*)$ download.php?file=$1 [L]
 
 #Redirecting the 404s to homepage
 ErrorDocument 404 /

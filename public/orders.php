@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -69,6 +69,7 @@ if (!$Session->isSessionValid()) {
                 <a class="button search-button" onclick='searchAction("search")'><img src="images/search_icon.png"/></a>
             </div>
             <div id="orders-error-div"></div>
+            <div class="reset-sort-button-wrapper-div"><a class="reset-sort-button" onclick="sortByColumn('')">Reset Sort</a></div>
             <table id="orders-table">
                 <thead>
                     <tr>
@@ -77,8 +78,8 @@ if (!$Session->isSessionValid()) {
                         <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
                         <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
                         <td onclick='sortByColumn($(this))'>Price <a>&#9650;</a></td>
+                        <td onclick='sortByColumn($(this))'>Requested By <a>&#9650;</a></td>
                         <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>
-                        <td>Attachments</td>
                     </tr>
                 </thead>
                 <tbody>

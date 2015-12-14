@@ -12,7 +12,6 @@
 }
 
 #orders-table {
-    margin-top: 40px;
     width: 100%;
     border-spacing: 0px;
     text-align: left;
@@ -149,7 +148,7 @@
 /* Generic Popup Window related items*/
 
 .popup-window {
-    position: fixed;
+    position: absolute;
     display: none;
     z-index: 99999;
     padding: 0px;
@@ -205,10 +204,37 @@
     margin-top: 40px;
 }
 
+#item-details-popup-window-edit-icon-wrapper {
+    position: relative;
+}
+
+#item-details-popup-window-edit-icon,
+#item-details-popup-window-save-icon {
+    position: absolute;
+    top: -10px;
+    right: 7px;
+    opacity: 0.7;
+}
+
+#item-details-popup-window-save-icon {
+    display: none;
+}
+
+#item-details-popup-window-edit-icon:hover,
+#item-details-popup-window-save-icon:hover {
+    opacity: 1.0;
+}
+
+#item-details-popup-window-edit-icon img,
+#item-details-popup-window-save-icon img {
+    width: 24px;
+}
+
 #item-details-popup-window .top-panel {
     width: 94%;
-    margin: 0 auto;
+    margin: 0px auto;
     padding: 0;
+    padding-top: 10px;
     text-align: left;
 }
 
@@ -220,11 +246,13 @@
 #item-details-popup-window .top-panel .left-panel,
 #item-details-popup-window .top-panel .right-panel {
     text-align: left;
+    width: 40%;
 }
 
 
 #item-details-popup-window .top-panel .right-panel {
     padding-left: 40px;
+    width: 60%;
 }
 
 
@@ -279,14 +307,36 @@
     height: 0.9em;
 }
 
+/* Item Details Popup Window Inputs */
+.item-details-input-holder-td {
+    position: relative;
+    width: 100%;
+}
+
+.item-details-input-holder-td input,
+.item-details-input-holder-td select {
+    position: absolute;
+    left: -3px;
+    top: 3px;
+    width: 100%;
+    display: none;
+}
+
+.item-details-input-holder-td span {
+    padding-left: 0px;
+}
+
 /* Popup Window Attachments */
 
 #attachments-holder {
     padding-left: 12px;
 }
 
-#attachments-holder .file {
+.file {
+    display: inline-block;
     padding: 10px 0px;
+    margin-right: 40px;
+    margin-bottom: 10px;
 }
 
 .attachment-buttons { 
@@ -390,6 +440,28 @@
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
+}
+
+/* Reset Sort Button */
+.reset-sort-button-wrapper-div {
+    position: relative;
+    margin-top: 40px;
+}
+
+.reset-sort-button {
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+    width: auto;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #006DBD;
+    opacity: 0.7;
+    display: none;
+}
+
+.reset-sort-button:hover {
+    opacity: 1.0;
 }
 
 /* Misc */

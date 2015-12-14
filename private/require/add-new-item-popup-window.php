@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -28,7 +28,6 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
-
 ?>
 <div class="popup-window" id="add-new-item-popup-window">
     <a class="popup-window-cancel-button" onclick="hidePopupWindows()">&#10006;</a>
@@ -69,7 +68,13 @@
             <td class="add-new-item-input-holder-td">
                 <input id="add-new-item-price" type="number"/>
             </td>
-        </tr>  
+        </tr> 
+        <tr>
+            <td>Date Needed<span class="red-font"> *</span></td>
+            <td class="add-new-item-input-holder-td">
+                <input class="datepicker" id="add-new-item-date-needed" type="date"/>
+            </td>
+        </tr>    
         <tr>
             <td>Cost Center</td>
             <td class="add-new-item-input-holder-td">
@@ -112,13 +117,20 @@
     </table>
     <hr class="horizontal-divider"></hr>
     <div class="bottom-panel">
-        <div id="attachments-holder">
+        <div>
             <h2>Attachments</h2>
-            <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
-                Select a file to upload:
-                <input type="file" name="fileToUpload" id="fileToUpload">
-                <input type="submit" class='button file-upload-button' value="Upload File" name="submit">
-            </form>
+            Select a file to upload:
+            <input type="file" name="file-to-upload" id="file-to-upload"/>
+            <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+            <div id="add-new-item-attachments-holder">
+                <?php
+                if (isset($_SESSION['temp-file-upload-directory'])) {
+                    $orderId = $_SESSION['temp-file-upload-directory'];
+                    require(PRIVATE_PATH . 'require/populate-attachments-echo-script.php');
+                    echo $htmlResponse;
+                }
+                ?>
+            </div>
         </div>
     </div>
     <hr class="horizontal-divider"></hr>
