@@ -37,7 +37,7 @@ function toggleItemDetailsPopupInputFields(showHide) {
         hideEditFields();
         updateOrderDetails();
     } else {
-        setTimeout(hideEditFields, 1000);
+        setTimeout(hideEditFields(), 1000);
     }
 }
 

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/15/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -77,7 +77,7 @@ $columns = ['id',
     'account_no',
     'comments',
     'status',
-    'vendor',
+    'vendor_name',
     'requested_datetime',
     'last_updated_datetime',
     'last_updated_by_username',
@@ -160,53 +160,61 @@ $stmt->bindValue(':start', $gPaginationStartPoint, PDO::PARAM_INT);
 /* Number of items for a page */
 $stmt->bindValue(':item_number', $gNumberOfItemsPerPage, PDO::PARAM_INT);
 $stmt->execute();
+
+// Getting the vendor names and putting them in a local array
+$sql1 = "SELECT id, name FROM vendors WHERE 1";
+$stmt1 = $Database->prepare($sql1);
+$stmt1->execute();
+while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+    $vendorsArray[$row1['id']] = $row1['name'];
+}
 /* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* ######################################################### Database Query ######################################################## */
-
 
 
 /* ########################################################## tbody Content ######################################################## */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $mItemId = trim($row['id']);
-    $mDescription = htmlspecialchars(trim($row['description']));
-    $mQuantity = htmlspecialchars(trim($row['quantity']));
-    $mUom = htmlspecialchars(trim($row['uom']));
-    $mVendor = htmlspecialchars(trim($row['vendor']));
-    $mCatalogNo = htmlspecialchars(trim($row['catalog_no']));
-    $mPrice = htmlspecialchars(trim($row['price']));
-    $mCostCenter = htmlspecialchars(trim($row['cost_center']));
-    $mProjectName = htmlspecialchars(trim($row['project_name']));
-    $mProjectNo = htmlspecialchars(trim($row['project_no']));
-    $mAccountNo = htmlspecialchars(trim($row['account_no']));
-    $mComments = htmlspecialchars(trim($row['comments']));
-    $mRequestedDate = $Functions->convertMysqlDateToPhpDate($row['requested_datetime']);
-    $mLastUpdatedDate = $Functions->convertMysqlDateToPhpDate($row['last_updated_datetime']);
-    $mItemNeededByDate = $Functions->convertMysqlDateToPhpDate($row['item_needed_by_date']);
+    $sanitizedArray = $Functions->sanitizeArrayItems($row);
+    $mItemId = $sanitizedArray['id'];
+    $mDescription = $sanitizedArray['description'];
+    $mQuantity = $sanitizedArray['quantity'];
+    $mUom = $sanitizedArray['uom'];
+    $mVendor = $vendorsArray[$sanitizedArray['vendor']];
+    $mCatalogNo = $sanitizedArray['catalog_no'];
+    $mPrice = $sanitizedArray['price'];
+    $mCostCenter = $sanitizedArray['cost_center'];
+    $mProjectName = $sanitizedArray['project_name'];
+    $mProjectNo = $sanitizedArray['project_no'];
+    $mAccountNo = $sanitizedArray['account_no'];
+    $mComments = $sanitizedArray['comments'];
+    $mRequestedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['requested_datetime']);
+    $mLastUpdatedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['last_updated_datetime']);
+    $mItemNeededByDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['item_needed_by_date']);
     $mStatus = trim($row['status']);
-    $mRequestedByUsername = $row['requested_by_username'];
-    $mLastUpdatedByUsername = $row['last_updated_by_username'];
+    $mRequestedByUsername = $sanitizedArray['requested_by_username'];
+    $mLastUpdatedByUsername = $sanitizedArray['last_updated_by_username'];
 
     echo "<tr onclick=\"showItemDetailsPopupWindow("
     . "'$mItemId', "
-    . "'$mDescription',"
-    . "'$mQuantity',"
-    . "'$mUom',"
-    . "'$mVendor',"
-    . "'$mCatalogNo',"
-    . "'$mPrice',"
-    . "'$mCostCenter',"
-    . "'$mProjectName',"
-    . "'$mProjectNo',"
-    . "'$mAccountNo',"
-    . "'$mComments',"
-    . "'$mRequestedByUsername',"
-    . "'$mRequestedDate',"
-    . "'$mLastUpdatedByUsername',"
-    . "'$mLastUpdatedDate',"
-    . "'$mStatus',"
+    . "'$mDescription', "
+    . "'$mQuantity', "
+    . "'$mUom', "
+    . "'$mVendor', "
+    . "'$mCatalogNo', "
+    . "'$mPrice', "
+    . "'$mCostCenter', "
+    . "'$mProjectName', "
+    . "'$mProjectNo', "
+    . "'$mAccountNo', "
+    . "'$mComments', "
+    . "'$mRequestedByUsername', "
+    . "'$mRequestedDate', "
+    . "'$mLastUpdatedByUsername', "
+    . "'$mLastUpdatedDate', "
+    . "'$mStatus', "
     . "'$mItemNeededByDate'"
     . ")\">";
     echo "<td title='$mItemId'>" . $mItemId . "</td>";

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/14/2015                                                           */
+/* Last modified on 12/15/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -103,7 +103,7 @@ class Functions {
     /* #################################################################################################### */
 
     function convertMysqlDateToPhpDate($date) {
-        if ($date == "0000-00-00") {
+        if ($date == "0000-00-00" || $date == "0000-00-00 00:00:00") {
             $date = "N/A";
         } else {
             $date = date('d-M-Y', strtotime($date));
@@ -111,26 +111,20 @@ class Functions {
         return $date;
     }
 
+    /** @param $date string
+     *  @return $convertedDate string
+     */
     function convertStrDateToMysqlDate($date) {
-        $originalDate = $date;
-        $date = str_replace("-", "/", $originalDate);
-        if ($date == "N/A") {
-            $date = "0";
-        } else {
-            try {
-                $date = date('Y-m-d', strtotime($date));
-                if ($date == "1970-01-01") {
-                    $date = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$2-$1", $originalDate);
-                    $date = date('Y-m-d', strtotime($date));
-                }
-            } catch (Exception $e) {
-                $date = "0";
+        $slashesReplacedDate = str_replace("-", "/", $date);
+        try {
+            $convertedDate = date('Y-m-d', strtotime($slashesReplacedDate));
+            if ($convertedDate == "1970-01-01") {
+                $convertedDate = date('Y-m-d', strtotime(preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$2-$1", $date)));
             }
+        } catch (Exception $e) {
+            $convertedDate = "0";
         }
-
-        error_log($date . "\n", 3, "php.log");
-        error_log("\n\n", 3, "php.log");
-        return $date;
+        return $convertedDate;
     }
 
     /* /  ************************************************************************************************* */
@@ -192,6 +186,18 @@ class Functions {
     }
 
     // This function is used in 'public/ajax/add-new-item-action.php'.
+    /** @param $array array 
+     *  @return $sanitizedArray array
+     */
+    function sanitizeArrayItems($array) {
+        $sanitizedArray = array();
+        foreach ($array as $key => $value) {
+            $sanitizedArray[$key] = htmlspecialchars(trim($value));
+        }
+        return $sanitizedArray;
+    }
+
+    // This function is used in 'public/ajax/add-new-item-action.php'.
     /** @return $sanitizedArray array
      */
     function sanitizePostedVariables() {
@@ -203,13 +209,11 @@ class Functions {
     }
 
     /** @param $orderId int
-     *  @param $popupWindow string
+     *  @param $showDeleteButtons boolean
      *  @return $htmlResponse string
      */
     function includeAttachments($orderId, $showDeleteButtons = false) {
         $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/' . $orderId;
-        error_log("Error message\n", 3, "php.log");
-        error_log($attachmentsDirectoryPath, 3, "php.log");
         $htmlResponse = '';
         if (is_dir($attachmentsDirectoryPath)) {
             $attachmentsFileNames = scandir($attachmentsDirectoryPath);
@@ -222,13 +226,25 @@ class Functions {
                     $htmlResponse .= "<span class='file'><a href='download/$encryptedFilePath'>$attachmentsFileNames[$i]</a>";
                     $htmlResponse .= "&nbsp;&nbsp;";
                     $htmlResponse .= "<a class='button attachment-buttons' href='download/$encryptedFilePath'><img src='images/download-icon.png'/></a>";
-                    if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2' || $showDeleteButtons) {
-                        $htmlResponse .= "&nbsp;&nbsp;";
-                        $htmlResponse .= "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
-                    }
+                    $htmlResponse .= $this->includeDeleteButtons($encryptedFilePath, $showDeleteButtons);
                     $htmlResponse .= "</span>";
                 }
             }
+        }
+        return $htmlResponse;
+    }
+
+    // This function is used in includeAttachments() function.
+    /** @param $encryptedFilePath string
+     *  @param $showDeleteButtons boolean
+     *  @return $htmlResponse string
+     */
+    function includeDeleteButtons($encryptedFilePath, $showDeleteButtons = false) {
+        if ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
+                $_SESSION['user_type'] == Constants::USER_TYPE_ADMINISTRATOR ||
+                $showDeleteButtons) {
+            $htmlResponse .= "&nbsp;&nbsp;";
+            $htmlResponse .= "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
         }
         return $htmlResponse;
     }

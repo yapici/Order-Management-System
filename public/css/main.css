@@ -222,21 +222,19 @@ select {
 }
 
 #logout-button {
+    width: 20px;
+    height: 20px;
+    padding: 8px 11px 8px 8px;
     position: absolute;
+    display: inline-block;
+    overflow: hidden;
     vertical-align: top;
     top: 16px;
     left: 16px;
     cursor: pointer;
     color: #ffffff;
-    padding: 8px 9px 8px 7px;
     background: #0093d0;
     border-bottom: 2px solid #006DBD;
-    border-right: 1px solid #0093d0;
-}
-
-#logout-button img {
-    width: 20px;
-    height: 20px;
 }
 
 #logout-button:hover {

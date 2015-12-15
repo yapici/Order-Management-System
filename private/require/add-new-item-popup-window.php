@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/14/2015                                                           */
+/* Last modified on 12/15/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -51,12 +51,7 @@
                 <input id="add-new-item-uom" type="text"/>
             </td>
         </tr>
-        <tr>
-            <td>Vendor<span class="red-font"> *</span></td>
-            <td class="add-new-item-input-holder-td">
-                <input id="add-new-item-vendor" type="text"/>
-            </td>
-        </tr>
+        <?php require(PRIVATE_PATH . 'require/populate-vendors-list.php'); ?>
         <tr>
             <td>Catalog No<span class="red-font"> *</span></td>
             <td class="add-new-item-input-holder-td">
@@ -130,6 +125,7 @@
                 Select a file to upload:
                 <input type="file" name="file-to-upload" id="file-to-upload"/>
                 <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+                <div><i style="font-size: 0.9em; padding: 10px 0px 20px 0px; display: inline-block;"><b>Maximum file upload size is 10 MB</b></i></div>
             </div>
             <div id="add-new-item-attachments-holder">
                 <?php

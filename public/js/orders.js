@@ -109,17 +109,31 @@ function addNewItem() {
     var account_no = $("#add-new-item-account-no").val();
     var comments = $("#add-new-item-comments").val();
     var date_needed = $("#add-new-item-date-needed").val();
+
+    // New Vendor Details
+    var new_vendor_name = $("#add-new-item-new-vendor-name").val();
+    var new_vendor_phone = $("#add-new-item-new-vendor-phone").val();
+    var new_vendor_website = $("#add-new-item-new-vendor-website").val();
+    var new_vendor_address = $("#add-new-item-new-vendor-address").val();
+
+    // Error div
     var error_div = $('#add-new-item-error-div');
     error_div.html("");
     error_div.html('&nbsp;');
+
     if (description === ''
             || quantity === ''
             || uom === ''
-            || vendor === ''
+            || vendor === 'Please Choose a Vendor'
             || catalog_no === ''
             || price === ''
             || date_needed === '') {
         error_div.html("Please fill all the mandatory fields");
+    } else if (vendor === "Add New Vendor"
+            && (new_vendor_name === ''
+                    || new_vendor_phone === ''
+                    || new_vendor_website === '')) {
+        error_div.html('Please enter all the required vendor details.');
     } else if (!$.isNumeric(quantity)) {
         error_div.html('Please enter only numberic values for the quantity.');
     } else if (!$.isNumeric(price)) {
@@ -153,7 +167,7 @@ function addNewItem() {
                 } else {
                     error_div.html(json_data.status);
                 }
-                add_new_item_popup_window.css('z-index', '9999');
+                add_new_item_popup_window.css('z-index', '99999');
                 hideProgressCircle();
             }
         });
@@ -161,22 +175,23 @@ function addNewItem() {
 }
 
 function deleteAttachment(filepath) {
-    var error_div = $("#item-details-popup-window-error-div");
+    var error_div = $("#add-new-item-popup-window-error-div");
     showProgressCircle();
     $.ajax({
         url: "ajax/delete-attachment.php",
         type: "GET",
         data: "file=" + filepath,
         cache: false,
-        dataType: "html",
-        success: function (html_response) {
-            alert(html_response);
-            if (html_response !== 'error') {
+        dataType: "json",
+        success: function (json_response) {
+            if (json_response.status === 'success') {
                 if ($("#add-new-item-popup-window").is(":visible")) {
-                    $("#add-new-item-attachments-holder").html(html_response);
+                    $("#add-new-item-attachments-holder").html(json_response.html_response);
                 } else {
-                    $("#attachments-holder").html(html_response);
+                    $("#attachments-holder").html(json_response.html_response);
                 }
+            } else if (json_response.status === 'get_out_of_here') {
+                error_div.html("You sneaky sun of a gun. Stop doing that.");
             } else {
                 error_div.html("Something went wrong, please try again later.");
             }
@@ -318,20 +333,52 @@ function uploadFile() {
     var file_data = $('#file-to-upload').prop('files')[0];
     var form_data = new FormData();
     form_data.append('file-to-upload', file_data);
-    $.ajax({
-        url: 'ajax/upload-file.php',
-        type: 'POST',
-        data: form_data,
-        cache: false,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (json_data) {
-            if (json_data.status === 'success') {
-                $("#add-new-item-attachments-holder").html(json_data.html_response);
+
+    var add_new_item_popup_window = $("#add-new-item-popup-window");
+    var error_div = $('#add-new-item-error-div');
+    error_div.html("");
+
+    if ($('#file-to-upload').val() === '') {
+        error_div.html('No file was chosen. Please choose a file to upload.');
+    } else if (file_data.size > 10485760) {
+        error_div.html('Maximum file upload size is 10 MB');
+    } else {
+        showProgressCircle();
+        add_new_item_popup_window.css('z-index', '9');
+        $.ajax({
+            url: 'ajax/upload-file.php',
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (json_data) {
+                if (json_data.status === 'success') {
+                    $("#add-new-item-attachments-holder").html(json_data.html_response);
+                } else if (json_data.status === 'disallowed_file_type') {
+                    error_div.html('This file type is not allowed');
+                } else if (json_data.status === 'no_file_was_chosen') {
+                    error_div.html('No file was chosen. Please choose a file to upload.');
+                } else if (json_data.status === 'max_file_size_exceeded') {
+                    error_div.html('Maximum file upload size is 10 MB');
+                } else {
+                    error_div.html('Something went wrong. Please contact webmaster.');
+                }
+                add_new_item_popup_window.css('z-index', '99999');
+                hideProgressCircle();
             }
-        }
-    });
+        });
+    }
+}
+
+function showVendorDetails(vendorId) {
+    $(".add-new-item-vendor-details-holder-tr").hide();
+    if (vendorId === 'Add New Vendor') {
+        $(".add-new-item-new-vendor-details").show();
+    } else {
+        $(".add-new-item-vendor-details-" + vendorId).show();
+    }
 }
 
 function msieversion() {

@@ -1,14 +1,14 @@
 var SERVER_FAIL_RESPONSE = 'Something went wrong with the server, please try again.';
 
-$(function(){
-    $('[placeholder]').focus(function() {
+$(function () {
+    $('[placeholder]').focus(function () {
         var input = $(this);
         if (input.val() === input.attr('placeholder')) {
             input.val('');
             input.removeClass('placeholder');
             input.css('color', '#1C4D6F');
         }
-    }).blur(function() {
+    }).blur(function () {
         var input = $(this);
         if (input.val() === '' || input.val() === input.attr('placeholder')) {
             input.addClass('placeholder');
@@ -21,7 +21,7 @@ $(function(){
 });
 
 function logoutAction() {
-    var error_div = $('#add-new-item-error-div');
+    var error_div = $('#orders-error-div');
     error_div.html('&nbsp;');
     error_div.css('color', '#cc0000');
 
@@ -32,7 +32,7 @@ function logoutAction() {
         type: "POST",
         cache: false,
         dataType: "html",
-        success: function(html_response) {
+        success: function (html_response) {
             if (html_response.trim() === 'success') {
                 window.location = "";
             } else {
@@ -58,13 +58,15 @@ function showProgressCircle() {
     var progress_circle = $(".progress-circle");
     progress_circle.show();
     progress_circle.css('opacity', 1.0);
-    progress_circle.css('z-index', '9999');
+    progress_circle.css('z-index', '99999');
 }
 
 function hideProgressCircle() {
     var progress_circle = $(".progress-circle");
     progress_circle.css('opacity', 0.0);
-    setTimeout(progress_circle.hide(), 500);
+    setTimeout(function () {
+        progress_circle.hide();
+    }, 500);
     progress_circle.css('z-index', '9');
 }
 

@@ -358,19 +358,15 @@
 #add-new-item-button {
     position: absolute;
     vertical-align: top;
+    width: 20px;
+    height: 20px;
     top: 16px;
     left: 60px;
     cursor: pointer;
     color: #ffffff;
-    padding: 10px;
+    padding: 8px 9px;
     background: #0093d0;
     border-bottom: 2px solid #006DBD;
-    border-right: 1px solid #0093d0;
-}
-
-#add-new-item-button img {
-    width: 16px;
-    height: 16px;
 }
 
 #add-new-item-button:hover {
@@ -464,6 +460,20 @@
 
 .reset-sort-button:hover {
     opacity: 1.0;
+}
+
+/* Vendor Details */
+.add-new-item-vendor-details-holder-tr {
+    display: none;
+}
+
+.add-new-item-vendor-details-holder-tr td .vendor-details-span {
+    display: inline-block;
+    padding: 4px 10px 4px 2px;
+}
+
+.add-new-item-new-vendor-details td {
+    padding-left: 20px;
 }
 
 /* Misc */

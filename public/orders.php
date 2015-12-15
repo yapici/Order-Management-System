@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/15/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -50,8 +50,8 @@ if (!$Session->isSessionValid()) {
         <?php require_once (PRIVATE_PATH . 'require/add-new-item-popup-window.php'); ?>
         <?php require_once (PRIVATE_PATH . 'require/header.php'); ?>        
         <div id="orders-main-body-wrapper" class='noselect'>
-            <span id='logout-button' title='Log Out' onclick=' logoutAction();'><img src='images/logout-button.png'></img></span>
-            <span id='add-new-item-button' title='Add New Item' onclick='showAddNewItemPopupWindow();'><img src='images/plus-icon.png'></img></span>
+            <span title='Log Out' onclick='logoutAction();'><img id='logout-button' src='images/logout-button.png'></img></span>
+            <span title='Add New Item' onclick='showAddNewItemPopupWindow();'><img id='add-new-item-button' src='images/plus-icon.png'></img></span>
             <div class="search-elements-wrapper">
                 <input class='search-input' id="orders-search-input" placeholder="Search"
                 <?php

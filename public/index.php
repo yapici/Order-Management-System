@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/15/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -31,7 +31,7 @@
 
 require_once('../private/include/include.php');
 
-if ($Session->isLoggedIn()) {
+if ($Session->isSessionValid()) {
     $Functions->phpRedirect('orders');
 }
 ?>
