@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/14/2015                                                           */
+/* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -87,7 +87,17 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                         <td>Vendor:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-vendor"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-vendor" type="text"/>'; ?>
+                            <?php
+                            if ($isAdmin) {
+                                $vendorsArray = $Vendors->getVendorsArray();
+                                echo '<select id="item-details-popup-window-vendor">';
+                                echo '<option></option>';
+                                foreach ($vendorsArray as $id => $vendor) {
+                                    echo "<option value='$id'>$vendor</option>";
+                                }
+                                echo '</select>';
+                            }
+                            ?>
                         </td>
                     </tr>
                     <tr>
@@ -207,9 +217,21 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
             </tr>
         </table>
         <hr class="horizontal-divider"></hr>
-        <div id="attachments-holder"></div>
+        <div id="item-details-popup-window-attachments-wrapper">
+            <h2>Attachments</h2>
+            <?php if ($isAdmin) { ?>
+                <div id="item-details-popup-window-file-upload-elements-wrapper">
+                    Select a file to upload:
+                    <input type="file" name="file-to-upload" id="file-to-upload"/>
+                    <input type="hidden" name="file_upload_order_id" id="file-upload-order-id"/>
+                    <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+                    <div><i style="font-size: 0.9em; padding: 10px 0px 20px 0px; display: inline-block;"><b>Maximum file upload size is 10 MB</b></i></div>
+                </div>
+            <?php } ?>
+            <div id="item-details-attachments-holder"></div>
+        </div>
     </div>
+    <div class="error-div popup-error-div" id="item-details-popup-window-error-div"></div>
     <a class="button" onclick="hidePopupWindow();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">Close</a>
-    <div class="error-div" id="item-details-popup-window-error-div"></div>
 </div>
 

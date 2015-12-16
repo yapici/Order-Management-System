@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/15/2015                                                           */
+/* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -117,7 +117,7 @@ $sql .= "id, ";
 $sql .= "description, ";
 $sql .= "quantity, ";
 $sql .= "uom, ";
-$sql .= "vendor, ";
+$sql .= "vendor_name, ";
 $sql .= "catalog_no, ";
 $sql .= "price, ";
 $sql .= "cost_center, ";
@@ -160,14 +160,6 @@ $stmt->bindValue(':start', $gPaginationStartPoint, PDO::PARAM_INT);
 /* Number of items for a page */
 $stmt->bindValue(':item_number', $gNumberOfItemsPerPage, PDO::PARAM_INT);
 $stmt->execute();
-
-// Getting the vendor names and putting them in a local array
-$sql1 = "SELECT id, name FROM vendors WHERE 1";
-$stmt1 = $Database->prepare($sql1);
-$stmt1->execute();
-while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-    $vendorsArray[$row1['id']] = $row1['name'];
-}
 /* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* ######################################################### Database Query ######################################################## */
@@ -182,7 +174,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $mDescription = $sanitizedArray['description'];
     $mQuantity = $sanitizedArray['quantity'];
     $mUom = $sanitizedArray['uom'];
-    $mVendor = $vendorsArray[$sanitizedArray['vendor']];
+    $mVendor = $sanitizedArray['vendor_name'];
     $mCatalogNo = $sanitizedArray['catalog_no'];
     $mPrice = $sanitizedArray['price'];
     $mCostCenter = $sanitizedArray['cost_center'];

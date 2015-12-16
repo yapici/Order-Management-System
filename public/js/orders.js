@@ -33,6 +33,11 @@ function showItemDetailsPopupWindow(
         status,
         itemNeededByDate) {
     blockUI();
+    $('.popup-error-div').html('');
+
+    if (msieversion() < 10 && msieversion()) {
+        $("#item-details-popup-window-file-upload-elements-wrapper").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
+    }
 
     $("#popup-item-order-number").html("Order " + orderNo);
     $("#popup-item-description").html(description);
@@ -51,6 +56,7 @@ function showItemDetailsPopupWindow(
     $('#popup-item-requested-by').html(requestedByUsername);
     $("#popup-item-last-updated-by").html(lastUpdatedByUsername);
     $("#popup-item-item-needed-by").html(itemNeededByDate);
+    $("#file-upload-order-id").val(orderNo);
 
     if (typeof showItemDetailsPopupWindowItems === 'function') {
         showItemDetailsPopupWindowItems(description,
@@ -76,7 +82,7 @@ function showItemDetailsPopupWindow(
         dataType: "json",
         success: function (json_response) {
             if (json_response.html_response !== 'no_session') {
-                $("#attachments-holder").html(json_response.html_response);
+                $("#item-details-attachments-holder").html(json_response.html_response);
                 $("#item-details-popup-window").fadeIn();
             } else {
                 // show popup login
@@ -89,6 +95,7 @@ function showItemDetailsPopupWindow(
 function showAddNewItemPopupWindow() {
     blockUI();
     $("#add-new-item-popup-window").fadeIn();
+    $(".popup-error-div").html('');
 
     if (msieversion() < 10 && msieversion()) {
         $("#add-new-item-popup-window-file-upload-elements-wrapper").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
@@ -175,8 +182,10 @@ function addNewItem() {
 }
 
 function deleteAttachment(filepath) {
-    var error_div = $("#add-new-item-popup-window-error-div");
+    var popup_window = $(".popup-window");
+    var error_div = $(".popup-error-div");
     showProgressCircle();
+    popup_window.css('z-index', '9');
     $.ajax({
         url: "ajax/delete-attachment.php",
         type: "GET",
@@ -188,13 +197,14 @@ function deleteAttachment(filepath) {
                 if ($("#add-new-item-popup-window").is(":visible")) {
                     $("#add-new-item-attachments-holder").html(json_response.html_response);
                 } else {
-                    $("#attachments-holder").html(json_response.html_response);
+                    $("#item-details-attachments-holder").html(json_response.html_response);
                 }
             } else if (json_response.status === 'get_out_of_here') {
                 error_div.html("You sneaky sun of a gun. Stop doing that.");
             } else {
                 error_div.html("Something went wrong, please try again later.");
             }
+            popup_window.css('z-index', '99999');
             hideProgressCircle();
         }
     });
@@ -333,9 +343,12 @@ function uploadFile() {
     var file_data = $('#file-to-upload').prop('files')[0];
     var form_data = new FormData();
     form_data.append('file-to-upload', file_data);
+    if ($("#item-details-popup-window").is(":visible")) {
+        form_data.append('file_upload_order_id', $("#file-upload-order-id").val());
+    }
 
-    var add_new_item_popup_window = $("#add-new-item-popup-window");
-    var error_div = $('#add-new-item-error-div');
+    var popup_window = $(".popup-window");
+    var error_div = $('.popup-error-div');
     error_div.html("");
 
     if ($('#file-to-upload').val() === '') {
@@ -344,7 +357,7 @@ function uploadFile() {
         error_div.html('Maximum file upload size is 10 MB');
     } else {
         showProgressCircle();
-        add_new_item_popup_window.css('z-index', '9');
+        popup_window.css('z-index', '9');
         $.ajax({
             url: 'ajax/upload-file.php',
             type: 'POST',
@@ -353,19 +366,23 @@ function uploadFile() {
             dataType: 'json',
             contentType: false,
             processData: false,
-            success: function (json_data) {
-                if (json_data.status === 'success') {
-                    $("#add-new-item-attachments-holder").html(json_data.html_response);
-                } else if (json_data.status === 'disallowed_file_type') {
+            success: function (json_response) {
+                if (json_response.status === 'success') {
+                if ($("#add-new-item-popup-window").is(":visible")) {
+                    $("#add-new-item-attachments-holder").html(json_response.html_response);
+                } else {
+                    $("#item-details-attachments-holder").html(json_response.html_response);
+                }
+                } else if (json_response.status === 'disallowed_file_type') {
                     error_div.html('This file type is not allowed');
-                } else if (json_data.status === 'no_file_was_chosen') {
+                } else if (json_response.status === 'no_file_was_chosen') {
                     error_div.html('No file was chosen. Please choose a file to upload.');
-                } else if (json_data.status === 'max_file_size_exceeded') {
+                } else if (json_response.status === 'max_file_size_exceeded') {
                     error_div.html('Maximum file upload size is 10 MB');
                 } else {
                     error_div.html('Something went wrong. Please contact webmaster.');
                 }
-                add_new_item_popup_window.css('z-index', '99999');
+                popup_window.css('z-index', '99999');
                 hideProgressCircle();
             }
         });

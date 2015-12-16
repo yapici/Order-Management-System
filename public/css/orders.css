@@ -288,7 +288,6 @@
     text-align: left;
     width: 94%;
     margin: 0 auto;
-    padding-bottom: 20px;
 }
 
 #item-details-popup-window .bottom-panel tr td {
@@ -351,6 +350,14 @@
 .attachment-buttons img {
     width: 0.8em;
     height: 0.8em;
+}
+
+#item-details-popup-window #item-details-popup-window-attachments-wrapper {
+    text-align: center;
+}
+
+#item-details-popup-window-file-upload-elements-wrapper {
+    margin-bottom: 20px;
 }
 
 /* Add New Item */

@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/15/2015                                                           */
+/* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -51,7 +51,7 @@
                 <input id="add-new-item-uom" type="text"/>
             </td>
         </tr>
-        <?php require(PRIVATE_PATH . 'require/populate-vendors-list.php'); ?>
+        <?php require(PRIVATE_PATH . 'require/add-new-item-populate-vendors-list.php'); ?>
         <tr>
             <td>Catalog No<span class="red-font"> *</span></td>
             <td class="add-new-item-input-holder-td">
@@ -138,7 +138,7 @@
         </div>
     </div>
     <hr class="horizontal-divider"></hr>
-    <div class="error-div" id="add-new-item-error-div"></div>
+    <div class="error-div popup-error-div" id="add-new-item-error-div"></div>
     <a class="button" onclick="addNewItem()">Submit</a>
     <a class="button" onclick="hidePopupWindow()">Close</a>
 </div>

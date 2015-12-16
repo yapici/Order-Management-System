@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/15/2015                                                           */
+/* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -243,7 +243,7 @@ class Functions {
         if ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
                 $_SESSION['user_type'] == Constants::USER_TYPE_ADMINISTRATOR ||
                 $showDeleteButtons) {
-            $htmlResponse .= "&nbsp;&nbsp;";
+            $htmlResponse = "&nbsp;&nbsp;";
             $htmlResponse .= "<a class='button attachment-buttons' onclick=\"deleteAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
         }
         return $htmlResponse;

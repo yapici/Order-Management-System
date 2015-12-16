@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/14/2015                                                           */
+/* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -37,14 +37,17 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $jsonResponse['status'] = "no_session";
     } else {
         $fileUploadDirectory = '';
-        if (filter_input(INPUT_POST, 'order_id') != null) {
-            $fileUploadDirectory = filter_input(INPUT_POST, 'order_id');
-        } else if (!isset($_SESSION['temp-file-upload-directory'])) {
+        if (filter_input(INPUT_POST, 'file_upload_order_id') != null &&
+                ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
+                $_SESSION['user_type'] == Constants::USER_TYPE_ADMINISTRATOR)) {
+            $fileUploadDirectory = filter_input(INPUT_POST, 'file_upload_order_id');
+        } else if (isset($_SESSION['temp-file-upload-directory'])){
+            $fileUploadDirectory = $_SESSION['temp-file-upload-directory'];
+        } else {
             $fileUploadDirectory = $_SESSION['username'] . '-' . time();
             $_SESSION['temp-file-upload-directory'] = $fileUploadDirectory;
-        } else {
-            $fileUploadDirectory = $_SESSION['temp-file-upload-directory'];
         }
+        $orderId = $fileUploadDirectory;
 
         $allowedFileType = true;
         $directoryPath = PRIVATE_PATH . 'attachments/' . $fileUploadDirectory . '/';
@@ -85,16 +88,15 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
                     if (!$success) {
                         $jsonResponse['status'] = "error";
                     } else {
-                        $orderId = $_SESSION['temp-file-upload-directory'];
                         $jsonResponse['html_response'] = $Functions->includeAttachments($orderId, true);
-                        $jsonResponse['status'] = "success";
+                        $jsonResponse['status'] = 'success';
                     }
                 } else {
                     $jsonResponse['status'] = "disallowed_file_type";
                 }
 
                 if ($file["error"] !== UPLOAD_ERR_OK) {
-                    $jsonResponse['status'] = "error";
+                    $jsonResponse['status'] = $file["error"];
                 }
             }
         } else {

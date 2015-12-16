@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -36,13 +36,15 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if (!$Session->isSessionValid()) {
         $jsonResponse['status'] = "no_session";
     } else {
+        $vendorsArray = $Vendors->getVendorsArray();
         date_default_timezone_set('America/Chicago');
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
         $description = $sanitizedPostArray['description'];
         $quantity = $sanitizedPostArray['quantity'];
         $uom = $sanitizedPostArray['uom'];
-        $vendor = $sanitizedPostArray['vendor'];
+        $vendorId = $sanitizedPostArray['vendor'];
+        $vendorName = $vendorsArray[$vendorId];
         $catalogNo = $sanitizedPostArray['catalog_no'];
         $price = $sanitizedPostArray['price'];
         $costCenter = $sanitizedPostArray['cost_center'];
@@ -61,6 +63,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $sql .= "quantity = :quantity, ";
         $sql .= "uom = :uom, ";
         $sql .= "vendor = :vendor, ";
+        $sql .= "vendor_name = :vendor_name, ";
         $sql .= "catalog_no = :catalog_no, ";
         $sql .= "price = :price, ";
         $sql .= "cost_center = :cost_center, ";
@@ -78,7 +81,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(':description', $description, PDO::PARAM_STR);
         $stmt->bindValue(':quantity', $quantity, PDO::PARAM_STR);
         $stmt->bindValue(':uom', $uom, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor', $vendor, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor', $vendorId, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_name', $vendorName, PDO::PARAM_STR);
         $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
         $stmt->bindValue(':price', $price, PDO::PARAM_STR);
         $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);

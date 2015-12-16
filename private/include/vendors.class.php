@@ -1,7 +1,8 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/16/2015                                                                 */
 /* Last modified on 12/16/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,14 +30,43 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
-define("PRIVATE_PATH", ROOT . "/private/");
-define("PUBLIC_PATH", ROOT . "/public/");
+class Vendors {
+    
+    private $Database;
+    public $vendorsArray;
+    public $vendorIdsArray;
 
-require_once(PRIVATE_PATH . "/include/constants.class.php");
-require_once(PRIVATE_PATH . "/include/passwords.php");
-require_once(PRIVATE_PATH . "/include/database.php");
-require_once(PRIVATE_PATH . "/include/functions.class.php");
-require_once(PRIVATE_PATH . "/include/session.class.php");
-require_once(PRIVATE_PATH . "/include/vendors.class.php");
-?>
+    /**
+     * @param $database Database
+     */
+    function __construct($database) {
+        $this->Database = $database;
+        $this->populateArrays();
+    }
+
+    private function populateArrays() {
+        $sql = "SELECT id, name FROM vendors WHERE approved = 1";
+        $stmt = $this->Database->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $this->vendorsArray[$row['id']] = $row['name'];
+            $this->vendorIdsArray[$row['name']] = $row['id'];
+        }
+    }
+
+    /**
+     * @return $vendorsArray array
+     */
+    public function getVendorsArray() {
+        return $this->vendorsArray;
+    }
+
+    /**
+     * @return $vendorIdsArray array
+     */
+    public function getVendorIdsArray() {
+        return $this->vendorIdsArray;
+    }
+}
+
+$Vendors = new Vendors($Database);
