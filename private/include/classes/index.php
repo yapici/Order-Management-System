@@ -1,9 +1,8 @@
 <?php
-
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/13/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Created on 10/19/2015                                                                 */
+/* Last modified on 12/12/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,15 +29,7 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-final class Constants {
-    const USER_TYPE_END_USER = 0;
-    const USER_TYPE_PURCHASING_PERSON = 1;
-    const USER_TYPE_ADMINISTRATOR = 2;
-    
-    private function __construct(){
-        throw new Exception("Can't get an instance of Constants");
-    }
-}
-
-/* @var $Constants Constants */
-//$Constants = new Constants();
+// Redirecting to the homepage
+header("Location: /");
+exit;
+?>

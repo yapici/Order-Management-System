@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/16/2015                                                           */
+/* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -44,9 +44,10 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $quantity = $sanitizedPostArray['quantity'];
         $uom = $sanitizedPostArray['uom'];
         $vendorId = $sanitizedPostArray['vendor'];
-        $vendorName = $vendorsArray[$vendorId];
+        $vendorName = $vendorsArray[$vendorId]['name'];
         $catalogNo = $sanitizedPostArray['catalog_no'];
         $price = $sanitizedPostArray['price'];
+        $weblink = $Functions->addHttp($sanitizedPostArray['weblink']);
         $costCenter = $sanitizedPostArray['cost_center'];
         $projectName = $sanitizedPostArray['project_name'];
         $projectNo = $sanitizedPostArray['project_no'];
@@ -66,6 +67,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $sql .= "vendor_name = :vendor_name, ";
         $sql .= "catalog_no = :catalog_no, ";
         $sql .= "price = :price, ";
+        $sql .= "weblink = :weblink, ";
         $sql .= "cost_center = :cost_center, ";
         $sql .= "project_name = :project_name, ";
         $sql .= "project_no = :project_no, ";
@@ -85,6 +87,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(':vendor_name', $vendorName, PDO::PARAM_STR);
         $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
         $stmt->bindValue(':price', $price, PDO::PARAM_STR);
+        $stmt->bindValue(':weblink', $weblink, PDO::PARAM_STR);
         $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
         $stmt->bindValue(':project_name', $projectName, PDO::PARAM_STR);
         $stmt->bindValue(':project_no', $projectNo, PDO::PARAM_STR);

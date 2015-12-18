@@ -4,6 +4,7 @@ function showItemDetailsPopupWindowItems(description,
         vendor,
         catalogNo,
         price,
+        weblink,
         costCenter,
         projectName,
         projectNo,
@@ -16,7 +17,8 @@ function showItemDetailsPopupWindowItems(description,
     $("#item-details-popup-window-uom").val(uom);
     $("#item-details-popup-window-catalog-no").val(catalogNo);
     $("#item-details-popup-window-price").val(price);
-    if (costCenter !== '') {
+    $("#item-details-popup-weblink").val(weblink);
+    if (vendor !== '') {
         $("#item-details-popup-window-vendor > option").each(function () {
             if ($(this).html() === vendor) {
                 $(this).prop('selected', true);
@@ -74,6 +76,7 @@ function updateOrderDetails() {
     var vendor_name = $("#item-details-popup-window-vendor option:selected").html();
     var catalog_no = $("#item-details-popup-window-catalog-no").val();
     var price = $("#item-details-popup-window-price").val();
+    var weblink = $("#item-details-popup-window-weblink").val();
     var cost_center = $("#item-details-popup-window-cost-center").val();
     var project_name = $("#item-details-popup-window-project-name").val();
     var project_no = $("#item-details-popup-window-project-no").val();
@@ -97,6 +100,7 @@ function updateOrderDetails() {
                 "&vendor=" + vendor +
                 "&catalog_no=" + catalog_no +
                 "&price=" + price +
+                "&weblink=" + weblink +
                 "&cost_center=" + cost_center +
                 "&project_name=" + project_name +
                 "&project_no=" + project_no +
@@ -113,6 +117,11 @@ function updateOrderDetails() {
                 $("#popup-item-uom").html(uom);
                 $("#popup-item-vendor").html(vendor_name);
                 $("#popup-item-catalog-no").html(catalog_no);
+                if (!/^https?:\/\//i.test(weblink)) {
+                    weblink = 'http://' + weblink;
+                }
+                weblink = "<a href='" + weblink + "'>Link</a>";
+                $("#popup-item-weblink").html(weblink);
                 $("#popup-item-price").html(price);
                 $("#popup-item-cost-center").html(cost_center);
                 $("#popup-item-project-name").html(project_name);

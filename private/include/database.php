@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -29,10 +29,10 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-$dbServer = DB_SERVER;
-$dbName = DB_NAME;
-$dbUser = DB_USER;
-$dbPass = DB_PASS;
+$dbServer = Constants::DB_SERVER;
+$dbName = Constants::DB_NAME;
+$dbUser = Constants::DB_USER;
+$dbPass = Constants::DB_PASS;
 
 try {
     $Database = new PDO("mysql:host=$dbServer;dbname=$dbName", $dbUser, $dbPass);

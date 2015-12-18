@@ -89,13 +89,7 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                             <span id="popup-item-vendor"></span>
                             <?php
                             if ($isAdmin) {
-                                $vendorsArray = $Vendors->getVendorsArray();
-                                echo '<select id="item-details-popup-window-vendor">';
-                                echo '<option></option>';
-                                foreach ($vendorsArray as $id => $vendor) {
-                                    echo "<option value='$id'>$vendor</option>";
-                                }
-                                echo '</select>';
+                                $ItemDetails->getVendors();
                             }
                             ?>
                         </td>
@@ -113,7 +107,14 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
                             <span id="popup-item-price"></span>
                             <?php if ($isAdmin) echo '<input id="item-details-popup-window-price" type="number" step="any"/>'; ?>
                         </td>
-                    </tr>                  
+                    </tr>   
+                    <tr>
+                        <td>Item Web Link:</td>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-weblink"></span>
+                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-weblink" type="text"/>'; ?>
+                        </td>
+                    </tr>                
                 </table>
             </td>
             <td class="right-panel">

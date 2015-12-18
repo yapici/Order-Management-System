@@ -1,7 +1,8 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/17/2015                                                                 */
 /* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,16 +30,66 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
-define("PRIVATE_PATH", ROOT . "/private/");
-define("PUBLIC_PATH", ROOT . "/public/");
-define("CLASSES_PATH", PRIVATE_PATH . 'include/classes/');
+class CostCenters {
 
-require_once(CLASSES_PATH . "constants.class.php");
-require_once(PRIVATE_PATH . "include/database.php");
-require_once(CLASSES_PATH . "functions.class.php");
-require_once(CLASSES_PATH . "session.class.php");
-require_once(CLASSES_PATH . "vendors.class.php");
-require_once(CLASSES_PATH . "cost_centers.class.php");
-require_once(CLASSES_PATH . "item_details.class.php");
+    private $Database;
+    private $Functions;
+
+    /** @var array $costCentersArray */
+    public $costCentersArray;
+
+    /** @var array $costCenterIdsArray */
+    public $costCenterIdsArray;
+
+    /**
+     * @param Database $database
+     * @param Functions $functions
+     */
+    function __construct($database, $functions) {
+        $this->Database = $database;
+        $this->Functions = $functions;
+        $this->populateArray();
+    }
+
+    private function populateArray() {
+        $sql = "SELECT id, name FROM cost_centers";
+        $stmt = $this->Database->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $sanitizedArray = $this->Functions->sanitizeArray($row);
+            $this->costCentersArray[$sanitizedArray['id']] = $sanitizedArray['name'];
+            $this->costCenterIdsArray[$sanitizedArray['name']] = $sanitizedArray['id'];
+        }
+    }
+
+    public function refreshArray() {
+        $this->populateArray();
+    }
+
+    /**
+     * @return array $costCentersArray
+     */
+    public function getCostCentersArray() {
+        return $this->costCentersArray;
+    }
+
+    /**
+     * @return array $costCenterIdsArray
+     */
+    public function getCostCenterIdsArray() {
+        return $this->costCenterIdsArray;
+    }
+
+    public function populateCostCentersList() {
+        $html = '';
+        foreach ($this->costCentersArray as $costCenterId => $costCenterName) {
+            $html .= "<option value='$costCenterId'>$costCenterName</option>";
+        }
+        echo $html;
+    }
+
+}
+
+/** @var CostCenters $CostCenters */
+$CostCenters = new CostCenters($Database, $Functions);
 ?>

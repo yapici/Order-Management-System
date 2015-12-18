@@ -1,8 +1,9 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Created on 12/13/2015                                                                 */
+/* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -29,9 +30,25 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("DB_SERVER", "localhost");
-define("DB_USER", "order_user");
-define("DB_PASS", "ka8*Q5(8Tku.hBs");
-define("DB_NAME", "orderings");
+final class Constants {
 
-?>
+    // Database details
+    const DB_SERVER = 'localhost';
+    const DB_USER = 'order_user';
+    const DB_PASS = 'ka8*Q5(8Tku.hBs';
+    const DB_NAME = 'orderings';
+    // User types
+    const USER_TYPE_END_USER = 0;
+    const USER_TYPE_PURCHASING_PERSON = 1;
+    const USER_TYPE_ADMINISTRATOR = 2;
+    // Order status
+    const ORDER_STATUS_PENDING = 'Pending';
+    const ORDER_STATUS_ORDERED = 'Ordered';
+    const ORDER_STATUS_RECEIVED = 'Received';
+    const ORDER_STATUS_BACKORDERED = 'Backordered';
+
+    private function __construct() {
+        throw new Exception("Can't get an instance of Constants");
+    }
+
+}

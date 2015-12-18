@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
-/* Last modified on 12/16/2015                                                           */
+/* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -31,42 +31,57 @@
 /* ===================================================================================== */
 
 class Vendors {
-    
+
     private $Database;
+    private $Functions;
+
+    /** @var array $vendorsArray */
     public $vendorsArray;
+
+    /** @var array $vendorIdsArray */
     public $vendorIdsArray;
 
     /**
-     * @param $database Database
+     * @param Database $database
+     * @param Functions $functions
      */
-    function __construct($database) {
+    function __construct($database, $functions) {
         $this->Database = $database;
+        $this->Functions = $functions;
         $this->populateArrays();
     }
 
     private function populateArrays() {
-        $sql = "SELECT id, name FROM vendors WHERE approved = 1";
+        $sql = "SELECT id, name, phone, website FROM vendors";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $this->vendorsArray[$row['id']] = $row['name'];
-            $this->vendorIdsArray[$row['name']] = $row['id'];
+            $sanitizedArray = $this->Functions->sanitizeArray($row);
+            $this->vendorsArray[$sanitizedArray['id']] = $sanitizedArray;
+            $this->vendorIdsArray[$sanitizedArray['name']] = $sanitizedArray['id'];
         }
     }
 
+    public function refreshArrays() {
+        $this->populateArrays();
+    }
+
     /**
-     * @return $vendorsArray array
+     * @return array $vendorsArray
      */
     public function getVendorsArray() {
         return $this->vendorsArray;
     }
 
     /**
-     * @return $vendorIdsArray array
+     * @return array $vendorIdsArray
      */
     public function getVendorIdsArray() {
         return $this->vendorIdsArray;
     }
+
 }
 
-$Vendors = new Vendors($Database);
+/** @var Vendors $Vendors */
+$Vendors = new Vendors($Database, $Functions);
+?>

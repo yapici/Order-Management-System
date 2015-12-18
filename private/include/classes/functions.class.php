@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/16/2015                                                           */
+/* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -111,8 +111,8 @@ class Functions {
         return $date;
     }
 
-    /** @param $date string
-     *  @return $convertedDate string
+    /** @param string $date
+     *  @return string $convertedDate
      */
     function convertStrDateToMysqlDate($date) {
         $slashesReplacedDate = str_replace("-", "/", $date);
@@ -135,8 +135,8 @@ class Functions {
         return $domain;
     }
 
-    /** @param $database Database 
-     *  @param $userId int 
+    /** @param Database $database 
+     *  @param int $userId 
      */
     function getUsername($database, $userId) {
         $username = '';
@@ -156,7 +156,7 @@ class Functions {
     }
 
     // This function is used in 'public/ajax/update-table-with-sort.php'.
-    /** @param $columnName string. Column name in the database
+    /** @param string $columnName - Column name in the database
      */
     function storeSortInSession($columnName) {
         if ($_SESSION['sort_column_name'] == $columnName && $_SESSION['sort_up_or_down'] == 'up') {
@@ -168,9 +168,9 @@ class Functions {
     }
 
     // This function is used in 'public/ajax/upload-file.php'.
-    /** @param $directory string. Base directory of the file
-     *  @param $filename string
-     *  @return $filePath string
+    /** @param string $directory - Base directory of the file
+     *  @param string $filename
+     *  @return string $filePath
      */
     function renameFileIfExists($directory, $filename) {
         $fileExtention = pathinfo($filename, PATHINFO_EXTENSION);
@@ -185,11 +185,10 @@ class Functions {
         return $filePath;
     }
 
-    // This function is used in 'public/ajax/add-new-item-action.php'.
-    /** @param $array array 
-     *  @return $sanitizedArray array
+    /** @param array $array 
+     *  @return array $sanitizedArray
      */
-    function sanitizeArrayItems($array) {
+    function sanitizeArray($array) {
         $sanitizedArray = array();
         foreach ($array as $key => $value) {
             $sanitizedArray[$key] = htmlspecialchars(trim($value));
@@ -198,7 +197,7 @@ class Functions {
     }
 
     // This function is used in 'public/ajax/add-new-item-action.php'.
-    /** @return $sanitizedArray array
+    /** @return array $sanitizedArray
      */
     function sanitizePostedVariables() {
         $sanitizedArray = array();
@@ -208,9 +207,9 @@ class Functions {
         return $sanitizedArray;
     }
 
-    /** @param $orderId int
-     *  @param $showDeleteButtons boolean
-     *  @return $htmlResponse string
+    /** @param int $orderId
+     *  @param boolena $showDeleteButtons
+     *  @return string $htmlResponse
      */
     function includeAttachments($orderId, $showDeleteButtons = false) {
         $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/' . $orderId;
@@ -235,9 +234,9 @@ class Functions {
     }
 
     // This function is used in includeAttachments() function.
-    /** @param $encryptedFilePath string
-     *  @param $showDeleteButtons boolean
-     *  @return $htmlResponse string
+    /** @param string $encryptedFilePath
+     *  @param boolean $showDeleteButtons
+     *  @return string $htmlResponse
      */
     function includeDeleteButtons($encryptedFilePath, $showDeleteButtons = false) {
         if ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
@@ -249,7 +248,19 @@ class Functions {
         return $htmlResponse;
     }
 
+    /** 
+     *  @param string $url
+     *  @return string $url
+     */
+    function addHttp($url) {
+        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+            $url = "http://" . $url;
+        }
+        return $url;
+    }
+    
 }
 
+/** @var Functions $Functions */
 $Functions = new Functions();
 ?>

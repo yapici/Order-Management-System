@@ -21,6 +21,7 @@ function showItemDetailsPopupWindow(
         vendor,
         catalogNo,
         price,
+        weblink,
         costCenter,
         projectName,
         projectNo,
@@ -39,6 +40,9 @@ function showItemDetailsPopupWindow(
         $("#item-details-popup-window-file-upload-elements-wrapper").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
     }
 
+    if (weblink !== '') {
+        var weblink = "<a href='" + weblink + "'>Link</a>";
+    }
     $("#popup-item-order-number").html("Order " + orderNo);
     $("#popup-item-description").html(description);
     $("#popup-item-quantity").html(quantity);
@@ -46,6 +50,7 @@ function showItemDetailsPopupWindow(
     $("#popup-item-vendor").html(vendor);
     $("#popup-item-catalog-no").html(catalogNo);
     $("#popup-item-price").html("$" + price);
+    $("#popup-item-weblink").html(weblink);
     $("#popup-item-cost-center").html(costCenter);
     $("#popup-item-project-name").html(projectName);
     $("#popup-item-project-no").html(projectNo);
@@ -56,6 +61,7 @@ function showItemDetailsPopupWindow(
     $('#popup-item-requested-by').html(requestedByUsername);
     $("#popup-item-last-updated-by").html(lastUpdatedByUsername);
     $("#popup-item-item-needed-by").html(itemNeededByDate);
+    $("#popup-item-status").html(status);
     $("#file-upload-order-id").val(orderNo);
 
     if (typeof showItemDetailsPopupWindowItems === 'function') {
@@ -65,6 +71,7 @@ function showItemDetailsPopupWindow(
                 vendor,
                 catalogNo,
                 price,
+                weblink,
                 costCenter,
                 projectName,
                 projectNo,
@@ -116,6 +123,7 @@ function addNewItem() {
     var account_no = $("#add-new-item-account-no").val();
     var comments = $("#add-new-item-comments").val();
     var date_needed = $("#add-new-item-date-needed").val();
+    var weblink = $("#add-new-item-weblink").val();
 
     // New Vendor Details
     var new_vendor_name = $("#add-new-item-new-vendor-name").val();
@@ -126,7 +134,6 @@ function addNewItem() {
     // Error div
     var error_div = $('#add-new-item-error-div');
     error_div.html("");
-    error_div.html('&nbsp;');
 
     if (description === ''
             || quantity === ''
@@ -156,6 +163,10 @@ function addNewItem() {
                     "&quantity=" + quantity +
                     "&uom=" + uom +
                     "&vendor=" + vendor +
+                    "&new_vendor_name=" + new_vendor_name +
+                    "&new_vendor_phone=" + new_vendor_phone +
+                    "&new_vendor_website=" + new_vendor_website +
+                    "&new_vendor_address=" + new_vendor_address +
                     "&catalog_no=" + catalog_no +
                     "&price=" + price +
                     "&cost_center=" + cost_center +
@@ -163,12 +174,14 @@ function addNewItem() {
                     "&project_no=" + project_no +
                     "&account_no=" + account_no +
                     "&date_needed=" + date_needed +
+                    "&weblink=" + weblink +
                     "&comments=" + comments,
             cache: false,
             dataType: "json",
             success: function (json_data) {
                 if (json_data.status === 'success') {
                     $('#orders-table tbody').html(json_data.html_tbody);
+                    $('#add-new-item-popup-window').html(json_data.add_new_item_popup);
                     unblockUI();
                     add_new_item_popup_window.fadeOut();
                 } else {
@@ -368,11 +381,11 @@ function uploadFile() {
             processData: false,
             success: function (json_response) {
                 if (json_response.status === 'success') {
-                if ($("#add-new-item-popup-window").is(":visible")) {
-                    $("#add-new-item-attachments-holder").html(json_response.html_response);
-                } else {
-                    $("#item-details-attachments-holder").html(json_response.html_response);
-                }
+                    if ($("#add-new-item-popup-window").is(":visible")) {
+                        $("#add-new-item-attachments-holder").html(json_response.html_response);
+                    } else {
+                        $("#item-details-attachments-holder").html(json_response.html_response);
+                    }
                 } else if (json_response.status === 'disallowed_file_type') {
                     error_div.html('This file type is not allowed');
                 } else if (json_response.status === 'no_file_was_chosen') {
@@ -391,7 +404,7 @@ function uploadFile() {
 
 function showVendorDetails(vendorId) {
     $(".add-new-item-vendor-details-holder-tr").hide();
-    if (vendorId === 'Add New Vendor') {
+    if (vendorId === 'new') {
         $(".add-new-item-new-vendor-details").show();
     } else {
         $(".add-new-item-vendor-details-" + vendorId).show();

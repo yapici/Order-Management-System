@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/16/2015                                                           */
+/* Last modified on 12/17/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -120,6 +120,7 @@ $sql .= "uom, ";
 $sql .= "vendor_name, ";
 $sql .= "catalog_no, ";
 $sql .= "price, ";
+$sql .= "weblink, ";
 $sql .= "cost_center, ";
 $sql .= "project_name, ";
 $sql .= "project_no, ";
@@ -169,7 +170,7 @@ $stmt->execute();
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $sanitizedArray = $Functions->sanitizeArrayItems($row);
+    $sanitizedArray = $Functions->sanitizeArray($row);
     $mItemId = $sanitizedArray['id'];
     $mDescription = $sanitizedArray['description'];
     $mQuantity = $sanitizedArray['quantity'];
@@ -177,6 +178,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $mVendor = $sanitizedArray['vendor_name'];
     $mCatalogNo = $sanitizedArray['catalog_no'];
     $mPrice = $sanitizedArray['price'];
+    $mWeblink = $sanitizedArray['weblink'];
     $mCostCenter = $sanitizedArray['cost_center'];
     $mProjectName = $sanitizedArray['project_name'];
     $mProjectNo = $sanitizedArray['project_no'];
@@ -185,7 +187,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $mRequestedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['requested_datetime']);
     $mLastUpdatedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['last_updated_datetime']);
     $mItemNeededByDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['item_needed_by_date']);
-    $mStatus = trim($row['status']);
+    $mStatus = $sanitizedArray['status'];
     $mRequestedByUsername = $sanitizedArray['requested_by_username'];
     $mLastUpdatedByUsername = $sanitizedArray['last_updated_by_username'];
 
@@ -197,6 +199,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     . "'$mVendor', "
     . "'$mCatalogNo', "
     . "'$mPrice', "
+    . "'$mWeblink', "
     . "'$mCostCenter', "
     . "'$mProjectName', "
     . "'$mProjectNo', "
