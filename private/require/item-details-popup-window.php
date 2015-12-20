@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/16/2015                                                           */
+/* Last modified on 12/19/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,7 +30,7 @@
 /* ===================================================================================== */
 
 $isAdmin = false;
-if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
+if ($Admin->isAdmin()) {
     echo "<script type='text/javascript'>";
     require(PRIVATE_PATH . 'require/js/item-details-popup-window-functions.js');
     echo "</script>";
@@ -223,9 +223,9 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
             <?php if ($isAdmin) { ?>
                 <div id="item-details-popup-window-file-upload-elements-wrapper">
                     Select a file to upload:
-                    <input type="file" name="file-to-upload" id="file-to-upload"/>
+                    <input type="file" name="file-to-upload" id="item-details-file-to-upload"/>
                     <input type="hidden" name="file_upload_order_id" id="file-upload-order-id"/>
-                    <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+                    <a class='button file-upload-button' onclick="uploadFile('item-details')">Upload File</a>
                     <div><i style="font-size: 0.9em; padding: 10px 0px 20px 0px; display: inline-block;"><b>Maximum file upload size is 10 MB</b></i></div>
                 </div>
             <?php } ?>
@@ -233,6 +233,6 @@ if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
         </div>
     </div>
     <div class="error-div popup-error-div" id="item-details-popup-window-error-div"></div>
-    <a class="button" onclick="hidePopupWindow();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">Close</a>
+    <a class="button" onclick="hidePopupWindows();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">Close</a>
 </div>
 

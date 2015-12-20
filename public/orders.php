@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/19/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -47,13 +47,22 @@ if (!$Session->isSessionValid()) {
         <div class="gray-out-div"></div>
         <img class="progress-circle" src="images/ajax-loader.gif"/>
         <?php require_once (PRIVATE_PATH . 'require/item-details-popup-window.php'); ?>
+        <?php require_once (PRIVATE_PATH . 'require/delete-file-confirmation-popup-window.php'); ?>
         <div class="popup-window" id="add-new-item-popup-window">
             <?php require_once (PRIVATE_PATH . 'require/add-new-item-popup-window.php'); ?>
         </div>
+        <?php
+        if ($Admin->isAdmin()) {
+            require_once (PRIVATE_PATH . 'require/vendors-popup-window.php');
+        }
+        ?>
         <?php require_once (PRIVATE_PATH . 'require/header.php'); ?>        
         <div id="orders-main-body-wrapper" class='noselect'>
-            <span title='Log Out' onclick='logoutAction();'><img id='logout-button' src='images/logout-button.png'></img></span>
-            <span title='Add New Item' onclick='showAddNewItemPopupWindow();'><img id='add-new-item-button' src='images/plus-icon.png'></img></span>
+            <span title='Log Out' onclick='logoutAction();'><img class='absolute-buttons' id='logout-button' src='images/logout-icon.png'></img></span>
+            <span title='Add New Item' onclick='showAddNewItemPopupWindow();'><img class='absolute-buttons' id='add-new-item-button' src='images/plus-icon.png'></img></span>
+            <?php if ($Admin->isAdmin()) { ?>
+                <span title='Manage Vendors' onclick='showVendorsPopupWindow();'><img class='absolute-buttons' id='vendor-button' src='images/vendor-icon.png'></img></span>
+            <?php } ?>
             <div class="search-elements-wrapper">
                 <input class='search-input' id="orders-search-input" placeholder="Search"
                 <?php

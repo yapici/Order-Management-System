@@ -1,0 +1,46 @@
+#vendors-popup-window {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 86%;
+    min-height: calc(96vh - 80px);
+}
+
+#vendors-popup-window-vendors-table {
+    width: 90%;
+    margin: 10px auto;
+    border-spacing: 1px;
+    border: #cccccc 1px solid;
+}
+
+#vendors-popup-window-vendors-table tbody tr td {
+    position: relative;
+    padding: 4px 0px;
+}
+
+#vendors-popup-window-vendors-table tbody tr td span {
+    visibility: hidden;
+}
+
+#vendors-popup-window-vendors-table tbody tr:nth-child(even) > td {
+    background-color: #ffffff;
+}
+
+#vendors-popup-window-vendors-table tbody tr:nth-child(odd) > td{
+    background-color: #f7f7f7;
+}
+
+#vendors-popup-window-vendors-table tbody tr td:hover {
+    background-color: #EBF6FF;
+}
+
+#vendors-popup-window-vendors-table tbody tr td input {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    padding: 4px 10px;
+    border: 0;
+    background: transparent;
+    outline: none;
+    box-shadow:none
+}

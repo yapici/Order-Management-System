@@ -124,6 +124,16 @@ select {
     background-color: #ffffff;
 }
 
+thead tr td {
+    background-color: #444444;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 1.0em;
+    font-weight: bold;
+    color: #ffffff;
+    border-bottom: 2px solid #222222; 
+}
+
 .file-upload-button {
     border: none;
 }
@@ -219,26 +229,6 @@ select {
     width: 120px;
     vertical-align: middle;
     line-height: 1.2em;
-}
-
-#logout-button {
-    width: 20px;
-    height: 20px;
-    padding: 8px 11px 8px 8px;
-    position: absolute;
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: top;
-    top: 16px;
-    left: 16px;
-    cursor: pointer;
-    color: #ffffff;
-    background: #0093d0;
-    border-bottom: 2px solid #006DBD;
-}
-
-#logout-button:hover {
-    background: #0063CE;
 }
 
 /* Datepicker */

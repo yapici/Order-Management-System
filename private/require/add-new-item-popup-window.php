@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/19/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -127,8 +127,8 @@
         <h2>Attachments</h2>
         <div id="add-new-item-popup-window-file-upload-elements-wrapper">
             Select a file to upload:
-            <input type="file" name="file-to-upload" id="file-to-upload"/>
-            <a class='button file-upload-button' onclick="uploadFile()">Upload File</a>
+            <input type="file" name="file-to-upload" id="new-item-file-to-upload"/>
+            <a class='button file-upload-button' onclick="uploadFile('new-item')">Upload File</a>
             <div><i style="font-size: 0.9em; padding: 10px 0px 20px 0px; display: inline-block;"><b>Maximum file upload size is 10 MB</b></i></div>
         </div>
         <div id="add-new-item-attachments-holder">
@@ -144,5 +144,5 @@
 <hr class="horizontal-divider"></hr>
 <div class="error-div popup-error-div" id="add-new-item-error-div"></div>
 <a class="button" onclick="addNewItem()">Submit</a>
-<a class="button" onclick="hidePopupWindow()">Close</a>
+<a class="button" onclick="hidePopupWindows()">Close</a>
 

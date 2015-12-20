@@ -1,5 +1,4 @@
 /* Orders Table */
-
 #orders-main-body-wrapper {
     display: table;
     min-width: 90%;
@@ -29,16 +28,6 @@
     cursor: pointer;
 }
 
-#orders-table thead tr td {
-    background-color: #444444;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    font-size: 1.0em;
-    font-weight: bold;
-    color: #ffffff;
-    border-bottom: 2px solid #222222; 
-}
-
 #orders-table thead tr td a {
     font-size: 0.8em;
     color: #ffffff;
@@ -66,7 +55,6 @@
 }
 
 /* Search Items */
-
 .search-elements-wrapper {
     position: relative;
     display: inline-block;
@@ -196,7 +184,6 @@
 }
 
 /* Item Details Popup Window */
-
 #item-details-popup-window {
     width: 80%;
     min-width: 800px;
@@ -360,26 +347,42 @@
     margin-bottom: 20px;
 }
 
-/* Add New Item */
-
-#add-new-item-button {
+/* Absolute Buttons */
+.absolute-buttons {
     position: absolute;
-    vertical-align: top;
     width: 20px;
     height: 20px;
     top: 16px;
-    left: 60px;
+    vertical-align: top;
+    display: inline-block;
     cursor: pointer;
     color: #ffffff;
-    padding: 8px 9px;
     background: #0093d0;
     border-bottom: 2px solid #006DBD;
+    overflow: hidden;
+    
 }
 
-#add-new-item-button:hover {
+.absolute-buttons:hover {
     background: #0063CE;
 }
 
+#logout-button {
+    left: 16px;
+    padding: 8px 11px 8px 8px;
+}
+
+#add-new-item-button {
+    left: 60px;
+    padding: 8px 9px;
+}
+
+#vendor-button {
+    left: 103px;
+    padding: 8px 9px;
+}
+
+/* Add New Item */
 #add-new-item-popup-window {
     margin-top: 40px;
     width: 80%;
@@ -411,7 +414,6 @@
 }
 
 /* Pagination Items */
-
 #pagination-holder-div {
     margin-top: 10px;
 }
@@ -481,6 +483,11 @@
 
 .add-new-item-new-vendor-details td {
     padding-left: 20px;
+}
+
+/* Delete Confirmation Popup */
+#delete-file-confirmation-popup-window {
+    width: 300px;
 }
 
 /* Misc */

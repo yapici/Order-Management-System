@@ -17,7 +17,16 @@ function showItemDetailsPopupWindowItems(description,
     $("#item-details-popup-window-uom").val(uom);
     $("#item-details-popup-window-catalog-no").val(catalogNo);
     $("#item-details-popup-window-price").val(price);
-    $("#item-details-popup-weblink").val(weblink);
+
+    if (weblink !== '') {
+        var div = document.createElement('div');
+        div.innerHTML = weblink;
+        var link = div.firstChild.getAttribute("href");
+        $("#item-details-popup-window-weblink").val(link);
+    } else {
+        $("#item-details-popup-window-weblink").val('');
+    }
+
     if (vendor !== '') {
         $("#item-details-popup-window-vendor > option").each(function () {
             if ($(this).html() === vendor) {
@@ -117,10 +126,15 @@ function updateOrderDetails() {
                 $("#popup-item-uom").html(uom);
                 $("#popup-item-vendor").html(vendor_name);
                 $("#popup-item-catalog-no").html(catalog_no);
-                if (!/^https?:\/\//i.test(weblink)) {
-                    weblink = 'http://' + weblink;
+                if (weblink !== '') {
+                    if (!/^https?:\/\//i.test(weblink)) {
+                        weblink = 'http://' + weblink;
+                    }
+                    weblink = "<a href='" + weblink + "'>Link</a>";
+                    $("#popup-item-weblink").html(weblink);
+                } else {
+                    $("#popup-item-weblink").html('');
                 }
-                weblink = "<a href='" + weblink + "'>Link</a>";
                 $("#popup-item-weblink").html(weblink);
                 $("#popup-item-price").html(price);
                 $("#popup-item-cost-center").html(cost_center);
@@ -128,7 +142,6 @@ function updateOrderDetails() {
                 $("#popup-item-project-no").html(project_no);
                 $("#popup-item-account-no").html(account_no);
                 $("#popup-item-comments").html(comments);
-                unblockUI();
             } else {
                 error_div.html(json_data.status);
             }

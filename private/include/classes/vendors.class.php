@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/19/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -52,7 +52,7 @@ class Vendors {
     }
 
     private function populateArrays() {
-        $sql = "SELECT id, name, phone, website FROM vendors";
+        $sql = "SELECT id, name, phone, website, address, contact_person, added_by_username, approved FROM vendors";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

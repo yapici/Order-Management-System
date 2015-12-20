@@ -1,7 +1,8 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/19/2015                                                                 */
 /* Last modified on 12/19/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,17 +30,22 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
-define("PRIVATE_PATH", ROOT . "/private/");
-define("PUBLIC_PATH", ROOT . "/public/");
-define("CLASSES_PATH", PRIVATE_PATH . 'include/classes/');
+class Admin {
 
-require_once(CLASSES_PATH . "constants.class.php");
-require_once(PRIVATE_PATH . "include/database.php");
-require_once(CLASSES_PATH . "functions.class.php");
-require_once(CLASSES_PATH . "session.class.php");
-require_once(CLASSES_PATH . "vendors.class.php");
-require_once(CLASSES_PATH . "cost_centers.class.php");
-require_once(CLASSES_PATH . "item_details.class.php");
-require_once(CLASSES_PATH . "admin.class.php");
-?>
+    /**
+     *  @return boolean If the logged in user is an administrator, 'true' is returned.
+     */
+    public function isAdmin() {
+        if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
+
+/**
+ *  @var Admin $Admin
+ */
+$Admin = new Admin();

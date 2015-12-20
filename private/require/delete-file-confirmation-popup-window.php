@@ -1,8 +1,9 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Created on 12/19/2015                                                                 */
+/* Last modified on 12/19/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -28,8 +29,11 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
-
-// Redirecting to the homepage
-header("Location: /");
-exit;
 ?>
+
+<div class="popup-window" id="delete-file-confirmation-popup-window">
+    <a class="popup-window-cancel-button" onclick="hideDeleteConfirmationWindow();">&#10006;</a>
+    <h1>Please Confirm</h1>
+    <p>Are you sure you want to delete this attachment?</p>
+    <a class="button" id="delete-file-confirmation-button">Yes</a>&nbsp;&nbsp;<a class="button" onclick="hideDeleteConfirmationWindow();">Cancel</a>
+</div>

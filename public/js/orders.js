@@ -8,11 +8,6 @@ $(function () {
     datepickerFunctions();
 });
 
-function hidePopupWindow() {
-    $(".popup-window").fadeOut();
-    unblockUI();
-}
-
 function showItemDetailsPopupWindow(
         orderNo,
         description,
@@ -194,7 +189,21 @@ function addNewItem() {
     }
 }
 
-function deleteAttachment(filepath) {
+function showDeleteConfirmationWindow(file) {
+    blockUI();
+    popup_window = $("#delete-file-confirmation-popup-window");
+    popup_window.fadeIn();
+    popup_window.css('z-index', '9999999');
+    $(".gray-out-div").css('z-index', '999999');
+    $("#delete-file-confirmation-button").attr('onclick', 'deleteAttachment("' + file + '")');
+}
+
+function hideDeleteConfirmationWindow() {
+    hidePopupWindow('delete-file-confirmation-popup-window');
+    $("#delete-file-confirmation-button").removeAttr('onclick');
+}
+
+function deleteAttachment(file) {
     var popup_window = $(".popup-window");
     var error_div = $(".popup-error-div");
     showProgressCircle();
@@ -202,7 +211,7 @@ function deleteAttachment(filepath) {
     $.ajax({
         url: "ajax/delete-attachment.php",
         type: "GET",
-        data: "file=" + filepath,
+        data: "file=" + file,
         cache: false,
         dataType: "json",
         success: function (json_response) {
@@ -218,6 +227,7 @@ function deleteAttachment(filepath) {
                 error_div.html("Something went wrong, please try again later.");
             }
             popup_window.css('z-index', '99999');
+            hideDeleteConfirmationWindow();;
             hideProgressCircle();
         }
     });
@@ -352,8 +362,13 @@ function datepickerFunctions() {
     });
 }
 
-function uploadFile() {
-    var file_data = $('#file-to-upload').prop('files')[0];
+function uploadFile(popup) {
+    if (popup === 'new-item') {
+        var file_input = $('#new-item-file-to-upload');
+    } else if (popup === 'item-details') {
+        var file_input = $('#item-details-file-to-upload');
+    }
+    var file_data = file_input.prop('files')[0];
     var form_data = new FormData();
     form_data.append('file-to-upload', file_data);
     if ($("#item-details-popup-window").is(":visible")) {
@@ -364,7 +379,7 @@ function uploadFile() {
     var error_div = $('.popup-error-div');
     error_div.html("");
 
-    if ($('#file-to-upload').val() === '') {
+    if (file_input.val() === '') {
         error_div.html('No file was chosen. Please choose a file to upload.');
     } else if (file_data.size > 10485760) {
         error_div.html('Maximum file upload size is 10 MB');
