@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/15/2015                                                           */
+/* Last modified on 12/20/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -51,7 +51,7 @@ if ($Session->isSessionValid()) {
         <img class="progress-circle" src="images/ajax-loader.gif"/>
         <div id="index-main-body-wrapper">
             <h1>Log in</h1>
-            <div><input id="email" type="text" placeholder="E-mail Address"/></div>
+            <div><input id="email" type="text" placeholder="E-mail Address" maxlength="111"/></div>
             <div><input id="password" type="password" placeholder="Password"/></div>
             <div><a class="button" onclick="loginUser()">Submit</a></div>
         </div>

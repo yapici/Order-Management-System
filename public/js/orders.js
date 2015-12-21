@@ -6,6 +6,7 @@ $(function () {
     });
 
     datepickerFunctions();
+    popupLoginWindowInputFunctions();
 });
 
 function showItemDetailsPopupWindow(
@@ -87,7 +88,7 @@ function showItemDetailsPopupWindow(
                 $("#item-details-attachments-holder").html(json_response.html_response);
                 $("#item-details-popup-window").fadeIn();
             } else {
-                // show popup login
+                showLoginPopupWindow();
             }
             hideProgressCircle();
         }
@@ -179,6 +180,8 @@ function addNewItem() {
                     $('#add-new-item-popup-window').html(json_data.add_new_item_popup);
                     unblockUI();
                     add_new_item_popup_window.fadeOut();
+                } else if (json_data.status === "no_session") {
+                    showLoginPopupWindow();
                 } else {
                     error_div.html(json_data.status);
                 }
@@ -223,11 +226,14 @@ function deleteAttachment(file) {
                 }
             } else if (json_response.status === 'get_out_of_here') {
                 error_div.html("You sneaky sun of a gun. Stop doing that.");
+            } else if (json_response.status === "no_session") {
+                showLoginPopupWindow();
             } else {
                 error_div.html("Something went wrong, please try again later.");
             }
             popup_window.css('z-index', '99999');
-            hideDeleteConfirmationWindow();;
+            hideDeleteConfirmationWindow();
+            ;
             hideProgressCircle();
         }
     });
@@ -271,7 +277,7 @@ function sortByColumn(element) {
                 }
                 unblockUI();
             } else if (json_data.status === "no_session") {
-                //showLoginPopupWindow();
+                showLoginPopupWindow();
             } else {
                 error_div.html("Something went wrong, please try again later.");
                 unblockUI();
@@ -310,7 +316,7 @@ function searchAction(action) {
                 }
                 unblockUI();
             } else if (json_data.status === "no_session") {
-                //showLoginPopupWindow();
+                showLoginPopupWindow();
             } else {
                 error_div.html("Something went wrong, please try again later.");
                 unblockUI();
@@ -336,7 +342,7 @@ function goToPage(page_number) {
                 $("#pagination-holder-div").html(json_data.html_pagination);
                 unblockUI();
             } else if (json_data.status === "no_session") {
-                //showLoginPopupWindow();
+                showLoginPopupWindow();
             } else {
                 error_div.html("Something went wrong, please try again later.");
                 unblockUI();
@@ -384,6 +390,7 @@ function uploadFile(popup) {
     } else if (file_data.size > 10485760) {
         error_div.html('Maximum file upload size is 10 MB');
     } else {
+        blockUI();
         showProgressCircle();
         popup_window.css('z-index', '9');
         $.ajax({
@@ -401,16 +408,22 @@ function uploadFile(popup) {
                     } else {
                         $("#item-details-attachments-holder").html(json_response.html_response);
                     }
+                    popup_window.css('z-index', '99999');
                 } else if (json_response.status === 'disallowed_file_type') {
                     error_div.html('This file type is not allowed');
+                    popup_window.css('z-index', '99999');
                 } else if (json_response.status === 'no_file_was_chosen') {
                     error_div.html('No file was chosen. Please choose a file to upload.');
+                    popup_window.css('z-index', '99999');
                 } else if (json_response.status === 'max_file_size_exceeded') {
                     error_div.html('Maximum file upload size is 10 MB');
+                    popup_window.css('z-index', '99999');
+                } else if (json_response.status === "no_session") {
+                    showLoginPopupWindow();
                 } else {
                     error_div.html('Something went wrong. Please contact webmaster.');
+                    popup_window.css('z-index', '99999');
                 }
-                popup_window.css('z-index', '99999');
                 hideProgressCircle();
             }
         });
@@ -424,6 +437,117 @@ function showVendorDetails(vendorId) {
     } else {
         $(".add-new-item-vendor-details-" + vendorId).show();
     }
+}
+
+function popupLoginWindowInputFunctions() {
+    var wasTrailingTextAdded = false;
+    $("#popup-login-email").click(function () {
+        var currentValue = $(this).val();
+        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+            currentValue = currentValue.substring(0, currentValue.indexOf('@'));
+        }
+
+        if (currentValue.indexOf('@example.com') < 0 && currentValue !== "Example E-mail Address") {
+            $(this).val(currentValue + "@example.com");
+            wasTrailingTextAdded = true;
+        }
+        if (!wasTrailingTextAdded) {
+            $(this)[0].setSelectionRange(0, 0);
+        }
+        if (currentValue === "@example.com" || currentValue === "" || currentValue === "Example E-mail Address") {
+            $(this).val('@example.com');
+            $(this)[0].setSelectionRange(0, 0);
+        }
+    });
+
+    $("#popup-login-email").blur(function () {
+        var error_div = $('#login-error-div');
+        error_div.html('&nbsp;');
+        var currentValue = $(this).val();
+        var trimmedValue = currentValue.substring(0, currentValue.indexOf('@'));
+        if (currentValue.indexOf('@') < 0 && currentValue !== "Example E-mail Address" && currentValue !== "") {
+            $(this).val(currentValue + "@example.com");
+            $(this).css('color', '#1C4D6F');
+        } else if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+            currentValue = currentValue.substring(0, currentValue.indexOf('@'));
+            $(this).val(currentValue + "@example.com");
+            $(this).css('color', '#1C4D6F');
+        } else if (currentValue.indexOf('@example.com') !== 0 && trimmedValue !== "") {
+            $(this).css('color', '#1C4D6F');
+        }
+
+        if ($(this).val() === "@example.com") {
+            $(this).addClass('placeholder');
+            $(this).val($(this).attr('placeholder'));
+            $(this).css('color', '#aaaaaa');
+        }
+
+        if (!isValidEmailAddress($(this).val())) {
+            error_div.css('color', '#cc0000');
+            error_div.html('Please enter a valid e-mail address.');
+        }
+    });
+
+    $("#password").keyup(function (event) {
+        if (event.keyCode === 13) {
+            loginUser();
+        }
+    });
+}
+
+function popupLoginUser() {
+    var email = $("#popup-login-email").val();
+    var password = $("#popup-login-password").val();
+    var error_div = $('#popup-login-error-div');
+    error_div.html('');
+
+    if (email.length < 1 || password.length < 1) {
+        error_div.html("Please fill all the fields properly");
+    } else if (!isValidEmailAddress(email)) {
+        error_div.html('Please enter a valid e-mail address.');
+    } else {
+        $('#login-popup-window').css('z-index', '99999');
+        $(".gray-out-div").css('z-index', '999999');
+        showProgressCircle();
+        $.ajax({
+            url: "ajax/login-action.php",
+            type: "POST",
+            data: "email=" + email +
+                    "&password=" + password,
+            cache: false,
+            dataType: "html",
+            success: function (html_response) {
+                if (html_response.trim() === "success") {
+                    hideLoginPopupWindow();
+                } else if (html_response.trim() === "invalid_info"
+                        || html_response.trim() === "wrong_combination") {
+                    error_div.html("Information you entered does not match with our records");
+                } else if (html_response.trim() === "invalid_domain_name") {
+                    error_div.html("Please use your 'example' email");
+                } else if (html_response.trim() === "invalid_email_address") {
+                    error_div.html("Please enter a valid email address");
+                } else if (html_response.trim() === "no_activation") {
+                    window.location = "/activation";
+                } else {
+                    error_div.html(html_response);
+                }
+                $('#login-popup-window').css('z-index', '99999');
+                $(".gray-out-div").css('z-index', '999');
+                hideProgressCircle();
+            }
+        });
+    }
+}
+
+function showLoginPopupWindow() {
+    $('#login-popup-window').fadeIn();
+    $('#login-popup-window').css('z-index', '9999999');
+    $(".gray-out-div").css('z-index', '999999');
+}
+
+function hideLoginPopupWindow() {
+    $('#login-popup-window').fadeOut();
+    unblockUI();
 }
 
 function msieversion() {

@@ -3,18 +3,49 @@
     margin-bottom: 40px;
     width: 86%;
     min-height: calc(96vh - 80px);
+    padding-bottom: 40px;
+}
+
+#vendor-popup-window-close-button {
+    position: absolute;
+    display: inline-block;
+    bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
 }
 
 #vendors-popup-window-vendors-table {
     width: 90%;
     margin: 10px auto;
-    border-spacing: 1px;
-    border: #cccccc 1px solid;
+    border-spacing: 0px;
 }
 
-#vendors-popup-window-vendors-table tbody tr td {
+#vendors-popup-window-vendors-table tr td {
     position: relative;
     padding: 4px 0px;
+    border-left: 1px #cccccc solid;
+}
+
+#vendors-popup-window-vendors-table tr td:first-child {
+    padding: 4px;
+}
+
+#vendors-popup-window-vendors-table tbody tr td:nth-child(8) {
+    border-right: 1px #cccccc solid;
+}
+
+#vendors-popup-window-vendors-table tbody tr td:last-child {
+    border: 0px;
+}
+
+#vendors-popup-window-vendors-table .empty-row td {
+    border-left: 0px;
+}
+
+#vendors-popup-window-vendors-table tbody tr:last-child td,
+#vendors-popup-window-vendors-table tfoot tr:last-child td {
+    border-bottom: 1px #cccccc solid;
 }
 
 #vendors-popup-window-vendors-table tbody tr td span {
@@ -25,7 +56,7 @@
     background-color: #ffffff;
 }
 
-#vendors-popup-window-vendors-table tbody tr:nth-child(odd) > td{
+#vendors-popup-window-vendors-table tbody tr:nth-child(odd) > td {
     background-color: #f7f7f7;
 }
 
@@ -33,7 +64,7 @@
     background-color: #EBF6FF;
 }
 
-#vendors-popup-window-vendors-table tbody tr td input {
+#vendors-popup-window-vendors-table tr td input {
     position: absolute;
     width: 100%;
     left: 0;
@@ -43,4 +74,54 @@
     background: transparent;
     outline: none;
     box-shadow:none
+}
+
+#vendors-popup-window-vendors-table .delete-button {
+    position: absolute;
+    right: -18px;
+    opacity: 0.7;
+    top: 5px;
+}
+
+#vendors-popup-window-vendors-table .delete-button:hover {
+    opacity: 1.0;
+}
+
+#vendors-popup-window-vendors-table #add-new-vendor-title-tr td,
+#vendors-popup-window-vendors-table thead tr td {
+    background-color: #444444;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 1.0em;
+    font-weight: bold;
+    color: #ffffff;
+    border-bottom: 1px solid #222222; 
+}
+
+#vendors-popup-window-vendors-table #add-new-vendor-input-wrapper-tr td {
+    background-color: #ffffff;
+}
+
+#vendors-popup-window-vendors-table #add-new-vendor-input-wrapper-tr td input {
+    line-height: 1.8em;
+    padding-top: 2px;
+    padding-bottom: 0px;
+}
+
+#vendors-popup-window-vendors-table #add-new-vendor-input-wrapper-tr td:hover {
+    background-color: #EBF6FF;
+}
+
+#vendors-popup-window-vendors-table #add-new-vendor-button-holder-td {
+    padding: 0;
+}
+
+#add-new-vendor-button-holder-td .button {
+    width: 100%;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    padding: 0;
+    padding-top: 1px;
+    line-height: 1.8em;
 }

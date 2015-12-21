@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/19/2015                                                           */
+/* Last modified on 12/20/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -127,8 +127,7 @@ if ($Admin->isAdmin()) {
                             if ($isAdmin) {
                                 echo '<select id="item-details-popup-window-cost-center">';
                                 echo '<option></option>';
-                                echo '<option>1234ZYZ</option>';
-                                echo '<option>9876ABCD</option>';
+                                $CostCenters->populateCostCentersList();
                                 echo '</select>';
                             }
                             ?>
@@ -172,8 +171,7 @@ if ($Admin->isAdmin()) {
                             if ($isAdmin) {
                                 echo '<select id="item-details-popup-window-account-no">';
                                 echo '<option></option>';
-                                echo '<option>ABCD12345XYZ</option>';
-                                echo '<option>XYZ12345ABCD</option>';
+                                $AccountNumbers->populateAccountNumbersList();
                                 echo '</select>';
                             }
                             ?>

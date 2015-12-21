@@ -490,6 +490,25 @@
     width: 300px;
 }
 
+/* Login Popup Window */
+#login-popup-window {
+    width: 400px;
+}
+
+#login-popup-window #login-popup-window-text-div {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#login-popup-window input {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#login-popup-window .button {
+    margin-top: 20px;
+}
+
 /* Misc */
 .horizontal-divider {
     border:none;

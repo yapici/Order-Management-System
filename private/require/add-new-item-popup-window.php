@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/19/2015                                                           */
+/* Last modified on 12/20/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -109,8 +109,7 @@
         <td class="add-new-item-input-holder-td">
             <select id="add-new-item-account-no">
                 <option></option>
-                <option>ABCD12345XYZ</option>
-                <option>XYZ12345ABCD</option>
+                <?php $AccountNumbers->populateAccountNumbersList();?>
             </select>
         </td>
     </tr>  

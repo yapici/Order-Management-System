@@ -142,6 +142,8 @@ function updateOrderDetails() {
                 $("#popup-item-project-no").html(project_no);
                 $("#popup-item-account-no").html(account_no);
                 $("#popup-item-comments").html(comments);
+            } else if (json_data.status === "no_session") {
+                showLoginPopupWindow();
             } else {
                 error_div.html(json_data.status);
             }

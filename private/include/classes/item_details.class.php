@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/20/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -59,7 +59,7 @@ class ItemDetails {
     }
 
     public function populateVendorsList() {
-        $sql = "SELECT id, name, phone, website FROM vendors WHERE approved = 1";
+        $sql = "SELECT id, name, phone, website FROM vendors WHERE approved = 1 AND deleted = 0";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
 

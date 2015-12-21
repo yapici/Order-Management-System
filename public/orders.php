@@ -48,6 +48,7 @@ if (!$Session->isSessionValid()) {
         <img class="progress-circle" src="images/ajax-loader.gif"/>
         <?php require_once (PRIVATE_PATH . 'require/item-details-popup-window.php'); ?>
         <?php require_once (PRIVATE_PATH . 'require/delete-file-confirmation-popup-window.php'); ?>
+        <?php require_once (PRIVATE_PATH . 'require/login-popup-window.php'); ?>
         <div class="popup-window" id="add-new-item-popup-window">
             <?php require_once (PRIVATE_PATH . 'require/add-new-item-popup-window.php'); ?>
         </div>
