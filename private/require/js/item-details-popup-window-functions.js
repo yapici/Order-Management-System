@@ -1,4 +1,5 @@
-function showItemDetailsPopupWindowItems(description,
+function prepareItemDetailsPopupWindowInputs(
+        description,
         quantity,
         uom,
         vendor,
@@ -6,9 +7,7 @@ function showItemDetailsPopupWindowItems(description,
         price,
         weblink,
         costCenter,
-        projectName,
-        projectNo,
-        accountNo,
+        project,
         comments,
         status) {
 
@@ -17,15 +16,8 @@ function showItemDetailsPopupWindowItems(description,
     $("#item-details-popup-window-uom").val(uom);
     $("#item-details-popup-window-catalog-no").val(catalogNo);
     $("#item-details-popup-window-price").val(price);
-
-    if (weblink !== '') {
-        var div = document.createElement('div');
-        div.innerHTML = weblink;
-        var link = div.firstChild.getAttribute("href");
-        $("#item-details-popup-window-weblink").val(link);
-    } else {
-        $("#item-details-popup-window-weblink").val('');
-    }
+    $("#item-details-popup-window-weblink").val(weblink);
+    $("#item-details-popup-window-comments").val(comments);
 
     if (vendor !== '') {
         $("#item-details-popup-window-vendor > option").each(function () {
@@ -34,19 +26,18 @@ function showItemDetailsPopupWindowItems(description,
             }
         });
     }
+    
     if (costCenter !== '') {
         $("#item-details-popup-window-cost-center option:contains('" + costCenter + "')").prop('selected', true);
+    } else {
+        $("#item-details-popup-window-cost-center")[0].selectedIndex = 0;
     }
-    if (projectName !== '') {
-        $("#item-details-popup-window-project-name option:contains('" + projectName + "')").prop('selected', true);
+    
+    if (project !== '') {
+        $("#item-details-popup-window-project option:contains('" + project + "')").prop('selected', true);
+    } else {
+        $("#item-details-popup-window-project option:contains('')")[0].selectedIndex = 0;
     }
-    if (projectNo !== '') {
-        $("#item-details-popup-window-project-no option:contains('" + projectNo + "')").prop('selected', true);
-    }
-    if (accountNo !== '') {
-        $("#item-details-popup-window-account-no option:contains('" + accountNo + "')").prop('selected', true);
-    }
-    $("#item-details-popup-window-comments").val(comments);
 }
 
 function toggleItemDetailsPopupInputFields(showHide) {
@@ -87,9 +78,7 @@ function updateOrderDetails() {
     var price = $("#item-details-popup-window-price").val();
     var weblink = $("#item-details-popup-window-weblink").val();
     var cost_center = $("#item-details-popup-window-cost-center").val();
-    var project_name = $("#item-details-popup-window-project-name").val();
-    var project_no = $("#item-details-popup-window-project-no").val();
-    var account_no = $("#item-details-popup-window-account-no").val();
+    var project = $("#item-details-popup-window-project").val();
     var comments = $("#item-details-popup-window-comments").val();
     var order_id = $("#popup-item-order-number").html();
     var error_div = $('#item-details-popup-window-error-div');
@@ -101,7 +90,7 @@ function updateOrderDetails() {
     showProgressCircle();
     blockUI();
     $.ajax({
-        url: "../ajax/update-item-details.php",
+        url: "../ajax/admin/update-item-details.php",
         type: "POST",
         data: "description=" + description +
                 "&quantity=" + quantity +
@@ -111,9 +100,7 @@ function updateOrderDetails() {
                 "&price=" + price +
                 "&weblink=" + weblink +
                 "&cost_center=" + cost_center +
-                "&project_name=" + project_name +
-                "&project_no=" + project_no +
-                "&account_no=" + account_no +
+                "&project=" + project +
                 "&comments=" + comments +
                 "&order_id=" + order_id,
         cache: false,
@@ -137,13 +124,13 @@ function updateOrderDetails() {
                 }
                 $("#popup-item-weblink").html(weblink);
                 $("#popup-item-price").html(price);
-                $("#popup-item-cost-center").html(cost_center);
-                $("#popup-item-project-name").html(project_name);
-                $("#popup-item-project-no").html(project_no);
-                $("#popup-item-account-no").html(account_no);
+                $("#popup-item-cost-center").html(json_data.cost_center_name);
+                $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(comments);
             } else if (json_data.status === "no_session") {
                 showLoginPopupWindow();
+            } else if (json_data.status === "unauthorized_access") {
+                location.reload();
             } else {
                 error_div.html(json_data.status);
             }
@@ -151,4 +138,13 @@ function updateOrderDetails() {
             hideProgressCircle();
         }
     });
+}
+
+function showItemDetailsPopupWindowAdmin(
+        accountNo,
+        vendorOrderNo,
+        invoiceNo
+        ) {
+        $("#popup-item-vendor-account-no").html(accountNo);
+
 }

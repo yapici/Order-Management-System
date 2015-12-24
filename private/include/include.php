@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -41,6 +41,7 @@ require_once(CLASSES_PATH . "session.class.php");
 require_once(CLASSES_PATH . "vendors.class.php");
 require_once(CLASSES_PATH . "cost_centers.class.php");
 require_once(CLASSES_PATH . "account_numbers.class.php");
+require_once(CLASSES_PATH . "projects.class.php");
 require_once(CLASSES_PATH . "item_details.class.php");
 require_once(CLASSES_PATH . "admin.class.php");
 ?>

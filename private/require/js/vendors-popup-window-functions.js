@@ -45,7 +45,7 @@ function updateVendorDetails(vendor_id, input_id) {
         showProgressCircle();
         blockUI();
         $.ajax({
-            url: "../ajax/update-vendor-details.php",
+            url: "../ajax/admin/update-vendor-details.php",
             type: "POST",
             data: "vendor_id=" + vendor_id +
                     "&field_name=" + field_name +
@@ -56,6 +56,8 @@ function updateVendorDetails(vendor_id, input_id) {
                 if (json_data.status === 'success') {
                 } else if (json_data.status === "no_session") {
                     showLoginPopupWindow();
+                } else if (json_data.status === "unauthorized_access") {
+                    location.reload();
                 } else {
                     error_div.html(json_data.status);
                 }
@@ -146,7 +148,7 @@ function deleteVendor(element) {
     showProgressCircle();
     blockUI();
     $.ajax({
-        url: "../ajax/delete-vendor.php",
+        url: "../ajax/admin/delete-vendor.php",
         type: "POST",
         data: "vendor_id=" + vendor_id,
         cache: false,
@@ -156,6 +158,8 @@ function deleteVendor(element) {
                 vendors_table_tbody.html(json_data.html_tbody);
             } else if (json_data.status === "no_session") {
                 showLoginPopupWindow();
+            } else if (json_data.status === "unauthorized_access") {
+                location.reload();
             } else {
                 error_div.html(json_data.status);
             }

@@ -219,7 +219,8 @@
     width: 24px;
 }
 
-#item-details-popup-window .top-panel {
+#item-details-popup-window .top-panel,
+#item-details-popup-window .bottom-panel {
     width: 94%;
     margin: 0px auto;
     padding: 0;
@@ -227,62 +228,47 @@
     text-align: left;
 }
 
-#item-details-popup-window .top-panel tr td {
+#item-details-popup-window .top-panel tr td,
+#item-details-popup-window .bottom-panel tr td {
     vertical-align: top;
     padding: 0px;
 }
 
-#item-details-popup-window .top-panel .left-panel,
-#item-details-popup-window .top-panel .right-panel {
+#item-details-popup-window .left-panel,
+#item-details-popup-window .right-panel {
     text-align: left;
     width: 40%;
 }
 
 
-#item-details-popup-window .top-panel .right-panel {
+#item-details-popup-window .right-panel {
     padding-left: 40px;
     width: 60%;
 }
 
 
-#item-details-popup-window .top-panel .left-panel tr td,
-#item-details-popup-window .top-panel .right-panel tr td {
+#item-details-popup-window .left-panel tr td,
+#item-details-popup-window .right-panel tr td {
     padding: 8px;
 }
 
-#item-details-popup-window .top-panel .left-panel tr td,
-#item-details-popup-window .top-panel .right-panel tr td,
-#item-details-popup-window .bottom-panel tr td {
+#item-details-popup-window .left-panel tr td,
+#item-details-popup-window .right-panel tr td{
     color: #222222;
 }
 
-#item-details-popup-window .top-panel .left-panel tr td:first-child,
-#item-details-popup-window .top-panel .right-panel tr td:first-child,
-#item-details-popup-window .bottom-panel tr td:first-child {
+#item-details-popup-window .left-panel tr td:first-child,
+#item-details-popup-window .right-panel tr td:first-child {
     font-weight: bold;
     padding-right: 10px;
     color: #1C4D6F;
     white-space: nowrap;
 }
 
-#item-details-popup-window .top-panel .left-panel tr td:last-child,
-#item-details-popup-window .top-panel .right-panel tr td:last-child {
+#item-details-popup-window .left-panel tr td:last-child,
+#item-details-popup-window .right-panel tr td:last-child {
     max-width: 400px;
     word-wrap: break-word;
-}
-
-#item-details-popup-window .bottom-panel {
-    text-align: left;
-    width: 94%;
-    margin: 0 auto;
-}
-
-#item-details-popup-window .bottom-panel tr td {
-    padding: 10px;
-}
-
-.editable-item-field:hover > .edit-button {
-    display: inline-block;
 }
 
 .edit-button {
@@ -348,11 +334,19 @@
 }
 
 /* Absolute Buttons */
-.absolute-buttons {
+#button-holder-span {
     position: absolute;
+    display: inline-block;
+    left: 16px;
+    top: 0;
+}
+
+.absolute-buttons {
+    position: relative;
     width: 20px;
     height: 20px;
     top: 16px;
+    padding: 8px 9px;
     vertical-align: top;
     display: inline-block;
     cursor: pointer;
@@ -360,7 +354,8 @@
     background: #0093d0;
     border-bottom: 2px solid #006DBD;
     overflow: hidden;
-    
+    z-index: 7;
+
 }
 
 .absolute-buttons:hover {
@@ -368,18 +363,63 @@
 }
 
 #logout-button {
-    left: 16px;
     padding: 8px 11px 8px 8px;
 }
 
-#add-new-item-button {
-    left: 60px;
-    padding: 8px 9px;
+#menu-button {
+    z-index: 8;
 }
 
-#vendor-button {
-    left: 103px;
-    padding: 8px 9px;
+#menu-button:hover + #menu-items-wrapper-span {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+
+/* Menu Items */
+#menu-items-wrapper-span {
+    position: absolute;
+    visibility: hidden;
+    width: 38px;
+    right: 0;
+    top: 38px;
+    opacity: 0;
+    transition: visibility 0s linear 0.3s, opacity 0.3s linear;
+    z-index: 7;
+}
+
+#menu-items-wrapper-span:hover {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+
+#menu-items-wrapper-ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+#menu-items-wrapper-ul .menu-items {
+    display: block;
+}
+
+#menu-items-wrapper-ul .menu-items:nth-child(2) .absolute-buttons {
+    -webkit-box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+       -moz-box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+#menu-items-wrapper-ul .menu-items:nth-child(3) .absolute-buttons {
+    -webkit-box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+       -moz-box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+}
+
+#menu-items-wrapper-ul .menu-items:last-child .absolute-buttons {
+    -webkit-box-shadow: 0px 5px 10px rgba(0,0,0,0.5);
+       -moz-box-shadow: 0px 5px 10px rgba(0,0,0,0.5);
+            box-shadow: 0px 5px 10px rgba(0,0,0,0.5);
 }
 
 /* Add New Item */

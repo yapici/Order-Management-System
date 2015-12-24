@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -37,15 +37,20 @@ final class Constants {
     const DB_USER = 'order_user';
     const DB_PASS = 'ka8*Q5(8Tku.hBs';
     const DB_NAME = 'orderings';
+    
     // User types
     const USER_TYPE_END_USER = 0;
     const USER_TYPE_PURCHASING_PERSON = 1;
     const USER_TYPE_ADMINISTRATOR = 2;
+    
     // Order status
     const ORDER_STATUS_PENDING = 'Pending';
     const ORDER_STATUS_ORDERED = 'Ordered';
     const ORDER_STATUS_RECEIVED = 'Received';
     const ORDER_STATUS_BACKORDERED = 'Backordered';
+    
+    // Item ordered status
+    const ORDER_PLACED = 1;
 
     private function __construct() {
         throw new Exception("Can't get an instance of Constants");

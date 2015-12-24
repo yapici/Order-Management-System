@@ -30,43 +30,52 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-class Admin {
+require('../../../private/include/include.php');
+// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
+if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+    $adminCheckResponse = $Admin->ajaxAdminChecks();
+    if ($adminCheckResponse !== true) {
+        $jsonResponse['status'] = $adminCheckResponse;
+    } else {
+        date_default_timezone_set('America/Chicago');
+        
+        // Getting the parameters passed through AJAX
+        $sanitizedPostArray = $Functions->sanitizePostedVariables();
+        
+        $vendorId = $sanitizedPostArray['vendor_id'];
+        $fieldName = $sanitizedPostArray['field_name'];
+        $value = $sanitizedPostArray['value'];
+        
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
 
-    private $Session;
+        // Inserting the information to the database
+        $sql = "UPDATE vendors SET ";
+        $sql .= "$fieldName = :value, ";
+        $sql .= "last_updated_by_user_id = :last_updated_by_user_id, ";
+        $sql .= "last_updated_by_username = :last_updated_by_username, ";
+        $sql .= "last_updated_date = :last_updated_date ";
+        $sql .= "WHERE id = :vendor_id";
 
-    /**
-     * @param Session $session
-     */
-    function __construct($session) {
-        $this->Session = $session;
-    }
+        $stmt = $Database->prepare($sql);
 
-    /**
-     *  @return boolean If the logged in user is an administrator, 'true' is returned.
-     */
-    public function isAdmin() {
-        if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
-            return true;
+        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_user_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_date', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_id', $vendorId, PDO::PARAM_STR);
+        $result = $stmt->execute();
+
+        if ($result) {
+            $Vendors->refreshArrays();
+            $jsonResponse['status'] = "success";
         } else {
-            return false;
+            $jsonResponse['status'] = "fail";
         }
     }
-
-    public function ajaxAdminChecks() {
-        if (!$this->Session->isSessionValid()) {
-            $response = "no_session";
-        } else if ($_SESSION['user_type'] != Constants::USER_TYPE_PURCHASING_PERSON &&
-                $_SESSION['user_type'] != Constants::USER_TYPE_ADMINISTRATOR) {
-            $response = "unauthorized_access";
-        } else {
-            $response = true;
-        }
-        return $response;
-    }
-
+    echo json_encode($jsonResponse);
+} else {
+    $Functions->phpRedirect('');
 }
 
-/**
- *  @var Admin $Admin
- */
-$Admin = new Admin($Session);

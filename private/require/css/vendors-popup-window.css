@@ -50,6 +50,7 @@
 
 #vendors-popup-window-vendors-table tbody tr td span {
     visibility: hidden;
+    white-space: nowrap;
 }
 
 #vendors-popup-window-vendors-table tbody tr:nth-child(even) > td {

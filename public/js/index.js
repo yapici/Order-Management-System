@@ -69,7 +69,7 @@ function loginUser() {
         showProgressCircle();
         blockUI();
         $.ajax({
-            url: "ajax/login-action.php",
+            url: "ajax/login.php",
             type: "POST",
             data: "email=" + email +
                     "&password=" + password,

@@ -28,7 +28,7 @@ function logoutAction() {
     showProgressCircle();
     blockUI();
     $.ajax({
-        url: "ajax/logout-action.php",
+        url: "ajax/logout.php",
         type: "POST",
         cache: false,
         dataType: "html",

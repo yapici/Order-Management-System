@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -46,10 +46,11 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $catalogNo = $sanitizedPostArray['catalog_no'];
         $price = $sanitizedPostArray['price'];
         $costCenter = $sanitizedPostArray['cost_center'];
-        $projectName = $sanitizedPostArray['project_name'];
-        $projectNo = $sanitizedPostArray['project_no'];
-        $accountNo = $sanitizedPostArray['account_no'];
-        $weblink = $Functions->addHttp($sanitizedPostArray['weblink']);
+        $project = $sanitizedPostArray['project'];
+        $weblink = $sanitizedPostArray['weblink'];
+        if ($weblink != '') {
+            $weblink = $Functions->addHttp($sanitizedPostArray['weblink']);
+        }
         $comments = $sanitizedPostArray['comments'];
         $dateNeeded = $Functions->convertStrDateToMysqlDate($sanitizedPostArray['date_needed']);
         $userId = $_SESSION['id'];
@@ -85,7 +86,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
 
         // Inserting the information to the database
         $sql = "INSERT INTO orders (";
-        $sql .= "description, quantity, uom, vendor, catalog_no, price, cost_center, project_name, project_no, account_no, comments, requested_by_id";
+        $sql .= "description, quantity, uom, vendor, catalog_no, price, cost_center, project, comments, requested_by_id";
         $sql .= ", requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status, item_needed_by_date, ";
         $sql .= "vendor_name, weblink) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -98,20 +99,18 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(5, $catalogNo, PDO::PARAM_STR);
         $stmt->bindValue(6, $price, PDO::PARAM_STR);
         $stmt->bindValue(7, $costCenter, PDO::PARAM_STR);
-        $stmt->bindValue(8, $projectName, PDO::PARAM_STR);
-        $stmt->bindValue(9, $projectNo, PDO::PARAM_STR);
-        $stmt->bindValue(10, $accountNo, PDO::PARAM_STR);
-        $stmt->bindValue(11, $comments, PDO::PARAM_STR);
-        $stmt->bindValue(12, $userId, PDO::PARAM_STR);
-        $stmt->bindValue(13, $username, PDO::PARAM_STR);
-        $stmt->bindValue(14, $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(15, $userId, PDO::PARAM_STR);
-        $stmt->bindValue(16, $username, PDO::PARAM_STR);
-        $stmt->bindValue(17, $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(18, Constants::ORDER_STATUS_PENDING, PDO::PARAM_STR);
-        $stmt->bindValue(19, $dateNeeded, PDO::PARAM_STR);
-        $stmt->bindValue(20, $vendorName, PDO::PARAM_STR);
-        $stmt->bindValue(21, $weblink, PDO::PARAM_STR);
+        $stmt->bindValue(8, $project, PDO::PARAM_STR);
+        $stmt->bindValue(9, $comments, PDO::PARAM_STR);
+        $stmt->bindValue(10, $userId, PDO::PARAM_STR);
+        $stmt->bindValue(11, $username, PDO::PARAM_STR);
+        $stmt->bindValue(12, $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(13, $userId, PDO::PARAM_STR);
+        $stmt->bindValue(14, $username, PDO::PARAM_STR);
+        $stmt->bindValue(15, $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(16, Constants::ORDER_STATUS_PENDING, PDO::PARAM_STR);
+        $stmt->bindValue(17, $dateNeeded, PDO::PARAM_STR);
+        $stmt->bindValue(18, $vendorName, PDO::PARAM_STR);
+        $stmt->bindValue(19, $weblink, PDO::PARAM_STR);
         $result = $stmt->execute();
 
         if ($result) {
@@ -123,7 +122,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
             $jsonResponse['html_tbody'] = ob_get_clean();
             ob_start();
-            require_once(PRIVATE_PATH . 'require/add-new-item-popup-window.php');
+            require_once(PRIVATE_PATH . 'require/popup-windows/add-new-item-popup-window.php');
             $jsonResponse['add_new_item_popup'] = ob_get_clean();
             $jsonResponse['html_pagination'] = $pagination;
             $jsonResponse['status'] = "success";

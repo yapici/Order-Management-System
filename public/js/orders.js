@@ -19,16 +19,17 @@ function showItemDetailsPopupWindow(
         price,
         weblink,
         costCenter,
-        projectName,
-        projectNo,
-        accountNo,
+        project,
         comments,
         requestedByUsername,
         requestedDate,
         lastUpdatedByUsername,
         lastUpdatedDate,
         status,
-        itemNeededByDate) {
+        itemNeededByDate,
+        ordered,
+        orderedDate,
+        orderedByUsername) {
     blockUI();
     $('.popup-error-div').html('');
 
@@ -48,9 +49,7 @@ function showItemDetailsPopupWindow(
     $("#popup-item-price").html("$" + price);
     $("#popup-item-weblink").html(weblink);
     $("#popup-item-cost-center").html(costCenter);
-    $("#popup-item-project-name").html(projectName);
-    $("#popup-item-project-no").html(projectNo);
-    $("#popup-item-account-no").html(accountNo);
+    $("#popup-item-project").html(project);
     $("#popup-item-comments").html(comments);
     $("#popup-item-last-updated-date").html("on " + lastUpdatedDate);
     $("#popup-item-requested-date").html("on " + requestedDate);
@@ -59,22 +58,6 @@ function showItemDetailsPopupWindow(
     $("#popup-item-item-needed-by").html(itemNeededByDate);
     $("#popup-item-status").html(status);
     $("#file-upload-order-id").val(orderNo);
-
-    if (typeof showItemDetailsPopupWindowItems === 'function') {
-        showItemDetailsPopupWindowItems(description,
-                quantity,
-                uom,
-                vendor,
-                catalogNo,
-                price,
-                weblink,
-                costCenter,
-                projectName,
-                projectNo,
-                accountNo,
-                comments,
-                status);
-    }
 
     showProgressCircle();
     $.ajax({
@@ -114,9 +97,7 @@ function addNewItem() {
     var catalog_no = $("#add-new-item-catalog-no").val();
     var price = $("#add-new-item-price").val();
     var cost_center = $("#add-new-item-cost-center").val();
-    var project_name = $("#add-new-item-project-name").val();
-    var project_no = $("#add-new-item-project-no").val();
-    var account_no = $("#add-new-item-account-no").val();
+    var project = $("#add-new-item-project").val();
     var comments = $("#add-new-item-comments").val();
     var date_needed = $("#add-new-item-date-needed").val();
     var weblink = $("#add-new-item-weblink").val();
@@ -136,7 +117,6 @@ function addNewItem() {
             || uom === ''
             || vendor === 'Please Choose a Vendor'
             || catalog_no === ''
-            || price === ''
             || date_needed === '') {
         error_div.html("Please fill all the mandatory fields");
     } else if (vendor === "Add New Vendor"
@@ -146,14 +126,14 @@ function addNewItem() {
         error_div.html('Please enter all the required vendor details.');
     } else if (!$.isNumeric(quantity)) {
         error_div.html('Please enter only numberic values for the quantity.');
-    } else if (!$.isNumeric(price)) {
+    } else if (price !== '' && !$.isNumeric(price)) {
         error_div.html('Please enter only numberic values for the price.');
     } else {
         add_new_item_popup_window.css('z-index', '9');
         showProgressCircle();
         blockUI();
         $.ajax({
-            url: "../ajax/add-new-item-action.php",
+            url: "../ajax/add-new-item.php",
             type: "POST",
             data: "description=" + description +
                     "&quantity=" + quantity +
@@ -166,9 +146,7 @@ function addNewItem() {
                     "&catalog_no=" + catalog_no +
                     "&price=" + price +
                     "&cost_center=" + cost_center +
-                    "&project_name=" + project_name +
-                    "&project_no=" + project_no +
-                    "&account_no=" + account_no +
+                    "&project=" + project +
                     "&date_needed=" + date_needed +
                     "&weblink=" + weblink +
                     "&comments=" + comments,
@@ -510,7 +488,7 @@ function popupLoginUser() {
         $(".gray-out-div").css('z-index', '999999');
         showProgressCircle();
         $.ajax({
-            url: "ajax/login-action.php",
+            url: "ajax/login.php",
             type: "POST",
             data: "email=" + email +
                     "&password=" + password,

@@ -2,8 +2,8 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/20/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Created on 12/23/2015                                                                 */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,48 +30,15 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-require('../../private/include/include.php');
-// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
-if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
-    if (!$Session->isSessionValid()) {
-        $jsonResponse['status'] = "no_session";
-    } else {
-        date_default_timezone_set('America/Chicago');
-        // Getting the parameters passed through AJAX
-        $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        $vendorId = $sanitizedPostArray['vendor_id'];
-        $userId = $_SESSION['id'];
-        $username = $_SESSION['username'];
-        $currentDate = date("Y-m-d H:i:s");
+require_once (PRIVATE_PATH . 'require/popup-windows/item-details-popup-window.php');
+require_once (PRIVATE_PATH . 'require/popup-windows/delete-file-confirmation-popup-window.php');
+require_once (PRIVATE_PATH . 'require/popup-windows/login-popup-window.php');
 
-        // Inserting the information to the database
-        $sql = "UPDATE vendors SET ";
-        $sql .= "deleted = '1', ";
-        $sql .= "deleted_date = :deleted_date, ";
-        $sql .= "deleted_by_user_id = :deleted_by_user_id, ";
-        $sql .= "deleted_by_username = :deleted_by_username ";
-        $sql .= "WHERE id = :vendor_id";
+echo '<div class="popup-window" id="add-new-item-popup-window">';
+require_once (PRIVATE_PATH . 'require/popup-windows/add-new-item-popup-window.php');
+echo '</div>';
 
-        $stmt = $Database->prepare($sql);
-
-        $stmt->bindValue(':deleted_date', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':deleted_by_user_id', $userId, PDO::PARAM_STR);
-        $stmt->bindValue(':deleted_by_username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor_id', $vendorId, PDO::PARAM_STR);
-        $result = $stmt->execute();
-
-        if ($result) {
-            $Vendors->removeVendorFromArray($vendorId);
-            ob_start();
-            $Vendors->populateVendorsTable();
-            $jsonResponse['html_tbody'] = ob_get_clean();
-            $jsonResponse['status'] = "success";
-        } else {
-            $jsonResponse['status'] = "fail";
-        }
-    }
-    echo json_encode($jsonResponse);
-} else {
-    $Functions->phpRedirect('');
+if ($Admin->isAdmin()) {
+    require_once (PRIVATE_PATH . 'require/popup-windows/vendors-popup-window.php');
 }
-
+?>

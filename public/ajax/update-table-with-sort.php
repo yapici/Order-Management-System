@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/13/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -53,6 +53,9 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             case "Cat":
                 $Functions->storeSortInSession('catalog_no');
                 break;
+            case "Acc":
+                $Functions->storeSortInSession('account_number');
+                break;
             case "Pri":
                 $Functions->storeSortInSession('price');
                 break;
@@ -61,6 +64,9 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
                 break;
             case "Req":
                 $Functions->storeSortInSession('requested_by_username');
+                break;
+            case "Ite":
+                $Functions->storeSortInSession('item_needed_by_date');
                 break;
             case "":
                 $Functions->storeSortInSession('');

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/15/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -40,8 +40,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $filepath = PRIVATE_PATH . 'attachments/' . $Functions->decode($filecode);
         $orderId = substr(dirname($filepath), strrpos(dirname($filepath), '/') + 1);
 
-        /* This if statement is used to prevent hacking  deleteAttachment function to delete
-         * an attachment other than the ones uploade in 'add-new-item-popup-window' (e.g. an 
+        /* This if statement is used to prevent hacking deleteAttachment function to delete
+         * an attachment other than the ones uploaded in 'add-new-item-popup-window' (e.g. an 
          * attachment in item-details-popup-window).
          */
         if (isset($_SESSION['temp-file-upload-directory']) &&

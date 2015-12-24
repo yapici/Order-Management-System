@@ -2,8 +2,8 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/13/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Created on 12/20/2015                                                                 */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,80 +30,42 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-require('../../private/include/include.php');
+require('../../../private/include/include.php');
 // Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
 if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
-    if (!$Session->isSessionValid()) {
-        $jsonResponse['status'] = "no_session";
+    $adminCheckResponse = $Admin->ajaxAdminChecks();
+    if ($adminCheckResponse !== true) {
+        $jsonResponse['status'] = $adminCheckResponse;
     } else {
-        $vendorsArray = $Vendors->getVendorsArray();
         date_default_timezone_set('America/Chicago');
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        $description = $sanitizedPostArray['description'];
-        $quantity = $sanitizedPostArray['quantity'];
-        $uom = $sanitizedPostArray['uom'];
-        $vendorId = $sanitizedPostArray['vendor'];
-        $vendorName = $vendorsArray[$vendorId]['name'];
-        $catalogNo = $sanitizedPostArray['catalog_no'];
-        $price = $sanitizedPostArray['price'];
-        $weblink = $Functions->addHttp($sanitizedPostArray['weblink']);
-        $costCenter = $sanitizedPostArray['cost_center'];
-        $projectName = $sanitizedPostArray['project_name'];
-        $projectNo = $sanitizedPostArray['project_no'];
-        $accountNo = $sanitizedPostArray['account_no'];
-        $comments = $sanitizedPostArray['comments'];
-        $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
+        $vendorId = $sanitizedPostArray['vendor_id'];
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
 
         // Inserting the information to the database
-        $sql = "UPDATE orders SET ";
-        $sql .= "description = :description, ";
-        $sql .= "quantity = :quantity, ";
-        $sql .= "uom = :uom, ";
-        $sql .= "vendor = :vendor, ";
-        $sql .= "vendor_name = :vendor_name, ";
-        $sql .= "catalog_no = :catalog_no, ";
-        $sql .= "price = :price, ";
-        $sql .= "weblink = :weblink, ";
-        $sql .= "cost_center = :cost_center, ";
-        $sql .= "project_name = :project_name, ";
-        $sql .= "project_no = :project_no, ";
-        $sql .= "account_no = :account_no, ";
-        $sql .= "comments = :comments, ";
-        $sql .= "last_updated_by_id = :last_updated_by_id, ";
-        $sql .= "last_updated_by_username = :last_updated_by_username, ";
-        $sql .= "last_updated_datetime = :last_updated_datetime ";
-        $sql .= "WHERE id = :order_id";
+        $sql = "UPDATE vendors SET ";
+        $sql .= "deleted = '1', ";
+        $sql .= "deleted_date = :deleted_date, ";
+        $sql .= "deleted_by_user_id = :deleted_by_user_id, ";
+        $sql .= "deleted_by_username = :deleted_by_username ";
+        $sql .= "WHERE id = :vendor_id";
 
         $stmt = $Database->prepare($sql);
 
-        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
-        $stmt->bindValue(':quantity', $quantity, PDO::PARAM_STR);
-        $stmt->bindValue(':uom', $uom, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor', $vendorId, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor_name', $vendorName, PDO::PARAM_STR);
-        $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
-        $stmt->bindValue(':price', $price, PDO::PARAM_STR);
-        $stmt->bindValue(':weblink', $weblink, PDO::PARAM_STR);
-        $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
-        $stmt->bindValue(':project_name', $projectName, PDO::PARAM_STR);
-        $stmt->bindValue(':project_no', $projectNo, PDO::PARAM_STR);
-        $stmt->bindValue(':account_no', $accountNo, PDO::PARAM_STR);
-        $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
+        $stmt->bindValue(':deleted_date', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':deleted_by_user_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':deleted_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_id', $vendorId, PDO::PARAM_STR);
         $result = $stmt->execute();
 
         if ($result) {
+            $Vendors->removeVendorFromArray($vendorId);
             ob_start();
-            require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
+            $Vendors->populateVendorsTable();
             $jsonResponse['html_tbody'] = ob_get_clean();
-            $jsonResponse['html_pagination'] = $pagination;
             $jsonResponse['status'] = "success";
         } else {
             $jsonResponse['status'] = "fail";

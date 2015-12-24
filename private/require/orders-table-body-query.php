@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -74,13 +74,16 @@ $columns = ['id',
     'uom',
     'catalog_no',
     'price',
-    'account_no',
+    'account_number',
+    'project_name_and_number',
     'comments',
     'status',
     'vendor_name',
     'requested_datetime',
     'last_updated_datetime',
     'last_updated_by_username',
+    'item_needed_by_date',
+    'ordered_date',
     'requested_by_username'
 ];
 $searchSqlString = " ";
@@ -91,7 +94,7 @@ if (isset($_SESSION['search_keywords']) && $_SESSION['search_keywords'] != "" &&
     for ($i = 0; $i < count($searchKeywordsArray); $i++) {
         $searchSqlString .= "AND (";
         for ($k = 0; $k < count($columns); $k++) {
-            if (substr($columns[$k], -8) == "datetime") {
+            if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
                 $searchSqlString .= '(' . $columns[$k] . " BETWEEN :keyword" . $i . $k . "a AND :keyword" . $i . $k . "b) OR ";
             } else {
                 $searchSqlString .= $columns[$k] . " LIKE :keyword" . $i . $k . " OR ";
@@ -122,15 +125,21 @@ $sql .= "catalog_no, ";
 $sql .= "price, ";
 $sql .= "weblink, ";
 $sql .= "cost_center, ";
-$sql .= "project_name, ";
-$sql .= "project_no, ";
-$sql .= "account_no, ";
+$sql .= "project, ";
+$sql .= "account_id, ";
 $sql .= "comments, ";
 $sql .= "requested_datetime, ";
 $sql .= "last_updated_datetime, ";
 $sql .= "status, ";
 $sql .= "requested_by_username, ";
 $sql .= "item_needed_by_date, ";
+$sql .= "ordered, ";
+$sql .= "ordered_date, ";
+$sql .= "ordered_by_username, ";
+if ($Admin->isAdmin()) {
+    $sql .= "vendor_order_no, ";
+    $sql .= "invoice_no, ";
+}
 $sql .= "last_updated_by_username ";
 $sql .= "FROM orders WHERE deleted = 0";
 $sql .= $searchSqlString;
@@ -144,8 +153,7 @@ for ($i = 0; $i < count($searchKeywordsArray); $i++) {
     $keyword = $searchKeywordsArray[$i];
     for ($k = 0; $k < count($columns); $k++) {
         $paramName = ":keyword" . $i . $k;
-        $colName = substr($columns[$k], -8);
-        if ($colName == "datetime") {
+        if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
             $dateKeyword = $Functions->convertStrDateToMysqlDate($keyword);
             $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
             $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
@@ -180,9 +188,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $mPrice = $sanitizedArray['price'];
     $mWeblink = $sanitizedArray['weblink'];
     $mCostCenter = $sanitizedArray['cost_center'];
-    $mProjectName = $sanitizedArray['project_name'];
-    $mProjectNo = $sanitizedArray['project_no'];
-    $mAccountNo = $sanitizedArray['account_no'];
+    $mProjectId = $sanitizedArray['project'];
+    $mAccountId = $sanitizedArray['account_id'];
     $mComments = $sanitizedArray['comments'];
     $mRequestedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['requested_datetime']);
     $mLastUpdatedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['last_updated_datetime']);
@@ -190,6 +197,31 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $mStatus = $sanitizedArray['status'];
     $mRequestedByUsername = $sanitizedArray['requested_by_username'];
     $mLastUpdatedByUsername = $sanitizedArray['last_updated_by_username'];
+    $mOrdered = $sanitizedArray['ordered'];
+    $mOrderedDate = $sanitizedArray['ordered_date'];
+    if ($mOrderedDate != '0000-00-00 00:00:00' || $mOrderedDate != '') {
+        $mOrderedDate = $Functions->convertMysqlDateToPhpDate($mOrderedDate);
+    }
+    $mOrderedByUsername = $sanitizedArray['ordered_by_username'];
+
+    if ($Admin->isAdmin()) {
+        $mVendorOrderNo = $sanitizedArray['vendor_order_no'];
+        $mInvoiceNo = $sanitizedArray['invoice_no'];
+    }
+
+    $mCostCenterName = $CostCenters->getCostCentersArray()[$mCostCenter];
+    
+    $mVendorAccountNo = '';
+    if ($mAccountId != '') {
+        $mVendorAccountNo = $AccountNumbers->getAccountNumbersArray()[$mAccountId];
+    }
+    
+    $mProject = '';
+    if ($mProjectId != '') {
+        $project = $Projects->getProjectsArray()[$mProjectId];
+        $mProject = $project['name'] . ' / ' . $project['number'];
+    }
+    
 
     echo "<tr onclick=\"showItemDetailsPopupWindow("
     . "'$mItemId', "
@@ -200,25 +232,58 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     . "'$mCatalogNo', "
     . "'$mPrice', "
     . "'$mWeblink', "
-    . "'$mCostCenter', "
-    . "'$mProjectName', "
-    . "'$mProjectNo', "
-    . "'$mAccountNo', "
+    . "'$mCostCenterName', "
+    . "'$mProject', "
     . "'$mComments', "
     . "'$mRequestedByUsername', "
     . "'$mRequestedDate', "
     . "'$mLastUpdatedByUsername', "
     . "'$mLastUpdatedDate', "
     . "'$mStatus', "
-    . "'$mItemNeededByDate'"
-    . ")\">";
-    echo "<td title='$mItemId'>" . $mItemId . "</td>";
-    echo "<td title='$mDescription'>" . $mDescription . "</td>";
-    echo "<td title='$mVendor'>" . $mVendor . "</td>";
-    echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
-    echo "<td title='$$mPrice'>$" . $mPrice . "</td>";
-    echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
-    echo "<td title='$mStatus'>" . $mStatus . "</td>";
+    . "'$mItemNeededByDate', "
+    . "'$mOrdered', "
+    . "'$mOrderedDate', "
+    . "'$mOrderedByUsername'"
+    . ");";
+    if ($Admin->isAdmin()) {
+        echo " showItemDetailsPopupWindowAdmin("
+        . "'$mVendorAccountNo', "
+        . "'$mVendorOrderNo', "
+        . "'$mInvoiceNo'"
+        . "); ";
+        echo " prepareItemDetailsPopupWindowInputs("
+        . "'$mDescription', "
+        . "'$mQuantity', "
+        . "'$mUom', "
+        . "'$mVendor', "
+        . "'$mCatalogNo', "
+        . "'$mPrice', "
+        . "'$mWeblink', "
+        . "'$mCostCenterName', "
+        . "'$mProject', "
+        . "'$mComments', "
+        . "'$mStatus'"
+        . ");";
+    }
+    echo "\">";
+    if ($Admin->isAdmin()) {
+        echo "<td title='$mItemId'>" . $mItemId . "</td>";
+        echo "<td title='$mDescription'>" . $mDescription . "</td>";
+        echo "<td title='$mVendor'>" . $mVendor . "</td>";
+        echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
+        echo "<td title='$mVendorAccountNo'>" . $mVendorAccountNo . "</td>";
+        echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
+        echo "<td title='$mItemNeededByDate'>" . $mItemNeededByDate . "</td>";
+        echo "<td title='$mStatus'>" . $mStatus . "</td>";
+    } else {
+        echo "<td title='$mItemId'>" . $mItemId . "</td>";
+        echo "<td title='$mDescription'>" . $mDescription . "</td>";
+        echo "<td title='$mVendor'>" . $mVendor . "</td>";
+        echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
+        echo "<td title='$$mPrice'>$" . $mPrice . "</td>";
+        echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
+        echo "<td title='$mStatus'>" . $mStatus . "</td>";
+    }
     echo "</tr>";
 }
 /* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
@@ -242,8 +307,7 @@ function getTotalNumberOfItems($database, $functions, $searchSqlString, $searchK
         $keyword = $searchKeywordsArray[$i];
         for ($k = 0; $k < count($columns); $k++) {
             $paramName = ":keyword" . $i . $k;
-            $colName = substr($columns[$k], -8);
-            if ($colName == "datetime") {
+            if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
                 $dateKeyword = $functions->convertStrDateToMysqlDate($keyword);
                 $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
                 $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);

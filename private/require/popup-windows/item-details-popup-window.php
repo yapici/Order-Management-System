@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -136,47 +136,17 @@ if ($Admin->isAdmin()) {
                     <tr>
                         <td>Project Name:</td>
                         <td class="item-details-input-holder-td">
-                            <span id="popup-item-project-name"></span>
+                            <span id="popup-item-project"></span>
                             <?php
                             if ($isAdmin) {
-                                echo '<select id="item-details-popup-window-project-name">';
+                                echo '<select id="item-details-popup-window-project">';
                                 echo '<option></option>';
-                                echo '<option>Project 1</option>';
-                                echo '<option>Project 2</option>';
-                                echo '</select>';
-                            }
-                            ?>
-                        </td>
-                    </tr> 
-                    <tr>
-                        <td>Project No:</td>
-                        <td class="item-details-input-holder-td">
-                            <span id="popup-item-project-no"></span>
-                            <?php
-                            if ($isAdmin) {
-                                echo '<select id="item-details-popup-window-project-no">';
-                                echo '<option></option>';
-                                echo '<option>1234ZYZ</option>';
-                                echo '<option>9876ABCD</option>';
+                                $Projects->populateProjectsList();
                                 echo '</select>';
                             }
                             ?>
                         </td>
                     </tr>   
-                    <tr>
-                        <td>Account Number:</td>
-                        <td class="item-details-input-holder-td">
-                            <span id="popup-item-account-no"></span>
-                            <?php
-                            if ($isAdmin) {
-                                echo '<select id="item-details-popup-window-account-no">';
-                                echo '<option></option>';
-                                $AccountNumbers->populateAccountNumbersList();
-                                echo '</select>';
-                            }
-                            ?>
-                        </td>
-                    </tr>  
                     <tr>
                         <td>Comments:</td>
                         <td class="item-details-input-holder-td">
@@ -184,6 +154,37 @@ if ($Admin->isAdmin()) {
                             <?php if ($isAdmin) echo '<input id="item-details-popup-window-comments" type="text"/>'; ?>
                         </td>
                     </tr>  
+                    <?php if ($Admin->isAdmin()) { ?>
+                        <tr>
+                            <td>Vendor Account No:</td>
+                            <td>
+                                <span id="popup-item-vendor-account-no"></span>
+                            </td>
+                        </tr>  
+                    <?php } ?>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <hr class="horizontal-divider"></hr>
+    <table class="bottom-panel">
+        <tr>
+            <td class='left-panel'>
+                <table>
+                    <tr>
+                        <td>Status:</td><td id="popup-item-status"></td>
+                    </tr>
+                    <tr>
+                        <td>Last Updated By:</td>
+                        <td>
+                            <span id="popup-item-last-updated-by"></span>
+                            <span id="popup-item-last-updated-date"></span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td class="right-panel">
+                <table>
                     <tr>
                         <td>Item Requested By:</td>
                         <td>
@@ -202,33 +203,18 @@ if ($Admin->isAdmin()) {
         </tr>
     </table>
     <hr class="horizontal-divider"></hr>
-    <div class="bottom-panel">
-        <table>
-            <tr>
-                <td>Status:</td><td id="popup-item-status"></td>
-            </tr>
-            <tr>
-                <td>Last Updated By:</td>
-                <td>
-                    <span id="popup-item-last-updated-by"></span>
-                    <span id="popup-item-last-updated-date"></span>
-                </td>
-            </tr>
-        </table>
-        <hr class="horizontal-divider"></hr>
-        <div id="item-details-popup-window-attachments-wrapper">
-            <h2>Attachments</h2>
-            <?php if ($isAdmin) { ?>
-                <div id="item-details-popup-window-file-upload-elements-wrapper">
-                    Select a file to upload:
-                    <input type="file" name="file-to-upload" id="item-details-file-to-upload"/>
-                    <input type="hidden" name="file_upload_order_id" id="file-upload-order-id"/>
-                    <a class='button file-upload-button' onclick="uploadFile('item-details')">Upload File</a>
-                    <div><i style="font-size: 0.9em; padding: 10px 0px 20px 0px; display: inline-block;"><b>Maximum file upload size is 10 MB</b></i></div>
-                </div>
-            <?php } ?>
-            <div id="item-details-attachments-holder"></div>
-        </div>
+    <div id="item-details-popup-window-attachments-wrapper">
+        <h2>Attachments</h2>
+        <?php if ($isAdmin) { ?>
+            <div id="item-details-popup-window-file-upload-elements-wrapper">
+                Select a file to upload:
+                <input type="file" name="file-to-upload" id="item-details-file-to-upload"/>
+                <input type="hidden" name="file_upload_order_id" id="file-upload-order-id"/>
+                <a class='button file-upload-button' onclick="uploadFile('item-details')">Upload File</a>
+                <div><i style="font-size: 0.9em; padding: 10px 0px 20px 0px; display: inline-block;"><b>Maximum file upload size is 10 MB</b></i></div>
+            </div>
+        <?php } ?>
+        <div id="item-details-attachments-holder"></div>
     </div>
     <div class="error-div popup-error-div" id="item-details-popup-window-error-div"></div>
     <a class="button" onclick="hidePopupWindows();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">Close</a>

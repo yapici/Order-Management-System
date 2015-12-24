@@ -2,8 +2,8 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/19/2015                                                                 */
-/* Last modified on 12/19/2015                                                           */
+/* Created on 12/23/2015                                                                 */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -30,51 +30,57 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-require('../../private/include/include.php');
-// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
-if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
-    if (!$Session->isSessionValid()) {
-        $jsonResponse['status'] = "no_session";
-    } else {
-        date_default_timezone_set('America/Chicago');
-        // Getting the parameters passed through AJAX
-        
-        $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        
-        $vendorId = $sanitizedPostArray['vendor_id'];
-        $fieldName = $sanitizedPostArray['field_name'];
-        $value = $sanitizedPostArray['value'];
-        
-        $userId = $_SESSION['id'];
-        $username = $_SESSION['username'];
-        $currentDate = date("Y-m-d H:i:s");
+class Projects {
 
-        // Inserting the information to the database
-        $sql = "UPDATE vendors SET ";
-        $sql .= "$fieldName = :value, ";
-        $sql .= "last_updated_by_user_id = :last_updated_by_user_id, ";
-        $sql .= "last_updated_by_username = :last_updated_by_username, ";
-        $sql .= "last_updated_date = :last_updated_date ";
-        $sql .= "WHERE id = :vendor_id";
+    private $Database;
+    private $Functions;
 
-        $stmt = $Database->prepare($sql);
+    /** @var array $projectsArray */
+    public $projectsArray;
 
-        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_user_id', $userId, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_date', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor_id', $vendorId, PDO::PARAM_STR);
-        $result = $stmt->execute();
+    /**
+     * @param Database $database
+     * @param Functions $functions
+     */
+    function __construct($database, $functions) {
+        $this->Database = $database;
+        $this->Functions = $functions;
+        $this->populateArray();
+    }
 
-        if ($result) {
-            $Vendors->refreshArrays();
-            $jsonResponse['status'] = "success";
-        } else {
-            $jsonResponse['status'] = "fail";
+    private function populateArray() {
+        $sql = "SELECT id, name, number, added_by_username, active FROM projects";
+        $stmt = $this->Database->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $sanitizedArray = $this->Functions->sanitizeArray($row);
+            $this->projectsArray[$sanitizedArray['id']] = $sanitizedArray;
         }
     }
-    echo json_encode($jsonResponse);
-} else {
-    $Functions->phpRedirect('');
+
+    public function refreshArray() {
+        $this->populateArray();
+    }
+
+    /**
+     * @return array $projectsArray
+     */
+    public function getProjectsArray() {
+        return $this->projectsArray;
+    }
+
+    public function populateProjectsList() {
+        $html = '';
+        foreach ($this->projectsArray as $projectId => $project) {
+            $projectName = $project['name'];
+            $projectNumber = $project['number'];
+            $html .= "<option value='$projectId'>$projectName / $projectNumber</option>";
+        }
+        echo $html;
+    }
+
 }
 
+/** @var Projects $Projects */
+$Projects = new Projects($Database, $Functions);
+?>

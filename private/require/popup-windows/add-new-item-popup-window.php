@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -56,17 +56,17 @@
         <td class="add-new-item-input-holder-td">
             <input id="add-new-item-catalog-no" type="text"/>
         </td>
-    </tr>    
-    <tr>
-        <td>Price (USD)<span class="red-font"> *</span></td>
-        <td class="add-new-item-input-holder-td">
-            <input id="add-new-item-price" type="number" step="any"/>
-        </td>
-    </tr> 
+    </tr>  
     <tr>
         <td>Date Needed<span class="red-font"> *</span></td>
         <td class="add-new-item-input-holder-td">
             <input class="datepicker" id="add-new-item-date-needed" type="text" readonly />
+        </td>
+    </tr>   
+    <tr>
+        <td>Price (USD)</td>
+        <td class="add-new-item-input-holder-td">
+            <input id="add-new-item-price" type="number" step="any"/>
         </td>
     </tr> 
     <tr>
@@ -80,39 +80,19 @@
         <td class="add-new-item-input-holder-td">
             <select id="add-new-item-cost-center">
                 <option></option>
-                <?php $CostCenters->populateCostCentersList();?>
+                <?php $CostCenters->populateCostCentersList(); ?>
             </select>
         </td>
     </tr>
     <tr>
-        <td>Project Name</td>
+        <td>Project</td>
         <td class="add-new-item-input-holder-td">
-            <select id="add-new-item-project-name">
+            <select id="add-new-item-project">
                 <option></option>
-                <option>Project 1</option>
-                <option>Project 2</option>
+                <?php $Projects->populateProjectsList(); ?>
             </select>
         </td>
     </tr>
-    <tr>
-        <td>Project No</td>
-        <td class="add-new-item-input-holder-td">
-            <select id="add-new-item-project-no">
-                <option></option>
-                <option>1234ZYZ</option>
-                <option>9876ABCD</option>
-            </select>
-        </td>
-    </tr>  
-    <tr>
-        <td>Account Number</td>
-        <td class="add-new-item-input-holder-td">
-            <select id="add-new-item-account-no">
-                <option></option>
-                <?php $AccountNumbers->populateAccountNumbersList();?>
-            </select>
-        </td>
-    </tr>  
     <tr>
         <td>Comments</td>
         <td class="add-new-item-input-holder-td">

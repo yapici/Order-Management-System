@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/19/2015                                                           */
+/* Last modified on 12/23/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -46,24 +46,26 @@ if (!$Session->isSessionValid()) {
     <body>
         <div class="gray-out-div"></div>
         <img class="progress-circle" src="images/ajax-loader.gif"/>
-        <?php require_once (PRIVATE_PATH . 'require/item-details-popup-window.php'); ?>
-        <?php require_once (PRIVATE_PATH . 'require/delete-file-confirmation-popup-window.php'); ?>
-        <?php require_once (PRIVATE_PATH . 'require/login-popup-window.php'); ?>
-        <div class="popup-window" id="add-new-item-popup-window">
-            <?php require_once (PRIVATE_PATH . 'require/add-new-item-popup-window.php'); ?>
-        </div>
-        <?php
-        if ($Admin->isAdmin()) {
-            require_once (PRIVATE_PATH . 'require/vendors-popup-window.php');
-        }
-        ?>
+        <?php require_once (PRIVATE_PATH . 'require/popup-windows.php'); ?>
         <?php require_once (PRIVATE_PATH . 'require/header.php'); ?>        
         <div id="orders-main-body-wrapper" class='noselect'>
-            <span title='Log Out' onclick='logoutAction();'><img class='absolute-buttons' id='logout-button' src='images/logout-icon.png'></img></span>
-            <span title='Add New Item' onclick='showAddNewItemPopupWindow();'><img class='absolute-buttons' id='add-new-item-button' src='images/plus-icon.png'></img></span>
-            <?php if ($Admin->isAdmin()) { ?>
-                <span title='Manage Vendors' onclick='showVendorsPopupWindow();'><img class='absolute-buttons' id='vendor-button' src='images/vendor-icon.png'></img></span>
-            <?php } ?>
+            <span id='button-holder-span'>
+                <span title='Log Out' onclick='logoutAction();'><img class='absolute-buttons' id='logout-button' src='images/logout-icon.png'></img></span>
+                <span title='Add New Item' onclick='showAddNewItemPopupWindow();'><img class='absolute-buttons' src='images/plus-icon.png'></img></span>
+                <?php if ($Admin->isAdmin()) { ?>
+                    <span>
+                        <img class='absolute-buttons' id='menu-button' src='images/menu-icon.png'></img>
+                        <span id='menu-items-wrapper-span'>
+                            <ul id='menu-items-wrapper-ul'>
+                                <li class='menu-items' title='Manage Vendors' onclick='showVendorsPopupWindow();'><img class='absolute-buttons' id='vendor-button' src='images/vendor-icon.png'></img></li>
+                                <li class='menu-items' title='Manage Projects'><img class='absolute-buttons' src='images/project-icon.png'></img></li>
+                                <li class='menu-items' title='Manage Cost Centers'><img class='absolute-buttons' src='images/cost-center-icon.png'></img></li>
+                                <li class='menu-items' title='Manage Users'><img class='absolute-buttons' src='images/users-icon.png'></img></li>
+                            </ul>
+                        </span>
+                    </span>
+                <?php } ?>
+            </span>
             <div class="search-elements-wrapper">
                 <input class='search-input' id="orders-search-input" placeholder="Search"
                 <?php
@@ -85,13 +87,24 @@ if (!$Session->isSessionValid()) {
             <table id="orders-table">
                 <thead>
                     <tr>
-                        <td onclick='sortByColumn($(this))'>Order No <a>&#9650;</a></td>
-                        <td onclick='sortByColumn($(this))'>Description <a>&#9650;</a></td>
-                        <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
-                        <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
-                        <td onclick='sortByColumn($(this))'>Price <a>&#9650;</a></td>
-                        <td onclick='sortByColumn($(this))'>Requested By <a>&#9650;</a></td>
-                        <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>
+                        <?php if ($Admin->isAdmin()) { ?>
+                            <td onclick='sortByColumn($(this))'>Order No <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Description <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Account No <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Requested By <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Item Needed By <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>
+                        <?php } else { ?>
+                            <td onclick='sortByColumn($(this))'>Order No <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Description <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Price <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Requested By <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>

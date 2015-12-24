@@ -61,7 +61,7 @@ class Session {
     }
 
     function lastLoginIsRecent() {
-        $maxElapsed = 10; // 1 day
+        $maxElapsed = 24 * 60 * 60; // 1 day
         if (!isset($_SESSION['last_login'])) {
             $this->afterSuccessfulLogout();
             return false;
