@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -31,204 +31,59 @@
 /* ===================================================================================== */
 
 
-/* ############################################################# Sort ############################################################## */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
-$sortSqlString = " ORDER BY requested_datetime DESC ";
-if (isset($_SESSION['sort_column_name']) && $_SESSION['sort_column_name'] != "") {
-    $sortSqlString = " ORDER BY " . $_SESSION['sort_column_name'];
-    if ($_SESSION['sort_up_or_down'] == 'up') {
-        $sortSqlString .= " ASC ";
-    } else {
-        $sortSqlString .= " DESC ";
-    }
-}
-/* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* ############################################################# Sort ############################################################## */
-
-
-
-/* ########################################################## Pagination ########################################################### */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
-$gPaginationPageNumber = 1;
-$gPaginationStartPoint = 0;
-$gNumberOfItemsPerPage = 25;
-
-if (isset($_SESSION['pagination_page_number'])) {
-    $gPaginationPageNumber = $_SESSION['pagination_page_number'];
-    $gPaginationStartPoint = ($gPaginationPageNumber - 1) * $gNumberOfItemsPerPage;
-}
-/* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* ########################################################## Pagination ########################################################### */
-
-
-
-/* ############################################################ Search ############################################################# */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
-$columns = ['id',
-    'description',
-    'uom',
-    'catalog_no',
-    'price',
-    'account_number',
-    'project_name_and_number',
-    'comments',
-    'status',
-    'vendor_name',
-    'requested_datetime',
-    'last_updated_datetime',
-    'last_updated_by_username',
-    'item_needed_by_date',
-    'ordered_date',
-    'requested_by_username'
-];
-$searchSqlString = " ";
-$searchKeywordsArray = array();
-if (isset($_SESSION['search_keywords']) && $_SESSION['search_keywords'] != "" && $_SESSION['search_keywords'] != "Search") {
-    $searchKeywordsString = $_SESSION['search_keywords'];
-    $searchKeywordsArray = preg_split('/[\s]+/', $searchKeywordsString);
-    for ($i = 0; $i < count($searchKeywordsArray); $i++) {
-        $searchSqlString .= "AND (";
-        for ($k = 0; $k < count($columns); $k++) {
-            if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
-                $searchSqlString .= '(' . $columns[$k] . " BETWEEN :keyword" . $i . $k . "a AND :keyword" . $i . $k . "b) OR ";
-            } else {
-                $searchSqlString .= $columns[$k] . " LIKE :keyword" . $i . $k . " OR ";
-            }
-        }
-        $searchSqlString = substr_replace($searchSqlString, "", -3); // to remove the 'OR' at the end.
-        $searchSqlString .= ") ";
-    }
-} else {
-    $search_keywords = "%";
-}
-/* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* ############################################################ Search ############################################################# */
-
-
-
-/* ######################################################### Database Query ######################################################## */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
-$sql = "SELECT ";
-$sql .= "id, ";
-$sql .= "description, ";
-$sql .= "quantity, ";
-$sql .= "uom, ";
-$sql .= "vendor_name, ";
-$sql .= "catalog_no, ";
-$sql .= "price, ";
-$sql .= "weblink, ";
-$sql .= "cost_center, ";
-$sql .= "project, ";
-$sql .= "account_id, ";
-$sql .= "comments, ";
-$sql .= "requested_datetime, ";
-$sql .= "last_updated_datetime, ";
-$sql .= "status, ";
-$sql .= "requested_by_username, ";
-$sql .= "item_needed_by_date, ";
-$sql .= "ordered, ";
-$sql .= "ordered_date, ";
-$sql .= "ordered_by_username, ";
-if ($Admin->isAdmin()) {
-    $sql .= "vendor_order_no, ";
-    $sql .= "invoice_no, ";
-}
-$sql .= "last_updated_by_username ";
-$sql .= "FROM orders WHERE deleted = 0";
-$sql .= $searchSqlString;
-$sql .= $sortSqlString;
-$sql .= "LIMIT :start, :item_number";
-
-$stmt = $Database->prepare($sql);
-
-/* Search Keywords */
-for ($i = 0; $i < count($searchKeywordsArray); $i++) {
-    $keyword = $searchKeywordsArray[$i];
-    for ($k = 0; $k < count($columns); $k++) {
-        $paramName = ":keyword" . $i . $k;
-        if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
-            $dateKeyword = $Functions->convertStrDateToMysqlDate($keyword);
-            $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
-            $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
-        } else {
-            $stmt->bindValue($paramName, "%$keyword%", PDO::PARAM_INT);
-        }
-    }
-}
-
-/* Pagination page number */
-$stmt->bindValue(':start', $gPaginationStartPoint, PDO::PARAM_INT);
-
-/* Number of items for a page */
-$stmt->bindValue(':item_number', $gNumberOfItemsPerPage, PDO::PARAM_INT);
-$stmt->execute();
-/* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
-/* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
-/* ######################################################### Database Query ######################################################## */
-
-
 /* ########################################################## tbody Content ######################################################## */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $sanitizedArray = $Functions->sanitizeArray($row);
-    $mItemId = $sanitizedArray['id'];
-    $mDescription = $sanitizedArray['description'];
-    $mQuantity = $sanitizedArray['quantity'];
-    $mUom = $sanitizedArray['uom'];
-    $mVendor = $sanitizedArray['vendor_name'];
-    $mCatalogNo = $sanitizedArray['catalog_no'];
-    $mPrice = $sanitizedArray['price'];
-    $mWeblink = $sanitizedArray['weblink'];
-    $mCostCenter = $sanitizedArray['cost_center'];
-    $mProjectId = $sanitizedArray['project'];
-    $mAccountId = $sanitizedArray['account_id'];
-    $mComments = $sanitizedArray['comments'];
-    $mRequestedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['requested_datetime']);
-    $mLastUpdatedDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['last_updated_datetime']);
-    $mItemNeededByDate = $Functions->convertMysqlDateToPhpDate($sanitizedArray['item_needed_by_date']);
-    $mStatus = $sanitizedArray['status'];
-    $mRequestedByUsername = $sanitizedArray['requested_by_username'];
-    $mLastUpdatedByUsername = $sanitizedArray['last_updated_by_username'];
-    $mOrdered = $sanitizedArray['ordered'];
-    $mOrderedDate = $sanitizedArray['ordered_date'];
+$ordersArray = $Orders->getOrdersArray();
+foreach ($ordersArray as $id => $order) {
+    $mItemId = $id;
+    $orderDetailsArray = $ordersArray[$id];
+    $mDescription = $orderDetailsArray['description'];
+    $mQuantity = $orderDetailsArray['quantity'];
+    $mUom = $orderDetailsArray['uom'];
+    $mVendorId = $orderDetailsArray['vendor'];
+    $mCatalogNo = $orderDetailsArray['catalog_no'];
+    $mPrice = $orderDetailsArray['price'];
+    $mWeblink = $orderDetailsArray['weblink'];
+    $mCostCenter = $orderDetailsArray['cost_center'];
+    $mProjectId = $orderDetailsArray['project'];
+    $mComments = $orderDetailsArray['comments'];
+    $mRequestedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['requested_datetime']);
+    $mStatusUpdatedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['status_updated_date']);
+    $mItemNeededByDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['item_needed_by_date']);
+    $mStatus = $orderDetailsArray['status'];
+    $mRequestedByUsername = $orderDetailsArray['requested_by_username'];
+    $mStatusUpdatedByUsername = $orderDetailsArray['status_updated_by_username'];
+    $mOrdered = $orderDetailsArray['ordered'];
+    $mOrderedDate = $orderDetailsArray['ordered_date'];
+    
     if ($mOrderedDate != '0000-00-00 00:00:00' || $mOrderedDate != '') {
         $mOrderedDate = $Functions->convertMysqlDateToPhpDate($mOrderedDate);
     }
-    $mOrderedByUsername = $sanitizedArray['ordered_by_username'];
+    $mOrderedByUsername = $orderDetailsArray['ordered_by_username'];
 
     if ($Admin->isAdmin()) {
-        $mVendorOrderNo = $sanitizedArray['vendor_order_no'];
-        $mInvoiceNo = $sanitizedArray['invoice_no'];
+        $mVendorOrderNo = $orderDetailsArray['vendor_order_no'];
+        $mInvoiceNo = $orderDetailsArray['invoice_no'];
     }
 
     $mCostCenterName = $CostCenters->getCostCentersArray()[$mCostCenter];
-    
-    $mVendorAccountNo = '';
-    if ($mAccountId != '') {
-        $mVendorAccountNo = $AccountNumbers->getAccountNumbersArray()[$mAccountId];
-    }
-    
+
+    $mVendorName = $Vendors->getVendorsArray()[$mVendorId]['name'];
+    $mVendorAccountNo = $Vendors->getVendorsArray()[$mVendorId]['account_number'];
+
     $mProject = '';
     if ($mProjectId != '') {
         $project = $Projects->getProjectsArray()[$mProjectId];
         $mProject = $project['name'] . ' / ' . $project['number'];
     }
-    
 
     echo "<tr onclick=\"showItemDetailsPopupWindow("
     . "'$mItemId', "
     . "'$mDescription', "
     . "'$mQuantity', "
     . "'$mUom', "
-    . "'$mVendor', "
+    . "'$mVendorName', "
     . "'$mCatalogNo', "
     . "'$mPrice', "
     . "'$mWeblink', "
@@ -237,8 +92,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     . "'$mComments', "
     . "'$mRequestedByUsername', "
     . "'$mRequestedDate', "
-    . "'$mLastUpdatedByUsername', "
-    . "'$mLastUpdatedDate', "
+    . "'$mStatusUpdatedByUsername', "
+    . "'$mStatusUpdatedDate', "
     . "'$mStatus', "
     . "'$mItemNeededByDate', "
     . "'$mOrdered', "
@@ -255,7 +110,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         . "'$mDescription', "
         . "'$mQuantity', "
         . "'$mUom', "
-        . "'$mVendor', "
+        . "'$mVendorName', "
         . "'$mCatalogNo', "
         . "'$mPrice', "
         . "'$mWeblink', "
@@ -269,7 +124,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     if ($Admin->isAdmin()) {
         echo "<td title='$mItemId'>" . $mItemId . "</td>";
         echo "<td title='$mDescription'>" . $mDescription . "</td>";
-        echo "<td title='$mVendor'>" . $mVendor . "</td>";
+        echo "<td title='$mVendorName'>" . $mVendorName . "</td>";
         echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
         echo "<td title='$mVendorAccountNo'>" . $mVendorAccountNo . "</td>";
         echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
@@ -278,7 +133,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     } else {
         echo "<td title='$mItemId'>" . $mItemId . "</td>";
         echo "<td title='$mDescription'>" . $mDescription . "</td>";
-        echo "<td title='$mVendor'>" . $mVendor . "</td>";
+        echo "<td title='$mVendorName'>" . $mVendorName . "</td>";
         echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
         echo "<td title='$$mPrice'>$" . $mPrice . "</td>";
         echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
@@ -295,30 +150,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 /* ########################################################## Pagination ########################################################### */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V */
-$totalNumberOfItems = getTotalNumberOfItems($Database, $Functions, $searchSqlString, $searchKeywordsArray, $sortSqlString, $columns);
+$totalNumberOfItems = $Orders->totalNumberOfItems;
 
 require_once('orders-table-pagination.php');
-
-function getTotalNumberOfItems($database, $functions, $searchSqlString, $searchKeywordsArray, $sortSqlString, $columns) {
-    $sql = "SELECT * FROM orders WHERE deleted = 0" . $searchSqlString . $sortSqlString;
-
-    $stmt = $database->prepare($sql);
-    for ($i = 0; $i < count($searchKeywordsArray); $i++) {
-        $keyword = $searchKeywordsArray[$i];
-        for ($k = 0; $k < count($columns); $k++) {
-            $paramName = ":keyword" . $i . $k;
-            if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
-                $dateKeyword = $functions->convertStrDateToMysqlDate($keyword);
-                $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
-                $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
-            } else {
-                $stmt->bindValue($paramName, "%$keyword%", PDO::PARAM_INT);
-            }
-        }
-    }
-    $stmt->execute();
-    return $stmt->rowCount();
-}
 
 /* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */

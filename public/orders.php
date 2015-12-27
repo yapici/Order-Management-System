@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -83,7 +83,15 @@ if (!$Session->isSessionValid()) {
                 <a class="button search-button" onclick='searchAction("search")'><img src="images/search_icon.png"/></a>
             </div>
             <div id="orders-error-div"></div>
-            <div class="reset-sort-button-wrapper-div"><a class="reset-sort-button" onclick="sortByColumn('')">Reset Sort</a></div>
+            <?php
+            echo '<div class="reset-sort-button-wrapper-div"><a class="reset-sort-button" ';
+            if (isset($_SESSION['sort_column_name']) && $_SESSION['sort_column_name'] != "") {
+                echo 'style="display: inline-block" ';
+            } else {
+                echo 'style="display: none" ';
+            }
+            echo 'onclick="sortByColumn(\'\')">Reset Sort</a></div>';
+            ?>    
             <table id="orders-table">
                 <thead>
                     <tr>

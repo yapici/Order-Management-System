@@ -38,6 +38,8 @@ function prepareItemDetailsPopupWindowInputs(
     } else {
         $("#item-details-popup-window-project option:contains('')")[0].selectedIndex = 0;
     }
+    
+    $("#item-details-popup-window-status option:contains('" + status + "')").prop('selected', true);
 }
 
 function toggleItemDetailsPopupInputFields(showHide) {
@@ -81,6 +83,7 @@ function updateOrderDetails() {
     var project = $("#item-details-popup-window-project").val();
     var comments = $("#item-details-popup-window-comments").val();
     var order_id = $("#popup-item-order-number").html();
+    var status = $("#item-details-popup-window-status").val();
     var error_div = $('#item-details-popup-window-error-div');
     error_div.html("");
     error_div.html('&nbsp;');
@@ -102,7 +105,8 @@ function updateOrderDetails() {
                 "&cost_center=" + cost_center +
                 "&project=" + project +
                 "&comments=" + comments +
-                "&order_id=" + order_id,
+                "&order_id=" + order_id +
+                "&status=" + status,
         cache: false,
         dataType: "json",
         success: function (json_data) {
@@ -127,6 +131,7 @@ function updateOrderDetails() {
                 $("#popup-item-cost-center").html(json_data.cost_center_name);
                 $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(comments);
+                $("#popup-item-status").html(status);
             } else if (json_data.status === "no_session") {
                 showLoginPopupWindow();
             } else if (json_data.status === "unauthorized_access") {

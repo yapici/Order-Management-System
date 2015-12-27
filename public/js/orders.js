@@ -23,8 +23,8 @@ function showItemDetailsPopupWindow(
         comments,
         requestedByUsername,
         requestedDate,
-        lastUpdatedByUsername,
-        lastUpdatedDate,
+        statusUpdatedByUsername,
+        statusUpdatedDate,
         status,
         itemNeededByDate,
         ordered,
@@ -51,10 +51,10 @@ function showItemDetailsPopupWindow(
     $("#popup-item-cost-center").html(costCenter);
     $("#popup-item-project").html(project);
     $("#popup-item-comments").html(comments);
-    $("#popup-item-last-updated-date").html("on " + lastUpdatedDate);
+    $("#popup-item-status-updated-date").html("on " + statusUpdatedDate);
     $("#popup-item-requested-date").html("on " + requestedDate);
     $('#popup-item-requested-by').html(requestedByUsername);
-    $("#popup-item-last-updated-by").html(lastUpdatedByUsername);
+    $("#popup-item-status-updated-by").html(statusUpdatedByUsername);
     $("#popup-item-item-needed-by").html(itemNeededByDate);
     $("#popup-item-status").html(status);
     $("#file-upload-order-id").val(orderNo);

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -45,8 +45,9 @@ final class Constants {
     
     // Order status
     const ORDER_STATUS_PENDING = 'Pending';
+    const ORDER_STATUS_PROCESSING = 'Processing';
     const ORDER_STATUS_ORDERED = 'Ordered';
-    const ORDER_STATUS_RECEIVED = 'Received';
+    const ORDER_STATUS_DELIVERED = 'Delivered';
     const ORDER_STATUS_BACKORDERED = 'Backordered';
     
     // Item ordered status

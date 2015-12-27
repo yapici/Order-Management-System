@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/19/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -102,7 +102,7 @@ class Functions {
     /* ################################# -- Date Conversion Functions -- ################################## */
     /* #################################################################################################### */
 
-    function convertMysqlDateToPhpDate($date) {
+    public function convertMysqlDateToPhpDate($date) {
         if ($date == "0000-00-00" || $date == "0000-00-00 00:00:00") {
             $date = "N/A";
         } else {
@@ -114,7 +114,7 @@ class Functions {
     /** @param string $date
      *  @return string $convertedDate
      */
-    function convertStrDateToMysqlDate($date) {
+    public function convertStrDateToMysqlDate($date) {
         $slashesReplacedDate = str_replace("-", "/", $date);
         try {
             $convertedDate = date('Y-m-d', strtotime($slashesReplacedDate));
@@ -130,35 +130,15 @@ class Functions {
     /* /  ************************************************************************************************* */
     /* /  ****************************** -- Date Conversion Functions -- ********************************** */
 
-    function getDomainFromEmail($email) {
+    public function getDomainFromEmail($email) {
         $domain = substr(strrchr($email, "@"), 1);
         return $domain;
-    }
-
-    /** @param Database $database 
-     *  @param int $userId 
-     */
-    function getUsername($database, $userId) {
-        $username = '';
-
-        $sql = "SELECT username FROM users ";
-        $sql .= "WHERE id = ?";
-        $stmt = $database->prepare($sql);
-        $stmt->bindValue(1, $userId, PDO::PARAM_STR);
-
-        $result = $stmt->execute();
-
-        if ($result) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $username = $row['username'];
-        }
-        return $username;
     }
 
     // This function is used in 'public/ajax/update-table-with-sort.php'.
     /** @param string $columnName - Column name in the database
      */
-    function storeSortInSession($columnName) {
+    public function storeSortInSession($columnName) {
         if ($_SESSION['sort_column_name'] == $columnName && $_SESSION['sort_up_or_down'] == 'up') {
             $_SESSION['sort_up_or_down'] = 'down';
         } else {
@@ -172,7 +152,7 @@ class Functions {
      *  @param string $filename
      *  @return string $filePath
      */
-    function renameFileIfExists($directory, $filename) {
+    public function renameFileIfExists($directory, $filename) {
         $fileExtention = pathinfo($filename, PATHINFO_EXTENSION);
         $fileBasename = basename($filename, '.' . $fileExtention);
 
@@ -188,7 +168,7 @@ class Functions {
     /** @param array $array 
      *  @return array $sanitizedArray
      */
-    function sanitizeArray($array) {
+    public function sanitizeArray($array) {
         $sanitizedArray = array();
         foreach ($array as $key => $value) {
             $sanitizedArray[$key] = htmlspecialchars(trim($value));
@@ -199,7 +179,7 @@ class Functions {
     // This function is used in 'public/ajax/add-new-item-action.php'.
     /** @return array $sanitizedArray
      */
-    function sanitizePostedVariables() {
+    public function sanitizePostedVariables() {
         $sanitizedArray = array();
         foreach ($_POST as $key => $value) {
             $sanitizedArray[$key] = htmlspecialchars(trim(filter_input(INPUT_POST, $key)));
@@ -211,7 +191,7 @@ class Functions {
      *  @param boolena $showDeleteButtons
      *  @return string $htmlResponse
      */
-    function includeAttachments($orderId, $showDeleteButtons = false) {
+    public function includeAttachments($orderId, $showDeleteButtons = false) {
         $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/' . $orderId;
         $htmlResponse = '';
         if (is_dir($attachmentsDirectoryPath)) {
@@ -238,7 +218,7 @@ class Functions {
      *  @param boolean $showDeleteButtons
      *  @return string $htmlResponse
      */
-    function includeDeleteButtons($encryptedFilePath, $showDeleteButtons = false) {
+    private function includeDeleteButtons($encryptedFilePath, $showDeleteButtons = false) {
         if ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
                 $_SESSION['user_type'] == Constants::USER_TYPE_ADMINISTRATOR ||
                 $showDeleteButtons) {
@@ -252,11 +232,21 @@ class Functions {
      *  @param string $url
      *  @return string $url
      */
-    function addHttp($url) {
+    public function addHttp($url) {
         if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
             $url = "http://" . $url;
         }
         return $url;
+    }
+    
+    /** 
+     *  @param string $title
+     *  @param string $error_msg
+     */
+    public function logError($title, $error_msg) {
+        error_log("\n$title\n", 3, "php.log");
+        error_log($error_msg, 3, "php.log");
+        error_log("\n$title\n", 3, "php.log");
     }
     
 }

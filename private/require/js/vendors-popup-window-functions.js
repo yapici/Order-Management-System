@@ -74,6 +74,7 @@ function addNewVendor() {
     var vendor_website = $("#add-new-vendor-website").val();
     var vendor_address = $("#add-new-vendor-address").val();
     var vendor_contact_person = $("#add-new-vendor-contact_person").val();
+    var vendor_account_no = $("#add-new-vendor-account_number").val();
 
     var vendors_popup_window = $("#vendors-popup-window");
     var vendors_table_tbody = $("#vendors-popup-window-vendors-table tbody");
@@ -106,13 +107,14 @@ function addNewVendor() {
         showProgressCircle();
         blockUI();
         $.ajax({
-            url: "../ajax/add-new-vendor.php",
+            url: "../ajax/admin/add-new-vendor.php",
             type: "POST",
             data: "name=" + vendor_name +
                     "&phone=" + vendo_phone +
                     "&website=" + vendor_website +
                     "&address=" + vendor_address +
-                    "&contact_person=" + vendor_contact_person,
+                    "&contact_person=" + vendor_contact_person +
+                    "&account_number=" + vendor_account_no,
             cache: false,
             dataType: "json",
             success: function (json_data) {
@@ -123,6 +125,7 @@ function addNewVendor() {
                     $("#add-new-vendor-website").val('');
                     $("#add-new-vendor-address").val('');
                     $("#add-new-vendor-contact_person").val('');
+                    $("#add-new-vendor-account_number").val('');
                 } else if (json_data.status === "no_session") {
                     showLoginPopupWindow();
                 } else {

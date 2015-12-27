@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -100,7 +100,11 @@ if ($Admin->isAdmin()) {
                             <span id="popup-item-catalog-no"></span>
                             <?php if ($isAdmin) echo '<input id="item-details-popup-window-catalog-no" type="text"/>'; ?>
                         </td>
-                    </tr>
+                    </tr>              
+                </table>
+            </td>
+            <td class="right-panel">
+                <table> 
                     <tr>
                         <td>Price:</td>
                         <td class="item-details-input-holder-td">
@@ -114,11 +118,7 @@ if ($Admin->isAdmin()) {
                             <span id="popup-item-weblink"></span>
                             <?php if ($isAdmin) echo '<input id="item-details-popup-window-weblink" type="text"/>'; ?>
                         </td>
-                    </tr>                
-                </table>
-            </td>
-            <td class="right-panel">
-                <table> 
+                    </tr>  
                     <tr>
                         <td>Cost Center:</td>
                         <td class="item-details-input-holder-td">
@@ -172,13 +172,27 @@ if ($Admin->isAdmin()) {
             <td class='left-panel'>
                 <table>
                     <tr>
-                        <td>Status:</td><td id="popup-item-status"></td>
+                        <td>Status:</td>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-status"></span>
+                            <?php
+                            if ($isAdmin) {
+                                echo '<select id="item-details-popup-window-status">';
+                                echo '<option>Pending</option>';
+                                echo '<option>Processing</option>';
+                                echo '<option>Ordered</option>';
+                                echo '<option>Delivered</option>';
+                                echo '<option>Backordered</option>';
+                                echo '</select>';
+                            }
+                            ?>
+                        </td>
                     </tr>
                     <tr>
                         <td>Last Updated By:</td>
                         <td>
-                            <span id="popup-item-last-updated-by"></span>
-                            <span id="popup-item-last-updated-date"></span>
+                            <span id="popup-item-status-updated-by"></span>
+                            <span id="popup-item-status-updated-date"></span>
                         </td>
                     </tr>
                 </table>

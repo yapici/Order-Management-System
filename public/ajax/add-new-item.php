@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -85,35 +85,36 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $vendorName = $vendorsArray[$vendorId]['name'];
 
         // Inserting the information to the database
-        $sql = "INSERT INTO orders (";
-        $sql .= "description, quantity, uom, vendor, catalog_no, price, cost_center, project, comments, requested_by_id";
-        $sql .= ", requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status, item_needed_by_date, ";
-        $sql .= "vendor_name, weblink) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO orders ";
+        $sql .= "(description, quantity, uom, vendor, catalog_no, price, cost_center, project, comments, requested_by_id, ";
+        $sql .= "requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status, status_updated_by_user_id, ";
+        $sql .= "status_updated_by_username, status_updated_date, item_needed_by_date, vendor_name, weblink) ";
+        $sql .= "VALUES ";
+        $sql .= "(:description, :quantity, :uom, :vendor, :catalog_no, :price, :cost_center, :project, :comments, :user_id, :username, :current_date, :user_id, ";
+        $sql .= ":username, :current_date, :status, :user_id, :username, :current_date, :item_needed_by_date, :vendor_name, :weblink)";
 
         $stmt = $Database->prepare($sql);
 
-        $stmt->bindValue(1, $description, PDO::PARAM_STR);
-        $stmt->bindValue(2, $quantity, PDO::PARAM_STR);
-        $stmt->bindValue(3, $uom, PDO::PARAM_STR);
-        $stmt->bindValue(4, $vendorId, PDO::PARAM_STR);
-        $stmt->bindValue(5, $catalogNo, PDO::PARAM_STR);
-        $stmt->bindValue(6, $price, PDO::PARAM_STR);
-        $stmt->bindValue(7, $costCenter, PDO::PARAM_STR);
-        $stmt->bindValue(8, $project, PDO::PARAM_STR);
-        $stmt->bindValue(9, $comments, PDO::PARAM_STR);
-        $stmt->bindValue(10, $userId, PDO::PARAM_STR);
-        $stmt->bindValue(11, $username, PDO::PARAM_STR);
-        $stmt->bindValue(12, $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(13, $userId, PDO::PARAM_STR);
-        $stmt->bindValue(14, $username, PDO::PARAM_STR);
-        $stmt->bindValue(15, $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(16, Constants::ORDER_STATUS_PENDING, PDO::PARAM_STR);
-        $stmt->bindValue(17, $dateNeeded, PDO::PARAM_STR);
-        $stmt->bindValue(18, $vendorName, PDO::PARAM_STR);
-        $stmt->bindValue(19, $weblink, PDO::PARAM_STR);
+        $stmt->bindValue(":description", $description, PDO::PARAM_STR);
+        $stmt->bindValue(":quantity", $quantity, PDO::PARAM_STR);
+        $stmt->bindValue(":uom", $uom, PDO::PARAM_STR);
+        $stmt->bindValue(":vendor", $vendorId, PDO::PARAM_STR);
+        $stmt->bindValue(":catalog_no", $catalogNo, PDO::PARAM_STR);
+        $stmt->bindValue(":price", $price, PDO::PARAM_STR);
+        $stmt->bindValue(":cost_center", $costCenter, PDO::PARAM_STR);
+        $stmt->bindValue(":project", $project, PDO::PARAM_STR);
+        $stmt->bindValue(":comments", $comments, PDO::PARAM_STR);
+        $stmt->bindValue(":user_id", $userId, PDO::PARAM_STR);
+        $stmt->bindValue(":username", $username, PDO::PARAM_STR);
+        $stmt->bindValue(":current_date", $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(":status", Constants::ORDER_STATUS_PENDING, PDO::PARAM_STR);
+        $stmt->bindValue(":item_needed_by_date", $dateNeeded, PDO::PARAM_STR);
+        $stmt->bindValue(":vendor_name", $vendorName, PDO::PARAM_STR);
+        $stmt->bindValue(":weblink", $weblink, PDO::PARAM_STR);
         $result = $stmt->execute();
 
         if ($result) {
+            $Orders->refreshTotalNumberOfItems();
             renameAttachmentsDirectory($Database->lastInsertId(), PRIVATE_PATH);
             $_SESSION['pagination_page_number'] = 1;
             $_SESSION['sort_column_name'] = "";

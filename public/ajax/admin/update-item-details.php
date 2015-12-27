@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -52,6 +52,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $costCenter = $sanitizedPostArray['cost_center'];
         $projectId = $sanitizedPostArray['project'];
         $comments = $sanitizedPostArray['comments'];
+        $status = $sanitizedPostArray['status'];
         $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
@@ -70,6 +71,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $sql .= "cost_center = :cost_center, ";
         $sql .= "project = :project, ";
         $sql .= "comments = :comments, ";
+        $sql .= "status = :status, ";
         $sql .= "last_updated_by_id = :last_updated_by_id, ";
         $sql .= "last_updated_by_username = :last_updated_by_username, ";
         $sql .= "last_updated_datetime = :last_updated_datetime ";
@@ -88,6 +90,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
         $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
         $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
+        $stmt->bindValue(':status', $status, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);

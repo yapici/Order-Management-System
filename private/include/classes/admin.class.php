@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/19/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -45,7 +45,7 @@ class Admin {
      *  @return boolean If the logged in user is an administrator, 'true' is returned.
      */
     public function isAdmin() {
-        if ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2') {
+        if (isset($_SESSION['user_type']) && ($_SESSION['user_type'] == '1' || $_SESSION['user_type'] == '2')) {
             return true;
         } else {
             return false;

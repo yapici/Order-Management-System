@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/19/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Last modified on 12/24/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -49,6 +49,7 @@ echo "</style>";
                 <td>Website</td>
                 <td>Address</td>
                 <td>Contact Person</td>
+                <td>Account No</td>
                 <td>Added By</td>
                 <td>Admin Approved</td>
             </tr>
@@ -72,6 +73,7 @@ echo "</style>";
                 <td><input id="add-new-vendor-website" type="text" placeholder="Website"/></td>
                 <td><input id="add-new-vendor-address" type="text" placeholder="Address"/></td>
                 <td><input id="add-new-vendor-contact_person" type="text" placeholder="Contact Person"/></td>
+                <td><input id="add-new-vendor-account_number" type="text" placeholder="Account No"/></td>
                 <td colspan="3" id="add-new-vendor-button-holder-td"><a class="button" onclick="addNewVendor();">Add Vendor</a></td>
             </tr>
         </tfoot>
