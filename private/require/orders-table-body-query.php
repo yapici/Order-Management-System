@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/27/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -56,7 +56,7 @@ foreach ($ordersArray as $id => $order) {
     $mStatusUpdatedByUsername = $orderDetailsArray['status_updated_by_username'];
     $mOrdered = $orderDetailsArray['ordered'];
     $mOrderedDate = $orderDetailsArray['ordered_date'];
-    
+
     if ($mOrderedDate != '0000-00-00 00:00:00' || $mOrderedDate != '') {
         $mOrderedDate = $Functions->convertMysqlDateToPhpDate($mOrderedDate);
     }
@@ -67,7 +67,10 @@ foreach ($ordersArray as $id => $order) {
         $mInvoiceNo = $orderDetailsArray['invoice_no'];
     }
 
-    $mCostCenterName = $CostCenters->getCostCentersArray()[$mCostCenter];
+    $mCostCenterName = '';
+    if ($mCostCenter != '0') {
+        $mCostCenterName = $CostCenters->getCostCentersArray()[$mCostCenter];
+    }
 
     $mVendorName = $Vendors->getVendorsArray()[$mVendorId]['name'];
     $mVendorAccountNo = $Vendors->getVendorsArray()[$mVendorId]['account_number'];
@@ -102,9 +105,10 @@ foreach ($ordersArray as $id => $order) {
     . ");";
     if ($Admin->isAdmin()) {
         echo " showItemDetailsPopupWindowAdmin("
+        . "'$mItemId', "
         . "'$mVendorAccountNo', "
-        . "'$mVendorOrderNo', "
-        . "'$mInvoiceNo'"
+        . "'$mInvoiceNo', "
+        . "'$mVendorOrderNo'"
         . "); ";
         echo " prepareItemDetailsPopupWindowInputs("
         . "'$mDescription', "
@@ -117,6 +121,8 @@ foreach ($ordersArray as $id => $order) {
         . "'$mCostCenterName', "
         . "'$mProject', "
         . "'$mComments', "
+        . "'$mInvoiceNo', "
+        . "'$mVendorOrderNo', "
         . "'$mStatus'"
         . ");";
     }

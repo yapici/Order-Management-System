@@ -53,6 +53,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $projectId = $sanitizedPostArray['project'];
         $comments = $sanitizedPostArray['comments'];
         $status = $sanitizedPostArray['status'];
+        $invoiceNo = $sanitizedPostArray['invoice_no'];
+        $vendorOrderNo = $sanitizedPostArray['vendor_order_no'];
         $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
@@ -72,6 +74,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $sql .= "project = :project, ";
         $sql .= "comments = :comments, ";
         $sql .= "status = :status, ";
+        $sql .= "invoice_no = :invoice_no, ";
+        $sql .= "vendor_order_no = :vendor_order_no, ";
         $sql .= "last_updated_by_id = :last_updated_by_id, ";
         $sql .= "last_updated_by_username = :last_updated_by_username, ";
         $sql .= "last_updated_datetime = :last_updated_datetime ";
@@ -91,6 +95,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
         $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
         $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+        $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);

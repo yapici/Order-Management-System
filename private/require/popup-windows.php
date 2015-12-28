@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/23/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/27/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -40,5 +40,12 @@ echo '</div>';
 
 if ($Admin->isAdmin()) {
     require_once (PRIVATE_PATH . 'require/popup-windows/vendors-popup-window.php');
+    require_once (PRIVATE_PATH . 'require/popup-windows/projects-popup-window.php');
+    echo "<style>";
+    require(PRIVATE_PATH . 'require/css/popup-windows.css');
+    echo "</style>";
+    echo "<script type='text/javascript'>";
+    require(PRIVATE_PATH . 'require/js/popup-windows.js');
+    echo "</script>";
 }
 ?>

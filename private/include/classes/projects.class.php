@@ -79,6 +79,24 @@ class Projects {
         echo $html;
     }
 
+    public function populateProjectsTable() {
+        $tableBody = '';
+        foreach ($this->projectsArray as $projectId => $project) {
+            $projectName = $project['name'];
+            $projectNumber = $project['number'];
+            $projectActive = $project['active'];
+
+            $tableBody .= "<tr id='project-$projectId'>";
+            $tableBody .= "<td>$projectId</td>";
+            $tableBody .= "<td title='$projectName'><span>$projectName</span><input id='projects-popup-window-project-name' value='$projectName' type='text'/></td>";
+            $tableBody .= "<td title='$projectNumber'><span>$projectNumber</span><input id='projects-popup-window-project-number' value='$projectNumber' type='text'/></td>";
+            $tableBody .= "<td title='$projectActive'><span>$projectActive</span><input id='projects-popup-window-project-active' value='$projectActive' type='text'/></td>";
+            $tableBody .= "<td title='Delete Vendor'><a class='delete-button' onclick='deleteVendor(this);'>&#10006;</a></td>";
+            $tableBody .= "</tr>";
+        }
+        echo $tableBody;
+    }
+
 }
 
 /** @var Projects $Projects */

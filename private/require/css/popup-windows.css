@@ -1,0 +1,136 @@
+.admin-popup-window {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 86%;
+    min-height: calc(96vh - 80px);
+    padding-bottom: 40px;
+}
+
+.admin-popup-window-close-button {
+    position: absolute;
+    display: inline-block;
+    bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+}
+
+.admin-popup-window-table {
+    width: 90%;
+    margin: 10px auto;
+    border-spacing: 0px;
+}
+
+.admin-popup-window-table tr td {
+    position: relative;
+    padding: 4px 0px;
+    border-left: 1px #cccccc solid;
+}
+
+.admin-popup-window-table tr td:first-child {
+    padding: 4px 10px;
+    width: 1%;
+}
+
+.admin-popup-window-table tbody tr td:nth-child(9) {
+    border-right: 1px #cccccc solid;
+}
+
+#projects-popup-window .admin-popup-window-table tbody tr td:nth-child(4) {
+    border-right: 1px #cccccc solid;
+}
+
+.admin-popup-window-table tbody tr td:last-child {
+    border: 0px;
+}
+
+.admin-popup-window-table .empty-row td {
+    border-left: 0px;
+}
+
+.admin-popup-window-table tbody tr:last-child td,
+.admin-popup-window-table tfoot tr:last-child td {
+    border-bottom: 1px #cccccc solid;
+}
+
+.admin-popup-window-table tbody tr td span {
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+.admin-popup-window-table tbody tr:nth-child(even) > td {
+    background-color: #ffffff;
+}
+
+.admin-popup-window-table tbody tr:nth-child(odd) > td {
+    background-color: #f7f7f7;
+}
+
+.admin-popup-window-table tbody tr td:hover {
+    background-color: #EBF6FF;
+}
+
+.admin-popup-window-table tr td input {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    padding: 4px 10px;
+    border: 0 !important;
+    background: transparent;
+    outline: none !important;
+    box-shadow:none !important;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+}
+
+.admin-popup-window-table .delete-button {
+    position: absolute;
+    right: -18px;
+    opacity: 0.7;
+    top: 5px;
+}
+
+.admin-popup-window-table .delete-button:hover {
+    opacity: 1.0;
+}
+
+.admin-popup-window-table .add-new-item-title-tr td,
+.admin-popup-window-table thead tr td {
+    background-color: #444444;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 1.0em;
+    font-weight: bold;
+    color: #ffffff;
+    border-bottom: 1px solid #222222; 
+}
+
+.admin-popup-window-table .add-new-item-input-wrapper-tr td {
+    background-color: #ffffff;
+}
+
+.admin-popup-window-table .add-new-item-input-wrapper-tr td input {
+    line-height: 1.8em;
+    padding-top: 2px;
+    padding-bottom: 0px;
+}
+
+.admin-popup-window-table .add-new-item-input-wrapper-tr td:hover {
+    background-color: #EBF6FF;
+}
+
+.admin-popup-window-table .add-new-item-button-holder-td {
+    padding: 0;
+}
+
+.add-new-item-button-holder-td .button {
+    width: 100%;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    padding: 0;
+    padding-top: 1px;
+    line-height: 1.8em;
+}

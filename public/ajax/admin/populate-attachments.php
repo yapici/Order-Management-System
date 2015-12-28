@@ -1,8 +1,9 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/19/2015                                                                 */
-/* Last modified on 12/27/2015                                                           */
+/* Created on 12/12/2015                                                                 */
+/* Last modified on 12/13/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -28,49 +29,19 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
-?>
 
-<div class="popup-window admin-popup-window" id="vendors-popup-window">
-    <h1>Vendors</h1>
-    <a class="popup-window-cancel-button" onclick="hidePopupWindows();">&#10006;</a>
-    <table class="admin-popup-window-table" id="vendors-popup-window-vendors-table">
-        <thead>
-            <tr>
-                <td>Id</td>
-                <td>Name</td>
-                <td>Phone</td>
-                <td>Website</td>
-                <td>Address</td>
-                <td>Contact Person</td>
-                <td>Account No</td>
-                <td>Added By</td>
-                <td>Admin Approved</td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $Vendors->populateVendorsTable();
-            ?>
-        </tbody>
-        <tfoot>
-            <tr class="empty-row">
-                <td colspan="9">&nbsp;</td>
-            </tr>
-            <tr class="add-new-item-title-tr">
-                <td colspan="9">Add New Vendor</td>
-            </tr>
-            <tr class="add-new-item-input-wrapper-tr">
-                <td><b>+</b></td>
-                <td><input id="add-new-vendor-name" type="text" placeholder="Name"/></td>
-                <td><input id="add-new-vendor-phone" type="text" placeholder="Phone"/></td>
-                <td><input id="add-new-vendor-website" type="text" placeholder="Website"/></td>
-                <td><input id="add-new-vendor-address" type="text" placeholder="Address"/></td>
-                <td><input id="add-new-vendor-contact_person" type="text" placeholder="Contact Person"/></td>
-                <td><input id="add-new-vendor-account_number" type="text" placeholder="Account No"/></td>
-                <td colspan="3" class="add-new-item-button-holder-td"><a class="button" onclick="addNewVendor();">Add Vendor</a></td>
-            </tr>
-        </tfoot>
-    </table>
-    <div class="error-div" id="vendors-popup-window-error-div"></div>
-    <a class="button admin-popup-window-close-button" onclick="hidePopupWindows()">Close</a>
-</div>
+
+require('../../../private/include/include.php');
+// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
+if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+    if (!$Session->isSessionValid()) {
+        $jsonResponse['status'] = "no_session";
+    } else {
+        $orderId = filter_input(INPUT_GET, 'order_id');
+        $jsonResponse['html_response'] = $Functions->includeAttachments($orderId, true, true);
+    }
+    echo json_encode($jsonResponse);
+} else {
+    $Functions->phpRedirect('');
+}
+?>

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/27/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -191,8 +191,12 @@ class Functions {
      *  @param boolena $showDeleteButtons
      *  @return string $htmlResponse
      */
-    public function includeAttachments($orderId, $showDeleteButtons = false) {
-        $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/' . $orderId;
+    public function includeAttachments($orderId, $showDeleteButtons = false, $isAdminAttachment = false) {
+        if ($isAdminAttachment) {
+            $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/admin/' . $orderId;
+        } else {
+            $attachmentsDirectoryPath = PRIVATE_PATH . 'attachments/' . $orderId;
+        }
         $htmlResponse = '';
         if (is_dir($attachmentsDirectoryPath)) {
             $attachmentsFileNames = scandir($attachmentsDirectoryPath);
@@ -201,11 +205,17 @@ class Functions {
                         $attachmentsFileNames[$i] !== '.' &&
                         $attachmentsFileNames[$i] !== 'index.php' &&
                         $attachmentsFileNames[$i] !== 'archived') {
-                    $encryptedFilePath = $this->encode($orderId . '/' . $attachmentsFileNames[$i]);
+                    $filePath = '';
+                    if ($isAdminAttachment) {
+                        $filePath .= 'admin/';
+                    }
+                    $filePath .= $orderId . '/' . $attachmentsFileNames[$i];
+                    $encryptedFilePath = $this->encode($filePath);
+
                     $htmlResponse .= "<span class='file'><a href='download/$encryptedFilePath'>$attachmentsFileNames[$i]</a>";
                     $htmlResponse .= "&nbsp;&nbsp;";
                     $htmlResponse .= "<a class='button attachment-buttons' href='download/$encryptedFilePath'><img src='images/download-icon.png'/></a>";
-                    $htmlResponse .= $this->includeDeleteButtons($encryptedFilePath, $showDeleteButtons);
+                    $htmlResponse .= $this->includeDeleteButtons($encryptedFilePath, $showDeleteButtons, $isAdminAttachment);
                     $htmlResponse .= "</span>";
                 }
             }
@@ -218,17 +228,22 @@ class Functions {
      *  @param boolean $showDeleteButtons
      *  @return string $htmlResponse
      */
-    private function includeDeleteButtons($encryptedFilePath, $showDeleteButtons = false) {
+    private function includeDeleteButtons($encryptedFilePath, $showDeleteButtons = false, $isAdminAttachment = false) {
+        $htmlResponse = '';
         if ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
                 $_SESSION['user_type'] == Constants::USER_TYPE_ADMINISTRATOR ||
                 $showDeleteButtons) {
             $htmlResponse = "&nbsp;&nbsp;";
-            $htmlResponse .= "<a class='button attachment-buttons' onclick=\"showDeleteConfirmationWindow('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
+            if ($isAdminAttachment) {
+                $htmlResponse .= "<a class='button attachment-buttons' onclick=\"deleteAdminAttachment('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
+            } else {
+                $htmlResponse .= "<a class='button attachment-buttons' onclick=\"showDeleteConfirmationWindow('$encryptedFilePath')\"><img src='images/x-icon.png'/></a></a>";
+            }
         }
         return $htmlResponse;
     }
 
-    /** 
+    /**
      *  @param string $url
      *  @return string $url
      */
@@ -238,8 +253,8 @@ class Functions {
         }
         return $url;
     }
-    
-    /** 
+
+    /**
      *  @param string $title
      *  @param string $error_msg
      */
@@ -248,7 +263,7 @@ class Functions {
         error_log($error_msg, 3, "php.log");
         error_log("\n$title\n", 3, "php.log");
     }
-    
+
 }
 
 /** @var Functions $Functions */

@@ -219,8 +219,7 @@
     width: 24px;
 }
 
-#item-details-popup-window .top-panel,
-#item-details-popup-window .bottom-panel {
+#item-details-popup-window .panel-table {
     width: 94%;
     margin: 0px auto;
     padding: 0;
@@ -228,8 +227,7 @@
     text-align: left;
 }
 
-#item-details-popup-window .top-panel tr td,
-#item-details-popup-window .bottom-panel tr td {
+#item-details-popup-window .panel-table tr td {
     vertical-align: top;
     padding: 0px;
 }
@@ -331,6 +329,26 @@
 
 #item-details-popup-window-file-upload-elements-wrapper {
     margin-bottom: 20px;
+}
+
+/* Admin File Upload */
+#admin-file-upload-table {
+    width: 100%;
+}
+#admin-file-upload-table tr td:first-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+#admin-file-upload-button {
+    padding: 4px 8px;
+    font-size: 0.9em;
+}
+
+#admin-file-upload-td input {
+    padding: 0px;
+    width: auto;
+    display: inline-block;
 }
 
 /* Absolute Buttons */

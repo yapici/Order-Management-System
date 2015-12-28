@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/27/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -70,7 +70,11 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
 
             if (rename($filepath, $archivePath . '/' . $fullFilename)) {
                 // Response for ajax call
-                $jsonResponse['html_response'] = $Functions->includeAttachments($orderId, true);
+                if (substr($Functions->decode($filecode), 0, 5) == 'admin') {
+                    $jsonResponse['html_response'] = $Functions->includeAttachments($orderId, true, true);
+                } else {
+                    $jsonResponse['html_response'] = $Functions->includeAttachments($orderId, true);
+                }
                 $jsonResponse['status'] = "success";
             } else {
                 $jsonResponse['status'] = "error";

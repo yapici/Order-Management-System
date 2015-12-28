@@ -58,7 +58,7 @@ if ($Admin->isAdmin()) {
     }
     ?>
 
-    <table class="top-panel">
+    <table class="top-panel panel-table">
         <tr>
             <td class="left-panel">
                 <table>
@@ -154,20 +154,12 @@ if ($Admin->isAdmin()) {
                             <?php if ($isAdmin) echo '<input id="item-details-popup-window-comments" type="text"/>'; ?>
                         </td>
                     </tr>  
-                    <?php if ($Admin->isAdmin()) { ?>
-                        <tr>
-                            <td>Vendor Account No:</td>
-                            <td>
-                                <span id="popup-item-vendor-account-no"></span>
-                            </td>
-                        </tr>  
-                    <?php } ?>
                 </table>
             </td>
         </tr>
     </table>
     <hr class="horizontal-divider"></hr>
-    <table class="bottom-panel">
+    <table class="panel-table">
         <tr>
             <td class='left-panel'>
                 <table>
@@ -216,6 +208,54 @@ if ($Admin->isAdmin()) {
             </td>
         </tr>
     </table>
+    <?php if ($isAdmin) { ?>
+        <hr class="horizontal-divider"></hr>
+        <h2>Admin Area</h2>
+        <table class="panel-table">
+            <tr>
+                <td class='left-panel'>
+                    <table>
+                        <tr>
+                            <td>Vendor Account No:</td>
+                            <td>
+                                <span id="popup-item-vendor-account-no"></span>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td>Invoice No:</td>
+                            <td class="item-details-input-holder-td">
+                                <span id="popup-item-invoice-no"></span>
+                                <input id="item-details-popup-window-invoice-no" type="text"/>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td>Vendor Order No:</td>
+                            <td class="item-details-input-holder-td">
+                                <span id="popup-item-vendor-order-no"></span>
+                                <input id="item-details-popup-window-vendor-order-no" type="text"/>
+                            </td>
+                        </tr>  
+                    </table>
+                </td>
+                <td class="right-panel">
+                    <table id='admin-file-upload-table'>
+                        <tr>
+                            <td>Attachments:</td>
+                            <td id='admin-file-upload-td'>
+                                <input type="file" name="admin-file-to-upload" id="item-details-admin-file-to-upload"/>
+                                <input type="hidden" id="admin-file-upload-order-id"/>
+                                <a class='button' id='admin-file-upload-button' onclick="uploadAdminFile()">Upload File</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td id='admin-files-holder-td'></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <?php } ?>
     <hr class="horizontal-divider"></hr>
     <div id="item-details-popup-window-attachments-wrapper">
         <h2>Attachments</h2>

@@ -58,7 +58,7 @@ if (!$Session->isSessionValid()) {
                         <span id='menu-items-wrapper-span'>
                             <ul id='menu-items-wrapper-ul'>
                                 <li class='menu-items' title='Manage Vendors' onclick='showVendorsPopupWindow();'><img class='absolute-buttons' id='vendor-button' src='images/vendor-icon.png'></img></li>
-                                <li class='menu-items' title='Manage Projects'><img class='absolute-buttons' src='images/project-icon.png'></img></li>
+                                <li class='menu-items' title='Manage Projects' onclick='showProjectsPopupWindow();'><img class='absolute-buttons' src='images/project-icon.png'></img></li>
                                 <li class='menu-items' title='Manage Cost Centers'><img class='absolute-buttons' src='images/cost-center-icon.png'></img></li>
                                 <li class='menu-items' title='Manage Users'><img class='absolute-buttons' src='images/users-icon.png'></img></li>
                             </ul>

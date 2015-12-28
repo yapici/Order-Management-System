@@ -9,6 +9,8 @@ function prepareItemDetailsPopupWindowInputs(
         costCenter,
         project,
         comments,
+        invoiceNo,
+        vendorOrderNo,
         status) {
 
     $("#item-details-popup-window-description").val(description);
@@ -18,6 +20,8 @@ function prepareItemDetailsPopupWindowInputs(
     $("#item-details-popup-window-price").val(price);
     $("#item-details-popup-window-weblink").val(weblink);
     $("#item-details-popup-window-comments").val(comments);
+    $("#item-details-popup-window-invoice-no").val(invoiceNo);
+    $("#item-details-popup-window-vendor-order-no").val(vendorOrderNo);
 
     if (vendor !== '') {
         $("#item-details-popup-window-vendor > option").each(function () {
@@ -26,19 +30,19 @@ function prepareItemDetailsPopupWindowInputs(
             }
         });
     }
-    
+
     if (costCenter !== '') {
         $("#item-details-popup-window-cost-center option:contains('" + costCenter + "')").prop('selected', true);
     } else {
         $("#item-details-popup-window-cost-center")[0].selectedIndex = 0;
     }
-    
+
     if (project !== '') {
         $("#item-details-popup-window-project option:contains('" + project + "')").prop('selected', true);
     } else {
         $("#item-details-popup-window-project option:contains('')")[0].selectedIndex = 0;
     }
-    
+
     $("#item-details-popup-window-status option:contains('" + status + "')").prop('selected', true);
 }
 
@@ -84,6 +88,8 @@ function updateOrderDetails() {
     var comments = $("#item-details-popup-window-comments").val();
     var order_id = $("#popup-item-order-number").html();
     var status = $("#item-details-popup-window-status").val();
+    var invoice_no = $("#item-details-popup-window-invoice-no").val();
+    var vendor_order_no = $("#item-details-popup-window-vendor-order-no").val();
     var error_div = $('#item-details-popup-window-error-div');
     error_div.html("");
     error_div.html('&nbsp;');
@@ -106,6 +112,8 @@ function updateOrderDetails() {
                 "&project=" + project +
                 "&comments=" + comments +
                 "&order_id=" + order_id +
+                "&invoice_no=" + invoice_no +
+                "&vendor_order_no=" + vendor_order_no +
                 "&status=" + status,
         cache: false,
         dataType: "json",
@@ -132,6 +140,8 @@ function updateOrderDetails() {
                 $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(comments);
                 $("#popup-item-status").html(status);
+                $("#popup-item-invoice-no").html(invoice_no);
+                $("#popup-item-vendor-order-no").html(vendor_order_no);
             } else if (json_data.status === "no_session") {
                 showLoginPopupWindow();
             } else if (json_data.status === "unauthorized_access") {
@@ -146,10 +156,110 @@ function updateOrderDetails() {
 }
 
 function showItemDetailsPopupWindowAdmin(
+        orderId,
         accountNo,
-        vendorOrderNo,
-        invoiceNo
-        ) {
-        $("#popup-item-vendor-account-no").html(accountNo);
+        invoiceNo,
+        vendorOrderNo) {
+    $("#popup-item-vendor-account-no").html(accountNo);
+    $("#popup-item-invoice-no").html(invoiceNo);
+    $("#popup-item-vendor-order-no").html(vendorOrderNo);
+    $("#admin-file-upload-order-id").val(orderId);
 
+    showProgressCircle();
+    $.ajax({
+        url: "ajax/admin/populate-attachments.php",
+        type: "GET",
+        data: "order_id=" + orderId,
+        cache: false,
+        dataType: "json",
+        success: function (json_response) {
+            if (json_response.html_response !== 'no_session') {
+                $("#admin-files-holder-td").html(json_response.html_response);
+            } else {
+                showLoginPopupWindow();
+            }
+            hideProgressCircle();
+        }
+    });
+}
+
+function uploadAdminFile() {
+    var form_data = new FormData();
+
+    var file_input = $('#item-details-admin-file-to-upload');
+    var file_data = file_input.prop('files')[0];
+
+    form_data.append('admin-file-to-upload', file_data);
+    form_data.append('admin-file-upload-order-id', $("#admin-file-upload-order-id").val());
+
+    var popup_window = $(".popup-window");
+    var error_div = $('.popup-error-div');
+    error_div.html("");
+
+    if (file_input.val() === '') {
+        error_div.html('No file was chosen. Please choose a file to upload.');
+    } else if (file_data.size > 10485760) {
+        error_div.html('Maximum file upload size is 10 MB');
+    } else {
+        blockUI();
+        showProgressCircle();
+        popup_window.css('z-index', '9');
+        $.ajax({
+            url: 'ajax/admin/upload-file.php',
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (json_response) {
+                if (json_response.status === 'success') {
+                    $("#admin-files-holder-td").html(json_response.html_response);
+                    popup_window.css('z-index', '99999');
+                } else if (json_response.status === 'disallowed_file_type') {
+                    error_div.html('This file type is not allowed');
+                    popup_window.css('z-index', '99999');
+                } else if (json_response.status === 'no_file_was_chosen') {
+                    error_div.html('No file was chosen. Please choose a file to upload.');
+                    popup_window.css('z-index', '99999');
+                } else if (json_response.status === 'max_file_size_exceeded') {
+                    error_div.html('Maximum file upload size is 10 MB');
+                    popup_window.css('z-index', '99999');
+                } else if (json_response.status === "no_session") {
+                    showLoginPopupWindow();
+                } else {
+                    error_div.html('Something went wrong. Please contact webmaster.');
+                    popup_window.css('z-index', '99999');
+                }
+                hideProgressCircle();
+            }
+        });
+    }
+}
+
+function deleteAdminAttachment(file) {
+    var popup_window = $(".popup-window");
+    var error_div = $(".popup-error-div");
+    showProgressCircle();
+    popup_window.css('z-index', '9');
+    $.ajax({
+        url: "ajax/delete-attachment.php",
+        type: "GET",
+        data: "file=" + file,
+        cache: false,
+        dataType: "json",
+        success: function (json_response) {
+            if (json_response.status === 'success') {
+                $("#admin-files-holder-td").html(json_response.html_response);
+            } else if (json_response.status === "no_session") {
+                showLoginPopupWindow();
+            } else {
+                error_div.html("Something went wrong, please try again later.");
+            }
+            popup_window.css('z-index', '99999');
+            hideDeleteConfirmationWindow();
+            ;
+            hideProgressCircle();
+        }
+    });
 }

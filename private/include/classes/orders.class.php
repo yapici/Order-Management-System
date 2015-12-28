@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/27/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -87,6 +87,9 @@ class Orders {
         $this->Functions = $functions;
         $this->Admin = $admin;
         $this->setTotalNumberOfItems();
+        if ($this->Admin->isAdmin()) {
+            array_push($this->searchColumns, 'vendor_order_no', 'invoice_no');
+        }
     }
 
     private function populateArray() {
@@ -149,6 +152,8 @@ class Orders {
             $sanitizedArray = $this->Functions->sanitizeArray($row);
             $this->ordersArray[$sanitizedArray['id']] = $sanitizedArray;
         }
+
+        $this->refreshTotalNumberOfItems();
     }
 
     public function refreshArray() {
@@ -234,7 +239,7 @@ class Orders {
         $stmt->execute();
         $this->totalNumberOfItems = $stmt->rowCount();
     }
-    
+
     public function refreshTotalNumberOfItems() {
         $this->setTotalNumberOfItems();
     }
@@ -242,7 +247,7 @@ class Orders {
     public function getTotalNumberOfItems() {
         return $this->totalNumberOfItems;
     }
-    
+
 }
 
 /** @var Orders $Orders */
