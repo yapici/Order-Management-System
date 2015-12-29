@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -64,6 +64,15 @@
         </td>
     </tr>   
     <tr>
+        <td>Project<span class="red-font"> *</span></td>
+        <td class="add-new-item-input-holder-td">
+            <select id="add-new-item-project">
+                <option>Please Choose a Project</option>
+                <?php $Projects->populateProjectsList(); ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
         <td>Price (USD)</td>
         <td class="add-new-item-input-holder-td">
             <input id="add-new-item-price" type="number" step="any"/>
@@ -81,15 +90,6 @@
             <select id="add-new-item-cost-center">
                 <option></option>
                 <?php $CostCenters->populateCostCentersList(); ?>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>Project</td>
-        <td class="add-new-item-input-holder-td">
-            <select id="add-new-item-project">
-                <option></option>
-                <?php $Projects->populateProjectsList(); ?>
             </select>
         </td>
     </tr>

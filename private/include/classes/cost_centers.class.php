@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 12/17/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -86,6 +86,21 @@ class CostCenters {
             $html .= "<option value='$costCenterId'>$costCenterName</option>";
         }
         echo $html;
+    }
+
+    public function populateCostCentersTable() {
+        $tableBody = '';
+        foreach ($this->costCentersArray as $id => $costCenter) {
+            $costCenterName = $costCenter['name'];
+            $costCenterActive = $costCenter['active'];
+
+            $tableBody .= "<tr id='cost-center-$id'>";
+            $tableBody .= "<td>$id</td>";
+            $tableBody .= "<td title='$costCenterName'><span>$costCenterName</span><input id='projects-popup-window-project-name' value='$costCenterName' type='text'/></td>";
+            $tableBody .= "<td title='$costCenterActive'><span>$costCenterActive</span><input id='projects-popup-window-project-active' value='$costCenterActive' type='text'/></td>";
+            $tableBody .= "</tr>";
+        }
+        echo $tableBody;
     }
 
 }

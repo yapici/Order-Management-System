@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -210,7 +210,8 @@ if ($Admin->isAdmin()) {
     </table>
     <?php if ($isAdmin) { ?>
         <hr class="horizontal-divider"></hr>
-        <h2>Admin Area</h2>
+        <h2 id="admin-area-h2">Admin Area</h2>
+        <div style="font-size: 0.8em;"><i>(This section is visible only to administrators)</i></div>
         <table class="panel-table">
             <tr>
                 <td class='left-panel'>

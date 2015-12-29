@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/27/2015                                                                 */
-/* Last modified on 12/27/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -32,7 +32,7 @@
 ?>
 
 <div class="popup-window admin-popup-window" id="projects-popup-window">
-    <h1>Project</h1>
+    <h1>Projects</h1>
     <a class="popup-window-cancel-button" onclick="hidePopupWindows();">&#10006;</a>
     <table class="admin-popup-window-table" id="projects-popup-window-projects-table">
         <thead>
@@ -58,7 +58,7 @@
             <tr class="add-new-item-input-wrapper-tr">
                 <td><b>+</b></td>
                 <td><input id="add-new-project-name" type="text" placeholder="Name"/></td>
-                <td><input id="add-new-project-number" type="text" placeholder="Number"/></td>
+                <td><input id="add-new-project-number" type="text" placeholder="Project Number"/></td>
                 <td colspan="3" class="add-new-item-button-holder-td"><a class="button" onclick="addNewProject();">Add Project</a></td>
             </tr>
         </tfoot>

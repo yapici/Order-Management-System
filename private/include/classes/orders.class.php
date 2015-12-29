@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 12/27/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -50,17 +50,33 @@ class Orders {
         'uom',
         'catalog_no',
         'price',
-        'account_number',
-        'project_name_and_number',
         'comments',
+        'project',
+        'vendor',
         'status',
-        'vendor_name',
         'requested_datetime',
         'status_updated_date',
         'status_updated_by_username',
         'item_needed_by_date',
         'ordered_date',
         'requested_by_username'
+    ];
+
+    /** @var string $o */
+    private $o = 'o.';
+
+    /** @var array $searchTables */
+    private $searchTables = [
+        'vendor' => array(
+            'table_name' => 'vendors',
+            'table_abbr' => 'v',
+            'columns' => array('name', 'website', 'account_number')
+        ),
+        'project' => array(
+            'table_name' => 'projects',
+            'table_abbr' => 'p',
+            'columns' => array('name', 'number')
+        )
     ];
 
     /** @var int $paginationPageNumber */
@@ -93,52 +109,35 @@ class Orders {
     }
 
     private function populateArray() {
+        $o = $this->o;
         $sql = "SELECT ";
-        $sql .= "id, ";
-        $sql .= "description, ";
-        $sql .= "quantity, ";
-        $sql .= "uom, ";
-        $sql .= "vendor, ";
-        $sql .= "catalog_no, ";
-        $sql .= "price, ";
-        $sql .= "weblink, ";
-        $sql .= "cost_center, ";
-        $sql .= "project, ";
-        $sql .= "comments, ";
-        $sql .= "requested_datetime, ";
-        $sql .= "status_updated_date, ";
-        $sql .= "status, ";
-        $sql .= "requested_by_username, ";
-        $sql .= "item_needed_by_date, ";
-        $sql .= "ordered, ";
-        $sql .= "ordered_date, ";
-        $sql .= "ordered_by_username, ";
+        $sql .= $o . "id, ";
+        $sql .= $o . "description, ";
+        $sql .= $o . "quantity, ";
+        $sql .= $o . "uom, ";
+        $sql .= $o . "vendor, ";
+        $sql .= $o . "catalog_no, ";
+        $sql .= $o . "price, ";
+        $sql .= $o . "weblink, ";
+        $sql .= $o . "cost_center, ";
+        $sql .= $o . "project, ";
+        $sql .= $o . "comments, ";
+        $sql .= $o . "requested_datetime, ";
+        $sql .= $o . "status_updated_date, ";
+        $sql .= $o . "status, ";
+        $sql .= $o . "requested_by_username, ";
+        $sql .= $o . "item_needed_by_date, ";
+        $sql .= $o . "ordered, ";
+        $sql .= $o . "ordered_date, ";
+        $sql .= $o . "ordered_by_username, ";
         if ($this->Admin->isAdmin()) {
-            $sql .= "vendor_order_no, ";
-            $sql .= "invoice_no, ";
+            $sql .= $o . "vendor_order_no, ";
+            $sql .= $o . "invoice_no, ";
         }
-        $sql .= "status_updated_by_username ";
-        $sql .= "FROM orders WHERE deleted = 0";
-        $sql .= $this->getSearchQuery();
-        $sql .= $this->getSortQuery();
-        $sql .= "LIMIT :start, :item_number";
-
-        $stmt = $this->Database->prepare($sql);
-
-        /* Search Keywords */
-        for ($i = 0; $i < count($this->searchKeywordsArray); $i++) {
-            $keyword = $this->searchKeywordsArray[$i];
-            for ($k = 0; $k < count($this->searchColumns); $k++) {
-                $paramName = ":keyword" . $i . $k;
-                if (substr($this->searchColumns[$k], -8) == "datetime" || substr($this->searchColumns[$k], -4) == "date") {
-                    $dateKeyword = $this->Functions->convertStrDateToMysqlDate($keyword);
-                    $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
-                    $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
-                } else {
-                    $stmt->bindValue($paramName, "%$keyword%", PDO::PARAM_INT);
-                }
-            }
-        }
+        $sql .= $o . "status_updated_by_username ";
+        $sql .= "FROM orders o ";
+        $limit_query = "LIMIT :start, :item_number";
+        $stmt = $this->prepareStmt($sql, $limit_query);
 
         /* Pagination page number */
         $stmt->bindValue(':start', $this->paginationStartPoint, PDO::PARAM_INT);
@@ -153,7 +152,8 @@ class Orders {
             $this->ordersArray[$sanitizedArray['id']] = $sanitizedArray;
         }
 
-        $this->refreshTotalNumberOfItems();
+        $this->refreshTotalNumberOfItems
+        ();
     }
 
     public function refreshArray() {
@@ -174,17 +174,24 @@ class Orders {
      */
     private function getSearchQuery() {
         $searchSqlString = " ";
+        $o = $this->o;
         if (isset($_SESSION['search_keywords']) && $_SESSION['search_keywords'] != "" && $_SESSION['search_keywords'] != "Search") {
             $searchKeywordsString = $_SESSION['search_keywords'];
-            $this->searchKeywordsArray = preg_split('/[\s]+/', $searchKeywordsString);
+            $this->searchKeywordsArray = str_getcsv($searchKeywordsString, ' ');
+            $columns = $this->searchColumns;
+            $searchTables = $this->searchTables;
             for ($i = 0; $i < count($this->searchKeywordsArray); $i++) {
                 $searchSqlString .= "AND (";
-                $columns = $this->searchColumns;
                 for ($k = 0; $k < count($columns); $k++) {
-                    if (substr($columns[$k], -8) == "datetime" || substr($columns[$k], -4) == "date") {
-                        $searchSqlString .= '(' . $columns[$k] . " BETWEEN :keyword" . $i . $k . "a AND :keyword" . $i . $k . "b) OR ";
+                    $currentColumn = $columns[$k];
+                    if (substr($currentColumn, -8) == "datetime" || substr($currentColumn, -4) == "date") {
+                        $searchSqlString .= '(' . $o . $currentColumn . " BETWEEN :keyword" . $i . $k . "a AND :keyword" . $i . $k . "b) OR ";
+                    } else if (array_key_exists($currentColumn, $searchTables)) {
+                        for ($l = 0; $l < count($searchTables[$currentColumn]['columns']); $l++) {
+                            $searchSqlString .= "(" . $searchTables[$currentColumn]['table_abbr'] . "." . $searchTables[$currentColumn]['columns'][$l] . " LIKE :keyword" . $i . $k . $l . ") OR ";
+                        }
                     } else {
-                        $searchSqlString .= $columns[$k] . " LIKE :keyword" . $i . $k . " OR ";
+                        $searchSqlString .= "(" . $o . $currentColumn . " LIKE :keyword" . $i . $k . ") OR ";
                     }
                 }
                 $searchSqlString = substr_replace($searchSqlString, "", -3); // to remove the 'OR' at the end.
@@ -201,8 +208,13 @@ class Orders {
      */
     private function getSortQuery() {
         $sortSqlString = " ORDER BY requested_datetime DESC ";
-        if (isset($_SESSION['sort_column_name']) && $_SESSION['sort_column_name'] != "") {
-            $sortSqlString = " ORDER BY " . $_SESSION['sort_column_name'];
+        if (isset($_SESSION['sort_column_name']) &&
+                $_SESSION['sort_column_name'] != "") {
+            if ($_SESSION['sort_column_name'] == "account_number") {
+                $sortSqlString = " ORDER BY v.account_number";
+            } else {
+                $sortSqlString = " ORDER BY " . $_SESSION['sort_column_name'];
+            }
             if ($_SESSION['sort_up_or_down'] == 'up') {
                 $sortSqlString .= " ASC ";
             } else {
@@ -213,31 +225,59 @@ class Orders {
     }
 
     private function setPaginationParameters() {
-        if (isset($_SESSION['pagination_page_number'])) {
+        if (isset(
+                        $_SESSION['pagination_page_number'])) {
             $this->paginationPageNumber = $_SESSION['pagination_page_number'];
-            $this->paginationStartPoint = ($this->paginationPageNumber - 1) * $this->numberOfItemsPerPage;
+            $this->paginationStartPoint = ($this->paginationPageNumber - 1) * $this->numberOfItemsPerPage
+
+            ;
         }
     }
 
     private function setTotalNumberOfItems() {
-        $sql = "SELECT * FROM orders WHERE deleted = 0" . $this->getSearchQuery() . $this->getSortQuery();
+        $sql = "SELECT " . $this->o . "id FROM orders o ";
+        $stmt = $this->prepareStmt($sql);
+        $stmt->execute();
+        $this->totalNumberOfItems = $stmt->rowCount();
+    }
+
+    /**
+     * @param string $sql
+     * @return queryString $stmt - PDO statement
+     */
+    private function prepareStmt($sql, $limit = '') {
+        foreach ($this->searchTables as $columnName => $array) {
+            $sql .= "JOIN " . $array['table_name'];
+            $sql .= " " . $array['table_abbr'];
+            $sql .= " ON " . $this->o . $columnName . " = " . $array['table_abbr'] . ".id ";
+        }
+        $sql .= "WHERE " . $this->o . "deleted = 0";
+        $sql .= $this->getSearchQuery();
+        $sql .= $this->getSortQuery();
+        $sql .= $limit;
+        $this->Functions->logError("query", $sql);
 
         $stmt = $this->Database->prepare($sql);
         for ($i = 0; $i < count($this->searchKeywordsArray); $i++) {
             $keyword = $this->searchKeywordsArray[$i];
+            $searchTables = $this->searchTables;
             for ($k = 0; $k < count($this->searchColumns); $k++) {
                 $paramName = ":keyword" . $i . $k;
-                if (substr($this->searchColumns[$k], -8) == "datetime" || substr($this->searchColumns[$k], -4) == "date") {
+                $currentColumn = $this->searchColumns[$k];
+                if (substr($currentColumn, -8) == "datetime" || substr($currentColumn, -4) == "date") {
                     $dateKeyword = $this->Functions->convertStrDateToMysqlDate($keyword);
                     $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
                     $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
+                } else if (array_key_exists($currentColumn, $searchTables)) {
+                    for ($l = 0; $l < count($searchTables[$currentColumn]['columns']); $l++) {
+                        $stmt->bindValue($paramName . $l, "%$keyword%", PDO::PARAM_STR);
+                    }
                 } else {
                     $stmt->bindValue($paramName, "%$keyword%", PDO::PARAM_INT);
                 }
             }
         }
-        $stmt->execute();
-        $this->totalNumberOfItems = $stmt->rowCount();
+        return $stmt;
     }
 
     public function refreshTotalNumberOfItems() {

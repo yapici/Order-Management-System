@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -113,6 +113,41 @@ class Vendors {
             $tableBody .= "</tr>";
         }
         echo $tableBody;
+    }
+
+    /**
+     * @param array $vendorDetailsArray
+     * @return boolean PDO execute result
+     */
+    public function addNewVendor($vendorDetailsArray) {
+        $vendorName = $vendorDetailsArray['name'];
+        $vendorPhone = $vendorDetailsArray['phone'];
+        $vendorWebsite = $vendorDetailsArray['website'];
+        $vendorAddress = $vendorDetailsArray['address'];
+        $vendorContactPerson = $vendorDetailsArray['contact_person'];
+        $vendorAccountNo = $vendorDetailsArray['account_number'];
+
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        $sql = "INSERT INTO vendors (";
+        $sql .= "name, phone, website, address, contact_person, account_number, date_added, added_by_user_id, added_by_username,";
+        $sql .= " last_updated_date, last_updated_by_user_id, last_updated_by_username, approved";
+        $sql .= ") VALUES (:name, :phone, :website, :address, :contactPerson, :accountNumber, :currentDate, :userId, :username, :currentDate, :userId, :username, '1')";
+
+        $stmt = $this->Database->prepare($sql);
+        $stmt->bindValue(':name', $vendorName, PDO::PARAM_STR);
+        $stmt->bindValue(':phone', $vendorPhone, PDO::PARAM_STR);
+        $stmt->bindValue(':website', $vendorWebsite, PDO::PARAM_STR);
+        $stmt->bindValue(':address', $vendorAddress, PDO::PARAM_STR);
+        $stmt->bindValue(':contactPerson', $vendorContactPerson, PDO::PARAM_STR);
+        $stmt->bindValue(':accountNumber', $vendorAccountNo, PDO::PARAM_STR);
+        $stmt->bindValue(':currentDate', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+
+        return $stmt->execute();
     }
 
 }

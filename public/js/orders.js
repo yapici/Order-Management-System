@@ -117,7 +117,8 @@ function addNewItem() {
             || uom === ''
             || vendor === 'Please Choose a Vendor'
             || catalog_no === ''
-            || date_needed === '') {
+            || date_needed === ''
+            || project === 'Please Choose a Project') {
         error_div.html("Please fill all the mandatory fields");
     } else if (vendor === "Add New Vendor"
             && (new_vendor_name === ''

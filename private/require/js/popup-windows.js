@@ -204,8 +204,9 @@ function deleteVendor(element) {
     });
 }
 
-function updateProjectDetails(project_id, input_id) {
-    var value = $("#" + project_id + " #" + input_id).val();
+function updateProjectDetails(tr_id, input_id) {
+    var value = $("#" + tr_id + " #" + input_id).val();
+    var project_id = tr_id.split('-').pop().trim();
     var field_name = input_id.split('-').pop().trim();
     var projects_popup_window = $("#projects-popup-window");
     var error_div = $("#projects-popup-window-error-div");
@@ -240,3 +241,49 @@ function updateProjectDetails(project_id, input_id) {
         });
     }
 }
+
+function addNewProject() {
+    var project_name = $("#add-new-project-name").val();
+    var project_number = $("#add-new-project-number").val();
+
+    var projects_popup_window = $("#projects-popup-window");
+    var projects_table_tbody = $("#projects-popup-window-projects-table tbody");
+
+    var error_div = $("#projects-popup-window-error-div");
+    error_div.html('');
+
+    if (project_name === ''
+            || project_number === ''
+            || project_name === 'Name'
+            || project_number === 'Project Number') {
+        error_div.html('Please fill all the fields');
+    } else {
+        projects_popup_window.css('z-index', '9');
+        showProgressCircle();
+        blockUI();
+        $.ajax({
+            url: "../ajax/admin/add-new-project.php",
+            type: "POST",
+            data: "name=" + project_name +
+                    "&number=" + project_number,
+            cache: false,
+            dataType: "json",
+            success: function (json_data) {
+                if (json_data.status === 'success') {
+                    projects_table_tbody.html(json_data.html_tbody);
+                    $("#add-new-project-name").val('');
+                    $("#add-new-project-number").val('');
+                } else if (json_data.status === "no_session") {
+                    showLoginPopupWindow();
+                } else {
+                    error_div.html(json_data.status);
+                }
+                projects_popup_window.css('z-index', '9999');
+                hideProgressCircle();
+            }
+        });
+    }
+}
+    if (msieversion() < 10 && msieversion()) {
+        $("#admin-file-upload-td").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
+    }

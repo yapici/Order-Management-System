@@ -402,7 +402,7 @@
     right: 0;
     top: 38px;
     opacity: 0;
-    transition: visibility 0s linear 0.3s, opacity 0.3s linear;
+    transition: visibility 0s linear 0.2s, opacity 0.2s linear;
     z-index: 7;
 }
 

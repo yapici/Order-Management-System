@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Created on 12/28/2015                                                                 */
 /* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
@@ -29,22 +29,39 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
-
-define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
-define("PRIVATE_PATH", ROOT . "/private/");
-define("PUBLIC_PATH", ROOT . "/public/");
-define("CLASSES_PATH", PRIVATE_PATH . 'include/classes/');
-
-require_once(CLASSES_PATH . "constants.class.php");
-require_once(PRIVATE_PATH . "include/database.php");
-require_once(CLASSES_PATH . "functions.class.php");
-require_once(CLASSES_PATH . "session.class.php");
-require_once(CLASSES_PATH . "vendors.class.php");
-require_once(CLASSES_PATH . "cost_centers.class.php");
-require_once(CLASSES_PATH . "projects.class.php");
-require_once(CLASSES_PATH . "item_details.class.php");
-require_once(CLASSES_PATH . "admin.class.php");
-require_once(CLASSES_PATH . "orders.class.php");
-
-date_default_timezone_set('America/Chicago');
 ?>
+
+<div class="popup-window admin-popup-window" id="cost-centers-popup-window">
+    <h1>Cost Centers</h1>
+    <a class="popup-window-cancel-button" onclick="hidePopupWindows();">&#10006;</a>
+    <table class="admin-popup-window-table" id="cost-centers-popup-window-cost-centers-table">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Cost Center Name</td>
+                <td>Active</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $Projects->populateCostCentersTable();
+            ?>
+        </tbody>
+        <tfoot>
+            <tr class="empty-row">
+                <td colspan="9">&nbsp;</td>
+            </tr>
+            <tr class="add-new-item-title-tr">
+                <td colspan="9">Add New Project</td>
+            </tr>
+            <tr class="add-new-item-input-wrapper-tr">
+                <td><b>+</b></td>
+                <td><input id="add-new-project-name" type="text" placeholder="Name"/></td>
+                <td><input id="add-new-project-number" type="text" placeholder="Project Number"/></td>
+                <td colspan="3" class="add-new-item-button-holder-td"><a class="button" onclick="addNewProject();">Add Project</a></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="error-div" id="projects-popup-window-error-div"></div>
+    <a class="button admin-popup-window-close-button" onclick="hidePopupWindows()">Close</a>
+</div>

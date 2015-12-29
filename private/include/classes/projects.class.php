@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/23/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -49,7 +49,7 @@ class Projects {
     }
 
     private function populateArray() {
-        $sql = "SELECT id, name, number, added_by_username, active FROM projects";
+        $sql = "SELECT id, name, number, added_by_username, active FROM projects WHERE active = '1'";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -91,10 +91,36 @@ class Projects {
             $tableBody .= "<td title='$projectName'><span>$projectName</span><input id='projects-popup-window-project-name' value='$projectName' type='text'/></td>";
             $tableBody .= "<td title='$projectNumber'><span>$projectNumber</span><input id='projects-popup-window-project-number' value='$projectNumber' type='text'/></td>";
             $tableBody .= "<td title='$projectActive'><span>$projectActive</span><input id='projects-popup-window-project-active' value='$projectActive' type='text'/></td>";
-            $tableBody .= "<td title='Delete Vendor'><a class='delete-button' onclick='deleteVendor(this);'>&#10006;</a></td>";
             $tableBody .= "</tr>";
         }
         echo $tableBody;
+    }
+
+    /**
+     * @param array $projectDetailsArray
+     * @return boolean PDO execute result
+     */
+    public function addNewProject($projectDetailsArray) {
+        $projectName = $projectDetailsArray['name'];
+        $projectNumber = $projectDetailsArray['number'];
+
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        $sql = "INSERT INTO projects (";
+        $sql .= "name, number, date_added, added_by_user_id, added_by_username,";
+        $sql .= " last_updated_date, last_updated_by_user_id, last_updated_by_username, active";
+        $sql .= ") VALUES (:name, :number, :currentDate, :userId, :username, :currentDate, :userId, :username, '1')";
+
+        $stmt = $this->Database->prepare($sql);
+        $stmt->bindValue(':name', $projectName, PDO::PARAM_STR);
+        $stmt->bindValue(':number', $projectNumber, PDO::PARAM_STR);
+        $stmt->bindValue(':currentDate', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+
+        return $stmt->execute();
     }
 
 }

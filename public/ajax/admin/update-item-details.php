@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -38,7 +38,6 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $jsonResponse['status'] = $adminCheckResponse;
     } else {
         $vendorsArray = $Vendors->getVendorsArray();
-        date_default_timezone_set('America/Chicago');
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
         $description = $sanitizedPostArray['description'];

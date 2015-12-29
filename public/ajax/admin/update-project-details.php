@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/27/2015                                                                 */
-/* Last modified on 12/27/2015                                                           */
+/* Last modified on 12/28/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -37,8 +37,6 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if ($adminCheckResponse !== true) {
         $jsonResponse['status'] = $adminCheckResponse;
     } else {
-        date_default_timezone_set('America/Chicago');
-        
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
         
@@ -53,17 +51,17 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         // Inserting the information to the database
         $sql = "UPDATE projects SET ";
         $sql .= "$fieldName = :value, ";
-        $sql .= "last_modified_by_user_id = :last_modified_by_user_id, ";
-        $sql .= "last_modified_by_username = :last_modified_by_username, ";
-        $sql .= "last_modified_date = :last_modified_date ";
+        $sql .= "last_updated_by_user_id = :last_updated_by_user_id, ";
+        $sql .= "last_updated_by_username = :last_updated_by_username, ";
+        $sql .= "last_updated_date = :last_updated_date ";
         $sql .= "WHERE id = :project_id";
 
         $stmt = $Database->prepare($sql);
 
         $stmt->bindValue(':value', $value, PDO::PARAM_STR);
-        $stmt->bindValue(':last_modified_by_user_id', $userId, PDO::PARAM_STR);
-        $stmt->bindValue(':last_modified_by_username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':last_modified_date', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_user_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_date', $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(':project_id', $projectId, PDO::PARAM_STR);
         $result = $stmt->execute();
 
