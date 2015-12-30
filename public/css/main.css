@@ -1,9 +1,17 @@
 /* Visuals for all pages - BEGINNING */
 @charset "utf-8";
+
+@font-face {
+    font-family: 'AlegreyaSans';
+    src: url('../font/AlegreyaSans-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     /* Setting the parameters for the whole website for all views */
-    font-family: sans-serif;
-    font-size: 1em;
+    font-family: 'AlegreyaSans', sans-serif;
+    font-size: 18px;
     color: #1C4D6F;
 }
 
@@ -95,6 +103,10 @@ input[type="date"] {
     color: #1C4D6F;
 }
 
+input[type="file"] {
+    font-size: 0.8em;   
+}
+
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="search"]:focus,
@@ -139,7 +151,7 @@ thead tr td {
 }
 
 .button {
-    padding: 10px 20px;
+    padding: 6px 16px;
     width: auto;
     background: #0093d0;
     border-bottom: 2px solid #006DBD; 
@@ -188,7 +200,7 @@ thead tr td {
 .red-font {
     color: #a30000;
     font-weight: bold;
-    font-size: 1.4em;
+    font-size: 1.2em;
 }
 
 .noselect {
@@ -202,8 +214,8 @@ thead tr td {
 
 .header {
     height: 5.2em;
-    line-height: 5.2em;
-    padding-right: 2%;
+    line-height: 4.4em;
+    padding: 0.4em 2% 0.4em 0px;
     width: 98%;
     background: rgba(245, 245, 245, 0.7);
     z-index: 5;
@@ -216,9 +228,9 @@ thead tr td {
 }
 
 #header-logo {
-    height: 4.6em;
+    height: 100%;
     float: left;
-    padding: 0.3em 4px;
+    padding: 0px 4px 0px 12px;
 }
 
 .header h2 {
@@ -251,7 +263,7 @@ thead tr td {
     margin-top: 1px;
     margin-right: 1px;
     opacity: 1.0;
-    
+
 }
 
 #ui-datepicker-div .ui-datepicker-next-hover {
@@ -262,4 +274,53 @@ thead tr td {
 #ui-datepicker-div .ui-datepicker-prev-hover {
     background-image: url('../images/prev-icon.png');
     margin-left: 1px;
+}
+
+/* Generic Popup Window related items*/
+.popup-window {
+    position: absolute;
+    display: none;
+    z-index: 99999;
+    padding: 0px;
+    margin-top: 15%;
+    padding-bottom: 20px;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+    background-image: url('../images/white_wall_hash.png');
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.9);
+    -moz-box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.9);
+    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.9);
+    font-weight: normal;
+}
+
+.popup-window-cancel-button {
+    position: absolute;
+    float: right;
+    top: 0px;
+    line-height: 2.0em;
+    font-weight: bold;
+    right: 5px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 2px 5px 2px 5px;
+    color: #ffffff;
+    opacity: 0.7;
+    cursor: pointer;
+    z-index: 9;
+}
+
+.popup-window-cancel-button:hover {
+    opacity: 1.0;
+}
+
+.popup-window h1 {
+    margin: 0;
+    margin-bottom: 20px;
 }

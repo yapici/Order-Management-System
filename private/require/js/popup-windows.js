@@ -48,6 +48,60 @@ $(function () {
             }
         }
     });
+
+    $("#cost-centers-popup-window-cost-centers-table tbody").on('focus', 'input', function () {
+        initial_input_value = $(this).val();
+    });
+
+    $("#cost-centers-popup-window-cost-centers-table tbody").on('blur', 'input', function () {
+        if ($(this).val() !== initial_input_value) {
+            var id = $(this).parent().parent().prop('id');
+            var input_id = $(this).prop('id');
+            updateCostCenterDetails(id, input_id);
+        }
+    });
+
+    $("#cost-centers-popup-window-cost-centers-table tbody").on('keyup', 'input', function (event) {
+        if (event.keyCode === 13) {
+            if ($(this).val() !== initial_input_value) {
+                var id = $(this).parent().parent().prop('id');
+                var input_id = $(this).prop('id');
+                updateCostCenterDetails(id, input_id);
+                initial_input_value = $(this).val();
+                $(this).blur();
+            }
+        }
+    });
+
+    $("#users-popup-window-users-table tbody").on('focus', 'input', function () {
+        initial_input_value = $(this).val();
+    });
+
+    $("#users-popup-window-users-table tbody").on('blur', 'input', function () {
+        if ($(this).val() !== initial_input_value) {
+            var id = $(this).parent().parent().prop('id');
+            var input_id = $(this).prop('id');
+            updateUserDetails(id, input_id);
+        }
+    });
+
+    $("#users-popup-window-users-table tbody").on('keyup', 'input', function (event) {
+        if (event.keyCode === 13) {
+            if ($(this).val() !== initial_input_value) {
+                var id = $(this).parent().parent().prop('id');
+                var input_id = $(this).prop('id');
+                updateUserDetails(id, input_id);
+                initial_input_value = $(this).val();
+                $(this).blur();
+            }
+        }
+    });
+
+    $("#users-popup-window-users-table tbody").on('change', 'select', function () {
+        var id = $(this).parent().parent().prop('id');
+        var input_id = $(this).prop('id');
+        updateUserDetails(id, input_id);
+    });
 });
 
 function showVendorsPopupWindow() {
@@ -58,6 +112,16 @@ function showVendorsPopupWindow() {
 function showProjectsPopupWindow() {
     blockUI();
     $("#projects-popup-window").fadeIn();
+}
+
+function showCostCentersPopupWindow() {
+    blockUI();
+    $("#cost-centers-popup-window").fadeIn();
+}
+
+function showUsersPopupWindow() {
+    blockUI();
+    $("#users-popup-window").fadeIn();
 }
 
 function updateVendorDetails(vendor_id, input_id) {
@@ -284,6 +348,117 @@ function addNewProject() {
         });
     }
 }
-    if (msieversion() < 10 && msieversion()) {
-        $("#admin-file-upload-td").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
+
+function updateCostCenterDetails(tr_id, input_id) {
+    var value = $("#" + tr_id + " #" + input_id).val();
+    var cost_center_id = tr_id.split('-').pop().trim();
+    var field_name = input_id.split('-').pop().trim();
+    var cost_centers_popup_window = $("#cost-centers-popup-window");
+    var error_div = $("#cost-centers-popup-window-error-div");
+    error_div.html('');
+
+    if (field_name === 'active' && value != '0' && value != '1') {
+        error_div.html('Please enter either "0" or "1" for the active status where "1" meaning active');
+    } else {
+        cost_centers_popup_window.css('z-index', '9');
+        showProgressCircle();
+        blockUI();
+        $.ajax({
+            url: "../ajax/admin/update-cost-center-details.php",
+            type: "POST",
+            data: "cost_center_id=" + cost_center_id +
+                    "&field_name=" + field_name +
+                    "&value=" + value,
+            cache: false,
+            dataType: "json",
+            success: function (json_data) {
+                if (json_data.status === 'success') {
+                } else if (json_data.status === "no_session") {
+                    showLoginPopupWindow();
+                } else if (json_data.status === "unauthorized_access") {
+                    location.reload();
+                } else {
+                    error_div.html(json_data.status);
+                }
+                cost_centers_popup_window.css('z-index', '9999');
+                hideProgressCircle();
+            }
+        });
     }
+}
+
+function addNewCostCenter() {
+    var cost_center_name = $("#add-new-cost-center-name").val();
+
+    var cost_centers_popup_window = $("#cost-centers-popup-window");
+    var cost_centers_table_tbody = $("#cost-centers-popup-window-cost-centers-table tbody");
+
+    var error_div = $("#cost-centers-popup-window-error-div");
+    error_div.html('');
+
+    if (cost_center_name === ''
+            || cost_center_name === 'Name') {
+        error_div.html('Please enter the cost center name');
+    } else {
+        cost_centers_popup_window.css('z-index', '9');
+        showProgressCircle();
+        blockUI();
+        $.ajax({
+            url: "../ajax/admin/add-new-cost-center.php",
+            type: "POST",
+            data: "name=" + cost_center_name,
+            cache: false,
+            dataType: "json",
+            success: function (json_data) {
+                if (json_data.status === 'success') {
+                    cost_centers_table_tbody.html(json_data.html_tbody);
+                    $("#add-new-cost-center-name").val('');
+                } else if (json_data.status === "no_session") {
+                    showLoginPopupWindow();
+                } else {
+                    error_div.html(json_data.status);
+                }
+                cost_centers_popup_window.css('z-index', '9999');
+                hideProgressCircle();
+            }
+        });
+    }
+}
+
+function updateUserDetails(tr_id, input_id) {
+    var value = $("#" + tr_id + " #" + input_id).val();
+    var user_id = tr_id.split('-').pop().trim();
+    var field_name = input_id.split('-').pop().trim();
+    var users_popup_window = $("#users-popup-window");
+    var error_div = $("#users-popup-window-error-div");
+    error_div.html('');
+
+    users_popup_window.css('z-index', '9');
+    showProgressCircle();
+    blockUI();
+    $.ajax({
+        url: "../ajax/admin/update-user-details.php",
+        type: "POST",
+        data: "user_id=" + user_id +
+                "&field_name=" + field_name +
+                "&value=" + value,
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+            } else if (json_data.status === "no_session") {
+                showLoginPopupWindow();
+            } else if (json_data.status === "unauthorized_access") {
+                location.reload();
+            } else {
+                error_div.html(json_data.status);
+            }
+            users_popup_window.css('z-index', '9999');
+            hideProgressCircle();
+        }
+    });
+}
+
+if (msieversion() < 10 && msieversion()) {
+    $("#admin-file-upload-td").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');
+}

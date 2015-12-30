@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Last modified on 12/29/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -107,7 +107,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
             $jsonResponse['html_tbody'] = ob_get_clean();
             $jsonResponse['html_pagination'] = $pagination;
-            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$costCenter];
+            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$costCenter]['name'];
             
             $project = $Projects->getProjectsArray()[$projectId];
             $jsonResponse['project'] = $project['name'] . ' / ' . $project['number'];

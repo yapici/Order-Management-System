@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Last modified on 12/29/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -53,6 +53,7 @@ class Orders {
         'comments',
         'project',
         'vendor',
+        'cost_center',
         'status',
         'requested_datetime',
         'status_updated_date',
@@ -76,6 +77,11 @@ class Orders {
             'table_name' => 'projects',
             'table_abbr' => 'p',
             'columns' => array('name', 'number')
+        ),
+        'cost_center' => array(
+            'table_name' => 'cost_centers',
+            'table_abbr' => 'c',
+            'columns' => array('name')
         )
     ];
 
@@ -102,6 +108,9 @@ class Orders {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Admin = $admin;
+        
+        $_SESSION['sort_column_name'] = '';
+        
         $this->setTotalNumberOfItems();
         if ($this->Admin->isAdmin()) {
             array_push($this->searchColumns, 'vendor_order_no', 'invoice_no');
@@ -152,8 +161,7 @@ class Orders {
             $this->ordersArray[$sanitizedArray['id']] = $sanitizedArray;
         }
 
-        $this->refreshTotalNumberOfItems
-        ();
+        $this->refreshTotalNumberOfItems();
     }
 
     public function refreshArray() {
@@ -247,7 +255,7 @@ class Orders {
      */
     private function prepareStmt($sql, $limit = '') {
         foreach ($this->searchTables as $columnName => $array) {
-            $sql .= "JOIN " . $array['table_name'];
+            $sql .= "LEFT JOIN " . $array['table_name'];
             $sql .= " " . $array['table_abbr'];
             $sql .= " ON " . $this->o . $columnName . " = " . $array['table_abbr'] . ".id ";
         }
@@ -255,7 +263,7 @@ class Orders {
         $sql .= $this->getSearchQuery();
         $sql .= $this->getSortQuery();
         $sql .= $limit;
-        $this->Functions->logError("query", $sql);
+        $this->Functions->logError('$sql', $sql);
 
         $stmt = $this->Database->prepare($sql);
         for ($i = 0; $i < count($this->searchKeywordsArray); $i++) {

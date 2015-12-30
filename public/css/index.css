@@ -32,15 +32,13 @@ input {
     background: #ffffff;
     margin-bottom: 10px;
     border: 1px solid #cccccc;
-    padding: 3%;
+    padding: 10px;
     color: #1C4D6F;
     font: 95% Arial, Helvetica, sans-serif;
-    height: 3em;
 }
 
 #index-main-body-wrapper input[type="text"]:focus,
 #index-main-body-wrapper input[type="password"]:focus {
     box-shadow: 0 0 5px #0093d0;
-    padding: 3%;
     border: 1px solid #0093d0;
 }

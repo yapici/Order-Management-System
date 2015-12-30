@@ -120,10 +120,9 @@
 .search-cancel-button {
     position: absolute;
     width: auto;
-    top: calc(50% - 7px);
+    top: calc(50% - 0.5em);
     right: 56px;
     font-weight: bold;
-    font-size: 14px;
     color: #006DBD;
     cursor: pointer;
     opacity: 0.5;
@@ -131,56 +130,6 @@
 
 .search-cancel-button:hover {
     opacity: 1;
-}
-
-/* Generic Popup Window related items*/
-
-.popup-window {
-    position: absolute;
-    display: none;
-    z-index: 99999;
-    padding: 0px;
-    margin-top: 15%;
-    padding-bottom: 20px;
-    left:0;
-    right:0;
-    margin-left:auto;
-    margin-right:auto;
-    background-image: url('../images/white_wall_hash.png');
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    -webkit-box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.9);
-    -moz-box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.9);
-    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.9);
-    font-weight: normal;
-}
-
-.popup-window-cancel-button {
-    position: absolute;
-    float: right;
-    top: 0px;
-    line-height: 2.0em;
-    font-size: 1.2em;
-    right: 5px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    text-align: center;
-    padding: 2px 5px 2px 5px;
-    color: #ffffff;
-    opacity: 0.7;
-    cursor: pointer;
-    z-index: 9;
-}
-
-.popup-window-cancel-button:hover {
-    opacity: 1.0;
-}
-
-.popup-window h1 {
-    margin: 0;
-    margin-bottom: 20px;
 }
 
 /* Item Details Popup Window */
@@ -247,7 +196,7 @@
 
 #item-details-popup-window .left-panel tr td,
 #item-details-popup-window .right-panel tr td {
-    padding: 8px;
+    padding: 9px 8px 3px 8px;
 }
 
 #item-details-popup-window .left-panel tr td,

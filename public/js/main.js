@@ -7,6 +7,7 @@ $(function () {
             input.val('');
             input.removeClass('placeholder');
             input.css('color', '#1C4D6F');
+            input.css('font-family', "'AlegreyaSans', sans-serif");
         }
     }).blur(function () {
         var input = $(this);
@@ -14,8 +15,10 @@ $(function () {
             input.addClass('placeholder');
             input.val(input.attr('placeholder'));
             input.css('color', '#aaaaaa');
+            input.css('font-family', "'AlegreyaSans', sans-serif");
         } else {
             input.css('color', '#1C4D6F');
+            input.css('font-family', "'AlegreyaSans', sans-serif");
         }
     }).blur();
 });

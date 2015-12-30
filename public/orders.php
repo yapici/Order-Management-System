@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 12/29/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -59,8 +59,8 @@ if (!$Session->isSessionValid()) {
                             <ul id='menu-items-wrapper-ul'>
                                 <li class='menu-items' title='Manage Vendors' onclick='showVendorsPopupWindow();'><img class='absolute-buttons' id='vendor-button' src='images/vendor-icon.png'></img></li>
                                 <li class='menu-items' title='Manage Projects' onclick='showProjectsPopupWindow();'><img class='absolute-buttons' src='images/project-icon.png'></img></li>
-                                <li class='menu-items' title='Manage Cost Centers'><img class='absolute-buttons' src='images/cost-center-icon.png'></img></li>
-                                <li class='menu-items' title='Manage Users'><img class='absolute-buttons' src='images/users-icon.png'></img></li>
+                                <li class='menu-items' title='Manage Cost Centers' onclick='showCostCentersPopupWindow();'><img class='absolute-buttons' src='images/cost-center-icon.png'></img></li>
+                                <li class='menu-items' title='Manage Users' onclick='showUsersPopupWindow();'><img class='absolute-buttons' src='images/users-icon.png'></img></li>
                             </ul>
                         </span>
                     </span>

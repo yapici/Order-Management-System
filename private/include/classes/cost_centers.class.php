@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Last modified on 12/29/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -52,12 +52,12 @@ class CostCenters {
     }
 
     private function populateArray() {
-        $sql = "SELECT id, name FROM cost_centers";
+        $sql = "SELECT id, name, active FROM cost_centers";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $sanitizedArray = $this->Functions->sanitizeArray($row);
-            $this->costCentersArray[$sanitizedArray['id']] = $sanitizedArray['name'];
+            $this->costCentersArray[$sanitizedArray['id']] = $sanitizedArray;
             $this->costCenterIdsArray[$sanitizedArray['name']] = $sanitizedArray['id'];
         }
     }
@@ -82,8 +82,11 @@ class CostCenters {
 
     public function populateCostCentersList() {
         $html = '';
-        foreach ($this->costCentersArray as $costCenterId => $costCenterName) {
-            $html .= "<option value='$costCenterId'>$costCenterName</option>";
+        foreach ($this->costCentersArray as $costCenterId => $costCenter) {
+            if ($costCenter['active'] == '1') {
+                $costCenterName = $costCenter['name'];
+                $html .= "<option value='$costCenterId'>$costCenterName</option>";
+            }
         }
         echo $html;
     }
@@ -101,6 +104,31 @@ class CostCenters {
             $tableBody .= "</tr>";
         }
         echo $tableBody;
+    }
+
+    /**
+     * @param array $costCenterDetailsArray
+     * @return boolean PDO execute result
+     */
+    public function addNewCostCenter($costCenterDetailsArray) {
+        $projectName = $costCenterDetailsArray['name'];
+
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        $sql = "INSERT INTO cost_centers (";
+        $sql .= "name, date_added, added_by_user_id, added_by_username,";
+        $sql .= " last_updated_date, last_updated_by_user_id, last_updated_by_username";
+        $sql .= ") VALUES (:name, :currentDate, :userId, :username, :currentDate, :userId, :username)";
+
+        $stmt = $this->Database->prepare($sql);
+        $stmt->bindValue(':name', $projectName, PDO::PARAM_STR);
+        $stmt->bindValue(':currentDate', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+
+        return $stmt->execute();
     }
 
 }

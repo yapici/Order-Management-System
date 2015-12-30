@@ -44,7 +44,7 @@
         </thead>
         <tbody>
             <?php
-            $Projects->populateCostCentersTable();
+            $CostCenters->populateCostCentersTable();
             ?>
         </tbody>
         <tfoot>
@@ -52,16 +52,15 @@
                 <td colspan="9">&nbsp;</td>
             </tr>
             <tr class="add-new-item-title-tr">
-                <td colspan="9">Add New Project</td>
+                <td colspan="9">Add New Cost Center</td>
             </tr>
             <tr class="add-new-item-input-wrapper-tr">
                 <td><b>+</b></td>
-                <td><input id="add-new-project-name" type="text" placeholder="Name"/></td>
-                <td><input id="add-new-project-number" type="text" placeholder="Project Number"/></td>
-                <td colspan="3" class="add-new-item-button-holder-td"><a class="button" onclick="addNewProject();">Add Project</a></td>
+                <td><input id="add-new-cost-center-name" type="text" placeholder="Name"/></td>
+                <td colspan="3" class="add-new-item-button-holder-td"><a class="button" onclick="addNewCostCenter();">Add Cost Center</a></td>
             </tr>
         </tfoot>
     </table>
-    <div class="error-div" id="projects-popup-window-error-div"></div>
+    <div class="error-div" id="cost-centers-popup-window-error-div"></div>
     <a class="button admin-popup-window-close-button" onclick="hidePopupWindows()">Close</a>
 </div>

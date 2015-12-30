@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/23/2015                                                                 */
+/* Created on 12/29/2015                                                                 */
 /* Last modified on 12/29/2015                                                           */
 /* ===================================================================================== */
 
@@ -30,13 +30,13 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-class Projects {
+class Users {
 
     private $Database;
     private $Functions;
 
-    /** @var array $projectsArray */
-    public $projectsArray;
+    /** @var array $usersArray */
+    public $usersArray;
 
     /**
      * @param Database $database
@@ -49,12 +49,12 @@ class Projects {
     }
 
     private function populateArray() {
-        $sql = "SELECT id, name, number, added_by_username, active FROM projects";
+        $sql = "SELECT id, email, phone, account_status, user_type FROM users";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $sanitizedArray = $this->Functions->sanitizeArray($row);
-            $this->projectsArray[$sanitizedArray['id']] = $sanitizedArray;
+            $this->usersArray[$sanitizedArray['id']] = $sanitizedArray;
         }
     }
 
@@ -63,70 +63,77 @@ class Projects {
     }
 
     /**
-     * @return array $projectsArray
+     * @return array $usersArray
      */
-    public function getProjectsArray() {
-        return $this->projectsArray;
+    public function getUsersArray() {
+        return $this->usersArray;
     }
 
-    public function populateProjectsList() {
+    public function populateUsersList() {
         $html = '';
-        foreach ($this->projectsArray as $projectId => $project) {
-            if ($project['active'] == '1') {
-                $projectName = $project['name'];
-                $projectNumber = $project['number'];
-                $html .= "<option value='$projectId'>$projectName / $projectNumber</option>";
+        foreach ($this->usersArray as $userId => $user) {
+            if ($user['active'] == '1') {
+                $userName = $user['name'];
+                $userNumber = $user['number'];
+                $html .= "<option value='$userId'>$userName / $userNumber</option>";
             }
         }
         echo $html;
     }
 
-    public function populateProjectsTable() {
+    public function populateUsersTable() {
         $tableBody = '';
-        foreach ($this->projectsArray as $projectId => $project) {
-            $projectName = $project['name'];
-            $projectNumber = $project['number'];
-            $projectActive = $project['active'];
+        foreach ($this->usersArray as $userId => $user) {
+            $userEmail = $user['email'];
+            $userPhone = $user['phone'];
+            $accountStatus = $user['account_status'];
+            $userType = $user['user_type'];
 
-            $tableBody .= "<tr id='project-$projectId'>";
-            $tableBody .= "<td>$projectId</td>";
-            $tableBody .= "<td title='$projectName'><span>$projectName</span><input id='projects-popup-window-project-name' value='$projectName' type='text'/></td>";
-            $tableBody .= "<td title='$projectNumber'><span>$projectNumber</span><input id='projects-popup-window-project-number' value='$projectNumber' type='text'/></td>";
-            $tableBody .= "<td title='$projectActive'><span>$projectActive</span><input id='projects-popup-window-project-active' value='$projectActive' type='text'/></td>";
+            $tableBody .= "<tr id='user-$userId'>";
+            $tableBody .= "<td title='$userEmail'><div>$userEmail</div></td>";
+            $tableBody .= "<td title='$userPhone'><span>$userPhone</span><input id='users-popup-window-user-phone' value='$userPhone' type='text'/></td>";
+            
+            $tableBody .= "<td title='Account Status'>";
+            if ($accountStatus == '0') {
+                $tableBody .= "<span>Inactive</span>";
+                $tableBody .= "<select id='users-popup-window-user-account_status'>";
+                $tableBody .= "<option value='0' selected>Inactive</option>";
+                $tableBody .= "<option value='1'>Active</option>";
+                $tableBody .= "</select>";
+            } else {
+                $tableBody .= "<span>Active</span>";
+                $tableBody .= "<select id='users-popup-window-user-account_status'>";
+                $tableBody .= "<option value='0'>Inactive</option>";
+                $tableBody .= "<option value='1' selected>Active</option>";
+                $tableBody .= "</select>";
+            }
+            $tableBody .= "</td>";
+            
+            $tableBody .= "<td title='User Type'>";
+            if ($userType == '0') {
+                $tableBody .= "<span>End User</span>";
+                $tableBody .= "<select id='users-popup-window-user-user_type'>";
+                $tableBody .= "<option value='0' selected>End User</option>";
+                $tableBody .= "<option value='1'>Admin</option>";
+                $tableBody .= "</select>";
+            } else {
+                $tableBody .= "<span>Admin</span>";
+                $tableBody .= "<select id='users-popup-window-user-user_type'>";
+                $tableBody .= "<option value='0'>End User</option>";
+                $tableBody .= "<option value='1' selected>Admin</option>";
+                $tableBody .= "</select>";
+            }
+            $tableBody .= "</td>";            
+            
             $tableBody .= "</tr>";
         }
         echo $tableBody;
     }
 
-    /**
-     * @param array $projectDetailsArray
-     * @return boolean PDO execute result
-     */
-    public function addNewProject($projectDetailsArray) {
-        $projectName = $projectDetailsArray['name'];
-        $projectNumber = $projectDetailsArray['number'];
-
-        $userId = $_SESSION['id'];
-        $username = $_SESSION['username'];
-        $currentDate = date("Y-m-d H:i:s");
-
-        $sql = "INSERT INTO projects (";
-        $sql .= "name, number, date_added, added_by_user_id, added_by_username,";
-        $sql .= " last_updated_date, last_updated_by_user_id, last_updated_by_username, active";
-        $sql .= ") VALUES (:name, :number, :currentDate, :userId, :username, :currentDate, :userId, :username, '1')";
-
-        $stmt = $this->Database->prepare($sql);
-        $stmt->bindValue(':name', $projectName, PDO::PARAM_STR);
-        $stmt->bindValue(':number', $projectNumber, PDO::PARAM_STR);
-        $stmt->bindValue(':currentDate', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
-        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
-
-        return $stmt->execute();
-    }
-
 }
 
-/** @var Projects $Projects */
-$Projects = new Projects($Database, $Functions);
+/** @var Users $Users */
+$Users = new Users($Database, $Functions);
 ?>
+
+

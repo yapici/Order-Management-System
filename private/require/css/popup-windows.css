@@ -38,6 +38,17 @@
 
 #projects-popup-window .admin-popup-window-table tbody tr td:nth-child(4) {
     border-right: 1px #cccccc solid;
+    border-left: 1px #cccccc solid;
+}
+
+#cost-centers-popup-window .admin-popup-window-table tbody tr td:nth-child(3) {
+    border-right: 1px #cccccc solid;
+    border-left: 1px #cccccc solid;
+}
+
+#users-popup-window .admin-popup-window-table tbody tr td:nth-child(4) {
+    border-right: 1px #cccccc solid;
+    border-left: 1px #cccccc solid;
 }
 
 .admin-popup-window-table tbody tr td:last-child {
@@ -63,14 +74,15 @@
 }
 
 .admin-popup-window-table tbody tr:nth-child(odd) > td {
-    background-color: #f7f7f7;
+    background-color: #eeeeee;
 }
 
 .admin-popup-window-table tbody tr td:hover {
     background-color: #EBF6FF;
 }
 
-.admin-popup-window-table tr td input {
+.admin-popup-window-table tr td input,
+.admin-popup-window-table tr td select {
     position: absolute;
     width: 100%;
     left: 0;
@@ -101,7 +113,6 @@
     background-color: #444444;
     padding-top: 8px;
     padding-bottom: 8px;
-    font-size: 1.0em;
     font-weight: bold;
     color: #ffffff;
     border-bottom: 1px solid #222222; 
@@ -137,4 +148,18 @@
 
 #admin-area-h2 {
     margin-bottom: 4px;
+}
+
+/* Vendors Popup */
+#vendors-popup-window table tr td,
+#vendors-popup-window table tr td input,
+#vendors-popup-window table tr td span,
+#vendors-popup-window table tr td p,
+#vendors-popup-window table tr td .button,
+#vendors-popup-window table tr td a {
+    font-size: 16px;
+}
+
+#vendors-popup-window table tr td {
+    max-width: 20vh;
 }
