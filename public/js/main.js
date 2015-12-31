@@ -21,6 +21,17 @@ $(function () {
             input.css('font-family', "'AlegreyaSans', sans-serif");
         }
     }).blur();
+
+    $(document).keyup(function (e) {
+        if (e.keyCode === 27) { //escape key
+            if ($("#delete-file-confirmation-popup-window").is(":visible")) {
+                $(".popup-window").css('z-index', '99999');
+                hideDeleteConfirmationWindow();
+            } else if ($(".popup-window").is(":visible")) {
+                hidePopupWindows();
+            }
+        }
+    });
 });
 
 function logoutAction() {

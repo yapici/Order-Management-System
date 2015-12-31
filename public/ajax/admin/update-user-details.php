@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/29/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -39,34 +39,9 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     } else {
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        
-        $id = $sanitizedPostArray['user_id'];
-        $fieldName = $sanitizedPostArray['field_name'];
-        $value = $sanitizedPostArray['value'];
-        
-        $userId = $_SESSION['id'];
-        $username = $_SESSION['username'];
-        $currentDate = date("Y-m-d H:i:s");
 
-        // Inserting the information to the database
-        $sql = "UPDATE users SET ";
-        $sql .= "$fieldName = :value, ";
-        $sql .= "last_updated_by_user_id = :last_updated_by_user_id, ";
-        $sql .= "last_updated_by_username = :last_updated_by_username, ";
-        $sql .= "last_updated_date = :last_updated_date ";
-        $sql .= "WHERE id = :user_id";
-
-        $stmt = $Database->prepare($sql);
-
-        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_user_id', $userId, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_date', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':user_id', $id, PDO::PARAM_STR);
-        $result = $stmt->execute();
-
-        if ($result) {
-            $Projects->refreshArray();
+        if ($Users->updateUser($sanitizedPostArray)) {
+            $Users->refreshArray();
             $jsonResponse['status'] = "success";
         } else {
             $jsonResponse['status'] = "fail";

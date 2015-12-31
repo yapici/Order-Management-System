@@ -7,7 +7,37 @@ $(function () {
 
     datepickerFunctions();
     popupLoginWindowInputFunctions();
+
+    $("#add-new-item-popup-window").on('input', function () {
+        showHideClearButton();
+    });
+
+    $("#add-new-item-popup-window").on('change', 'select', function () {
+        showHideClearButton();
+    });
 });
+
+function showHideClearButton() {
+    if ($("#add-new-item-popup-window input").filter(function () {
+        return $(this).val();
+    }).length > 0
+            || $("#add-new-item-vendor").val() !== 'Please Choose a Vendor'
+            || $("#add-new-item-project").val() !== 'Please Choose a Project'
+            || $("#add-new-item-cost-center").val() !== '') {
+        $("#add-new-item-popup-window-clear-button").show();
+    } else {
+        $("#add-new-item-popup-window-clear-button").hide();
+    }
+}
+
+function clearText() {
+    $("#add-new-item-popup-window input").val('');
+    $("#add-new-item-vendor")[0].selectedIndex = 0;
+    $("#add-new-item-project")[0].selectedIndex = 0;
+    $("#add-new-item-cost-center")[0].selectedIndex = 0;
+    $("#add-new-item-popup-window-clear-button").hide();
+    $(".add-new-item-vendor-details-holder-tr").hide();
+}
 
 function showItemDetailsPopupWindow(
         orderNo,
@@ -78,10 +108,31 @@ function showItemDetailsPopupWindow(
     });
 }
 
+function reorder() {
+    $("#item-details-popup-window").fadeOut();
+    $("#add-new-item-description").val($("#popup-item-description").html());
+    $("#add-new-item-quantity").val($("#popup-item-quantity").html());
+    $("#add-new-item-uom").val($("#popup-item-uom").html());
+    $('#add-new-item-vendor option:contains("' + $("#popup-item-vendor").html() + '")').prop('selected', true);
+    $("#add-new-item-catalog-no").val($("#popup-item-catalog-no").html());
+    $("#add-new-item-price").val($("#popup-item-price").html().substring(1));
+    $("#add-new-item-weblink").val($($("#popup-item-weblink").html()).attr('href'));
+    $('#add-new-item-cost-center option:contains("' + $("#popup-item-cost-center").html() + '")').prop('selected', true);
+    $('#add-new-item-project option:contains("' + $("#popup-item-project").html() + '")').prop('selected', true);
+    $("#add-new-item-comments").val($("#popup-item-comments").html());
+    showAddNewItemPopupWindow();
+}
+
 function showAddNewItemPopupWindow() {
     blockUI();
     $("#add-new-item-popup-window").fadeIn();
     $(".popup-error-div").html('');
+
+    if ($("#add-new-item-popup-window input").filter(function () {
+        return $(this).val();
+    }).length > 0) {
+        $("#add-new-item-popup-window-clear-button").show();
+    }
 
     if (msieversion() < 10 && msieversion()) {
         $("#add-new-item-popup-window-file-upload-elements-wrapper").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');

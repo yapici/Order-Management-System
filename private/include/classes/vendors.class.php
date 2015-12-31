@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -146,6 +146,64 @@ class Vendors {
         $stmt->bindValue(':currentDate', $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
         $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
+    /**
+     * @param string $vendorId
+     * @return boolean PDO execute result
+     */
+    public function deleteVendor($vendorId) {
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        $sql = "UPDATE vendors SET ";
+        $sql .= "deleted = '1', ";
+        $sql .= "deleted_date = :deleted_date, ";
+        $sql .= "deleted_by_user_id = :deleted_by_user_id, ";
+        $sql .= "deleted_by_username = :deleted_by_username ";
+        $sql .= "WHERE id = :vendor_id";
+
+        $stmt = $this->Database->prepare($sql);
+
+        $stmt->bindValue(':deleted_date', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':deleted_by_user_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':deleted_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_id', $vendorId, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
+    /**
+     * @param array $vendorDetailsArray
+     * @return boolean PDO execute result
+     */
+    public function updateVendor($vendorDetailsArray) {
+        $vendorId = $vendorDetailsArray['vendor_id'];
+        $fieldName = $vendorDetailsArray['field_name'];
+        $value = $vendorDetailsArray['value'];
+        
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        // Inserting the information to the database
+        $sql = "UPDATE vendors SET ";
+        $sql .= "$fieldName = :value, ";
+        $sql .= "last_updated_by_user_id = :last_updated_by_user_id, ";
+        $sql .= "last_updated_by_username = :last_updated_by_username, ";
+        $sql .= "last_updated_date = :last_updated_date ";
+        $sql .= "WHERE id = :vendor_id";
+
+        $stmt = $this->Database->prepare($sql);
+
+        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_user_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_date', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_id', $vendorId, PDO::PARAM_STR);
 
         return $stmt->execute();
     }

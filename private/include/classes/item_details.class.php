@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -126,6 +126,76 @@ class ItemDetails {
                 <input id='add-new-item-new-vendor-address' type='text'/>
             </td>
         </tr>";
+    }
+
+    /**
+     * @param array $itemDetailsArray
+     * @return boolean PDO execute result
+     */
+    public function updateItemDetails($itemDetailsArray) {
+        $vendorsArray = $this->Vendors->getVendorsArray();
+        $description = $itemDetailsArray['description'];
+        $quantity = $itemDetailsArray['quantity'];
+        $uom = $itemDetailsArray['uom'];
+        $vendorId = $itemDetailsArray['vendor'];
+        $vendorName = $vendorsArray[$vendorId]['name'];
+        $catalogNo = $itemDetailsArray['catalog_no'];
+        $price = $itemDetailsArray['price'];
+        $weblink = $this->Functions->addHttp($itemDetailsArray['weblink']);
+        $costCenter = $itemDetailsArray['cost_center'];
+        $projectId = $itemDetailsArray['project'];
+        $comments = $itemDetailsArray['comments'];
+        $status = $itemDetailsArray['status'];
+        $invoiceNo = $itemDetailsArray['invoice_no'];
+        $vendorOrderNo = $itemDetailsArray['vendor_order_no'];
+        $orderId = trim(substr($itemDetailsArray['order_id'], 5));
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        // Inserting the information to the database
+        $sql = "UPDATE orders SET ";
+        $sql .= "description = :description, ";
+        $sql .= "quantity = :quantity, ";
+        $sql .= "uom = :uom, ";
+        $sql .= "vendor = :vendor, ";
+        $sql .= "vendor_name = :vendor_name, ";
+        $sql .= "catalog_no = :catalog_no, ";
+        $sql .= "price = :price, ";
+        $sql .= "weblink = :weblink, ";
+        $sql .= "cost_center = :cost_center, ";
+        $sql .= "project = :project, ";
+        $sql .= "comments = :comments, ";
+        $sql .= "status = :status, ";
+        $sql .= "invoice_no = :invoice_no, ";
+        $sql .= "vendor_order_no = :vendor_order_no, ";
+        $sql .= "last_updated_by_id = :last_updated_by_id, ";
+        $sql .= "last_updated_by_username = :last_updated_by_username, ";
+        $sql .= "last_updated_datetime = :last_updated_datetime ";
+        $sql .= "WHERE id = :order_id";
+
+        $stmt = $this->Database->prepare($sql);
+
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $stmt->bindValue(':uom', $uom, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor', $vendorId, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_name', $vendorName, PDO::PARAM_STR);
+        $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
+        $stmt->bindValue(':price', $price, PDO::PARAM_STR);
+        $stmt->bindValue(':weblink', $weblink, PDO::PARAM_STR);
+        $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
+        $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
+        $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
+        $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+        $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
+        $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
+
+        return $stmt->execute();
     }
 
 }

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/27/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -34,7 +34,7 @@ class Functions {
     /* ################################### -- Encryption Functions -- ##################################### */
     /* #################################################################################################### */
 
-    var $skey = "dvds#4fw00#wfkm!8jwd#&mhg%uywb";
+    var $skey = "dvds#4fw00#wfkm!8jwd#&mhg%uy34wb";
 
     public function safe_b64encode($string) {
         $data = base64_encode($string);
@@ -115,10 +115,10 @@ class Functions {
      *  @return string $convertedDate
      */
     public function convertStrDateToMysqlDate($date) {
-        $slashesReplacedDate = str_replace("-", "/", $date);
+        $slashesReplacedDate = str_replace("/", "-", $date);
         try {
             $convertedDate = date('Y-m-d', strtotime($slashesReplacedDate));
-            if ($convertedDate == "1970-01-01") {
+            if ($convertedDate == "1970-01-01" || $convertedDate == "1969-12-31") {
                 $convertedDate = date('Y-m-d', strtotime(preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$2-$1", $date)));
             }
         } catch (Exception $e) {

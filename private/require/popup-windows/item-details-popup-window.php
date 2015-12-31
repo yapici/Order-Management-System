@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -272,6 +272,7 @@ if ($Admin->isAdmin()) {
         <div id="item-details-attachments-holder"></div>
     </div>
     <div class="error-div popup-error-div" id="item-details-popup-window-error-div"></div>
+    <a class="button" onclick="reorder();">Reorder</a>
     <a class="button" onclick="hidePopupWindows();<?php if ($isAdmin) echo ' toggleItemDetailsPopupInputFields();'; ?>">Close</a>
 </div>
 

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -45,7 +45,8 @@ class Orders {
     public $ordersArray;
 
     /** @var array $searchColumns */
-    private $searchColumns = ['id',
+    private $searchColumns = [
+        'id',
         'description',
         'uom',
         'catalog_no',
@@ -108,8 +109,6 @@ class Orders {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Admin = $admin;
-        
-        $_SESSION['sort_column_name'] = '';
         
         $this->setTotalNumberOfItems();
         if ($this->Admin->isAdmin()) {
@@ -263,7 +262,6 @@ class Orders {
         $sql .= $this->getSearchQuery();
         $sql .= $this->getSortQuery();
         $sql .= $limit;
-        $this->Functions->logError('$sql', $sql);
 
         $stmt = $this->Database->prepare($sql);
         for ($i = 0; $i < count($this->searchKeywordsArray); $i++) {
@@ -274,6 +272,7 @@ class Orders {
                 $currentColumn = $this->searchColumns[$k];
                 if (substr($currentColumn, -8) == "datetime" || substr($currentColumn, -4) == "date") {
                     $dateKeyword = $this->Functions->convertStrDateToMysqlDate($keyword);
+                    //$this->Functions->logError('$keyword/$dateKeyword', $keyword . '/' . $dateKeyword);
                     $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
                     $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
                 } else if (array_key_exists($currentColumn, $searchTables)) {

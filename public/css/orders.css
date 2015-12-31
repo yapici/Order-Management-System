@@ -420,6 +420,21 @@
     width: 100%;
 }
 
+#add-new-item-popup-window-clear-button {
+    position: absolute;
+    font-weight: bold;
+    color: #1C4D6F;
+    left: 16px;
+    margin-top: -10px;
+    opacity: 0.5;
+    display: none;
+    width: 0px;
+}
+
+#add-new-item-popup-window-clear-button:hover {
+    opacity: 1.0;
+}
+
 /* Pagination Items */
 #pagination-holder-div {
     margin-top: 10px;

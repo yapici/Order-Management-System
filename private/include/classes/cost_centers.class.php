@@ -131,6 +131,36 @@ class CostCenters {
         return $stmt->execute();
     }
 
+    /**
+     * @param string $costCenterId
+     * @param string $fieldName
+     * @param string $value
+     * @return boolean PDO execute result
+     */
+    public function updateCostCenter($costCenterId, $fieldName, $value) {
+        $userId = $_SESSION['id'];
+        $username = $_SESSION['username'];
+        $currentDate = date("Y-m-d H:i:s");
+
+        // Inserting the information to the database
+        $sql = "UPDATE cost_centers SET ";
+        $sql .= "$fieldName = :value, ";
+        $sql .= "last_updated_by_user_id = :last_updated_by_user_id, ";
+        $sql .= "last_updated_by_username = :last_updated_by_username, ";
+        $sql .= "last_updated_date = :last_updated_date ";
+        $sql .= "WHERE id = :cost_center_id";
+
+        $stmt = $this->Database->prepare($sql);
+
+        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_user_id', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':last_updated_date', $currentDate, PDO::PARAM_STR);
+        $stmt->bindValue(':cost_center_id', $costCenterId, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+
 }
 
 /** @var CostCenters $CostCenters */

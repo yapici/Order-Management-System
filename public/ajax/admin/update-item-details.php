@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -37,77 +37,17 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if ($adminCheckResponse !== true) {
         $jsonResponse['status'] = $adminCheckResponse;
     } else {
-        $vendorsArray = $Vendors->getVendorsArray();
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        $description = $sanitizedPostArray['description'];
-        $quantity = $sanitizedPostArray['quantity'];
-        $uom = $sanitizedPostArray['uom'];
-        $vendorId = $sanitizedPostArray['vendor'];
-        $vendorName = $vendorsArray[$vendorId]['name'];
-        $catalogNo = $sanitizedPostArray['catalog_no'];
-        $price = $sanitizedPostArray['price'];
-        $weblink = $Functions->addHttp($sanitizedPostArray['weblink']);
-        $costCenter = $sanitizedPostArray['cost_center'];
+        $costCenterId = $sanitizedPostArray['cost_center'];
         $projectId = $sanitizedPostArray['project'];
-        $comments = $sanitizedPostArray['comments'];
-        $status = $sanitizedPostArray['status'];
-        $invoiceNo = $sanitizedPostArray['invoice_no'];
-        $vendorOrderNo = $sanitizedPostArray['vendor_order_no'];
-        $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
-        $userId = $_SESSION['id'];
-        $username = $_SESSION['username'];
-        $currentDate = date("Y-m-d H:i:s");
 
-        // Inserting the information to the database
-        $sql = "UPDATE orders SET ";
-        $sql .= "description = :description, ";
-        $sql .= "quantity = :quantity, ";
-        $sql .= "uom = :uom, ";
-        $sql .= "vendor = :vendor, ";
-        $sql .= "vendor_name = :vendor_name, ";
-        $sql .= "catalog_no = :catalog_no, ";
-        $sql .= "price = :price, ";
-        $sql .= "weblink = :weblink, ";
-        $sql .= "cost_center = :cost_center, ";
-        $sql .= "project = :project, ";
-        $sql .= "comments = :comments, ";
-        $sql .= "status = :status, ";
-        $sql .= "invoice_no = :invoice_no, ";
-        $sql .= "vendor_order_no = :vendor_order_no, ";
-        $sql .= "last_updated_by_id = :last_updated_by_id, ";
-        $sql .= "last_updated_by_username = :last_updated_by_username, ";
-        $sql .= "last_updated_datetime = :last_updated_datetime ";
-        $sql .= "WHERE id = :order_id";
-
-        $stmt = $Database->prepare($sql);
-
-        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
-        $stmt->bindValue(':quantity', $quantity, PDO::PARAM_STR);
-        $stmt->bindValue(':uom', $uom, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor', $vendorId, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor_name', $vendorName, PDO::PARAM_STR);
-        $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
-        $stmt->bindValue(':price', $price, PDO::PARAM_STR);
-        $stmt->bindValue(':weblink', $weblink, PDO::PARAM_STR);
-        $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
-        $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
-        $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
-        $stmt->bindValue(':status', $status, PDO::PARAM_STR);
-        $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
-        $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
-        $result = $stmt->execute();
-
-        if ($result) {
+        if ($ItemDetails->updateItemDetails($sanitizedPostArray)) {
             ob_start();
             require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
             $jsonResponse['html_tbody'] = ob_get_clean();
             $jsonResponse['html_pagination'] = $pagination;
-            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$costCenter]['name'];
+            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$costCenterId]['name'];
             
             $project = $Projects->getProjectsArray()[$projectId];
             $jsonResponse['project'] = $project['name'] . ' / ' . $project['number'];

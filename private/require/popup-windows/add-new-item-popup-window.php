@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Last modified on 12/30/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -31,6 +31,7 @@
 ?>
 <a class="popup-window-cancel-button" onclick="hidePopupWindows()">&#10006;</a>
 <h1>Add New Item</h1>
+<a onclick="clearText();" id="add-new-item-popup-window-clear-button">Clear</a>
 <table class="top-panel">
     <tr>
         <td>Description<span class="red-font"> *</span></td>
