@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/20/2015                                                           */
+/* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -40,7 +40,7 @@ if ($Session->isSessionValid()) {
 
 <html>
     <head>
-        <title>Inventory Management System</title>
+        <title>Order Management System</title>
         <?php
         require_once ('include_references.php');
         ?>
@@ -49,12 +49,14 @@ if ($Session->isSessionValid()) {
     <body>
         <div class="gray-out-div"></div>
         <img class="progress-circle" src="images/ajax-loader.gif"/>
+        <?php require_once (PRIVATE_PATH . 'require/header.php'); ?>      
         <div id="index-main-body-wrapper">
             <h1>Log in</h1>
             <div><input id="email" type="text" placeholder="E-mail Address" maxlength="111"/></div>
             <div><input id="password" type="password" placeholder="Password"/></div>
             <div><a class="button" onclick="loginUser()">Submit</a></div>
         </div>
+        <div><a class='text-only-button' href="/register">Don't have an account? Register here</a></div>
         <div class="error-div" id="login-error-div"></div>
     </body>
 </html>

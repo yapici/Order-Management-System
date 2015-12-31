@@ -53,7 +53,7 @@ a, img {
     top: 0;
     left: 0;
     position: fixed;
-    visibility: hidden;
+    display: none;
 }
 
 input {
@@ -174,6 +174,16 @@ thead tr td {
     background: #0063CE;
 }
 
+.text-only-button {
+    display: inline-block;
+    padding: 10px;
+    opacity: 0.7;
+}
+
+.text-only-button:hover {
+    opacity: 1;
+}
+
 .error-div {
     padding: 10px 0px;
     color: #f05b56;
@@ -213,8 +223,6 @@ thead tr td {
 }
 
 .header {
-    height: 5.2em;
-    line-height: 4.4em;
     padding: 0.4em 2% 0.4em 0px;
     width: 98%;
     background: rgba(245, 245, 245, 0.7);
@@ -228,19 +236,26 @@ thead tr td {
 }
 
 #header-logo {
-    height: 100%;
+    height: 2.6em;
     float: left;
     padding: 0px 4px 0px 12px;
 }
 
 .header h2 {
     display: inline-block;
-    float: left;
     padding: 0px 4px;
-    margin: 0;
-    width: 120px;
-    vertical-align: middle;
-    line-height: 1.2em;
+    margin: 0 auto;
+    font-size: 2.6em;
+    font-weight: bold;
+}
+
+.header #version-span {
+    display: inline-block;
+    padding: 0px 4px;
+    margin-right: -2%;
+    font-size: 0.8em;
+    opacity: 0.8;
+    float: right;
 }
 
 /* Datepicker */

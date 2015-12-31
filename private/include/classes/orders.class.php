@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 12/30/2015                                                           */
+/* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -272,7 +272,6 @@ class Orders {
                 $currentColumn = $this->searchColumns[$k];
                 if (substr($currentColumn, -8) == "datetime" || substr($currentColumn, -4) == "date") {
                     $dateKeyword = $this->Functions->convertStrDateToMysqlDate($keyword);
-                    //$this->Functions->logError('$keyword/$dateKeyword', $keyword . '/' . $dateKeyword);
                     $stmt->bindValue($paramName . 'a', $dateKeyword . ' 00:00:00', PDO::PARAM_STR);
                     $stmt->bindValue($paramName . 'b', $dateKeyword . ' 23:59:59', PDO::PARAM_STR);
                 } else if (array_key_exists($currentColumn, $searchTables)) {
@@ -296,7 +295,4 @@ class Orders {
     }
 
 }
-
-/** @var Orders $Orders */
-$Orders = new Orders($Database, $Functions, $Admin);
 ?>

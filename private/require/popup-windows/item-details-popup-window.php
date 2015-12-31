@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/30/2015                                                           */
+/* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -183,8 +183,15 @@ if ($Admin->isAdmin()) {
                     <tr>
                         <td>Last Updated By:</td>
                         <td>
-                            <span id="popup-item-status-updated-by"></span>
+                            <span id="popup-item-status-updated-by"></span>&nbsp;on&nbsp;
                             <span id="popup-item-status-updated-date"></span>
+                        </td>
+                    </tr>
+                    <tr id='popup-item-status-ordered-tr'>
+                        <td>Ordered By:</td>
+                        <td>
+                            <span id="popup-item-status-ordered-by"></span>&nbsp;on&nbsp;
+                            <span id="popup-item-status-ordered-date"></span>
                         </td>
                     </tr>
                 </table>
@@ -194,7 +201,7 @@ if ($Admin->isAdmin()) {
                     <tr>
                         <td>Item Requested By:</td>
                         <td>
-                            <span id="popup-item-requested-by"></span>
+                            <span id="popup-item-requested-by"></span>&nbsp;on&nbsp;
                             <span id="popup-item-requested-date"></span>
                         </td>
                     </tr>

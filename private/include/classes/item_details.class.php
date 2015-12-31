@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 12/30/2015                                                           */
+/* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -167,6 +167,12 @@ class ItemDetails {
         $sql .= "project = :project, ";
         $sql .= "comments = :comments, ";
         $sql .= "status = :status, ";
+        $sql .= "ordered = :ordered, ";
+        if ($status == 'Ordered') {
+            $sql .= "ordered_date = :ordered_date, ";
+            $sql .= "ordered_by_user_id = :ordered_by_user_id, ";
+            $sql .= "ordered_by_username = :ordered_by_username, ";
+        }
         $sql .= "invoice_no = :invoice_no, ";
         $sql .= "vendor_order_no = :vendor_order_no, ";
         $sql .= "last_updated_by_id = :last_updated_by_id, ";
@@ -194,12 +200,16 @@ class ItemDetails {
         $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
+        if ($status == 'Ordered') {
+            $stmt->bindValue(':ordered', "1", PDO::PARAM_STR);
+            $stmt->bindValue(':ordered_date', $currentDate, PDO::PARAM_STR);
+            $stmt->bindValue(':ordered_by_user_id', $userId, PDO::PARAM_STR);
+            $stmt->bindValue(':ordered_by_username', $username, PDO::PARAM_STR);
+        } else {
+            $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
+        }
 
         return $stmt->execute();
     }
 
 }
-
-/** @var ItemDetails $ItemDetails */
-$ItemDetails = new ItemDetails($Database, $Functions, $Vendors);
-

@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/13/2015                                                                 */
+/* Created on 12/31/2015                                                                 */
 /* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
@@ -30,35 +30,33 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-final class Constants {
+/** @var Session $Session */
+$Session = new Session();
 
-    // Database details
-    const DB_SERVER = 'localhost';
-    const DB_USER = 'order_user';
-    const DB_PASS = 'ka8*Q5(8Tku.hBs';
-    const DB_NAME = 'orderings';
-    
-    // User types
-    const USER_TYPE_END_USER = 0;
-    const USER_TYPE_PURCHASING_PERSON = 1;
-    const USER_TYPE_ADMINISTRATOR = 2;
-    
-    // Order status
-    const ORDER_STATUS_PENDING = 'Pending';
-    const ORDER_STATUS_PROCESSING = 'Processing';
-    const ORDER_STATUS_ORDERED = 'Ordered';
-    const ORDER_STATUS_DELIVERED = 'Delivered';
-    const ORDER_STATUS_BACKORDERED = 'Backordered';
-    
-    // Item ordered status
-    const ORDER_PLACED = 1;
-    
-    // Domain name
-    const DOMAIN_NAME = 'hireforall.com';
-    const DOMAIN_NAME_HTTP = 'http://hireforall.com';
+/** @var Functions $Functions */
+$Functions = new Functions();
 
-    private function __construct() {
-        throw new Exception("Can't get an instance of Constants");
-    }
+/** @var Email $Email */
+$Email = new Email();
 
-}
+/** @var Admin $Admin */
+$Admin = new Admin($Session);
+
+/** @var Vendors $Vendors */
+$Vendors = new Vendors($Database, $Functions);
+
+/** @var CostCenters $CostCenters */
+$CostCenters = new CostCenters($Database, $Functions);
+
+/** @var ItemDetails $ItemDetails */
+$ItemDetails = new ItemDetails($Database, $Functions, $Vendors);
+
+/** @var Orders $Orders */
+$Orders = new Orders($Database, $Functions, $Admin);
+
+/** @var Projects $Projects */
+$Projects = new Projects($Database, $Functions);
+
+/** @var Users $Users */
+$Users = new Users($Database, $Functions);
+

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 12/30/2015                                                           */
+/* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -120,6 +120,10 @@ class Functions {
             $convertedDate = date('Y-m-d', strtotime($slashesReplacedDate));
             if ($convertedDate == "1970-01-01" || $convertedDate == "1969-12-31") {
                 $convertedDate = date('Y-m-d', strtotime(preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$2-$1", $date)));
+                if ($convertedDate == "1970-01-01" || $convertedDate == "1969-12-31") {
+                    $dashesReplacedDate = str_replace("-", "/", $date);
+                    $convertedDate = date('Y-m-d', strtotime($dashesReplacedDate));
+                }
             }
         } catch (Exception $e) {
             $convertedDate = "0";
@@ -139,7 +143,9 @@ class Functions {
     /** @param string $columnName - Column name in the database
      */
     public function storeSortInSession($columnName) {
-        if ($_SESSION['sort_column_name'] == $columnName && $_SESSION['sort_up_or_down'] == 'up') {
+        if (isset($_SESSION['sort_column_name']) &&
+                $_SESSION['sort_column_name'] == $columnName &&
+                $_SESSION['sort_up_or_down'] == 'up') {
             $_SESSION['sort_up_or_down'] = 'down';
         } else {
             $_SESSION['sort_up_or_down'] = 'up';
@@ -264,8 +270,15 @@ class Functions {
         error_log("\n$title\n", 3, "php.log");
     }
 
+    /**
+     *  @param int $string_length
+     *  @return string Random string created with the provided length
+     */
+    function generateRandomString($string_length) {
+        $alpha_numeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        return substr(str_shuffle($alpha_numeric), 0, $string_length);
+    }
+
 }
 
-/** @var Functions $Functions */
-$Functions = new Functions();
 ?>

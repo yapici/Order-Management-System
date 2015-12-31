@@ -68,7 +68,7 @@ function showItemDetailsPopupWindow(
     }
 
     if (weblink !== '') {
-        var weblink = "<a href='" + weblink + "'>Link</a>";
+        var weblink = "<a target='_blank' href='" + weblink + "'>Link</a>";
     }
     $("#popup-item-order-number").html("Order " + orderNo);
     $("#popup-item-description").html(description);
@@ -81,13 +81,21 @@ function showItemDetailsPopupWindow(
     $("#popup-item-cost-center").html(costCenter);
     $("#popup-item-project").html(project);
     $("#popup-item-comments").html(comments);
-    $("#popup-item-status-updated-date").html("on " + statusUpdatedDate);
-    $("#popup-item-requested-date").html("on " + requestedDate);
+    $("#popup-item-status-updated-date").html(statusUpdatedDate);
+    $("#popup-item-requested-date").html(requestedDate);
     $('#popup-item-requested-by').html(requestedByUsername);
     $("#popup-item-status-updated-by").html(statusUpdatedByUsername);
     $("#popup-item-item-needed-by").html(itemNeededByDate);
     $("#popup-item-status").html(status);
     $("#file-upload-order-id").val(orderNo);
+
+    if (ordered === '1') {
+        $("#popup-item-status-ordered-tr").show();
+        $("#popup-item-status-ordered-by").html(orderedByUsername);
+        $("#popup-item-status-ordered-date").html(orderedDate);
+    } else {
+        $("#popup-item-status-ordered-tr").hide();
+    }
 
     showProgressCircle();
     $.ajax({
@@ -141,23 +149,23 @@ function showAddNewItemPopupWindow() {
 
 function addNewItem() {
     var add_new_item_popup_window = $("#add-new-item-popup-window");
-    var description = $("#add-new-item-description").val();
-    var quantity = $("#add-new-item-quantity").val();
-    var uom = $("#add-new-item-uom").val();
-    var vendor = $("#add-new-item-vendor").val();
-    var catalog_no = $("#add-new-item-catalog-no").val();
-    var price = $("#add-new-item-price").val();
-    var cost_center = $("#add-new-item-cost-center").val();
-    var project = $("#add-new-item-project").val();
-    var comments = $("#add-new-item-comments").val();
-    var date_needed = $("#add-new-item-date-needed").val();
-    var weblink = $("#add-new-item-weblink").val();
+    var description = encodeURIComponent($("#add-new-item-description").val());
+    var quantity = encodeURIComponent($("#add-new-item-quantity").val());
+    var uom = encodeURIComponent($("#add-new-item-uom").val());
+    var vendor = encodeURIComponent($("#add-new-item-vendor").val());
+    var catalog_no = encodeURIComponent($("#add-new-item-catalog-no").val());
+    var price = encodeURIComponent($("#add-new-item-price").val());
+    var cost_center = encodeURIComponent($("#add-new-item-cost-center").val());
+    var project = encodeURIComponent($("#add-new-item-project").val());
+    var comments = encodeURIComponent($("#add-new-item-comments").val());
+    var date_needed = encodeURIComponent($("#add-new-item-date-needed").val());
+    var weblink = encodeURIComponent($("#add-new-item-weblink").val());
 
     // New Vendor Details
-    var new_vendor_name = $("#add-new-item-new-vendor-name").val();
-    var new_vendor_phone = $("#add-new-item-new-vendor-phone").val();
-    var new_vendor_website = $("#add-new-item-new-vendor-website").val();
-    var new_vendor_address = $("#add-new-item-new-vendor-address").val();
+    var new_vendor_name = encodeURIComponent($("#add-new-item-new-vendor-name").val());
+    var new_vendor_phone = encodeURIComponent($("#add-new-item-new-vendor-phone").val());
+    var new_vendor_website = encodeURIComponent($("#add-new-item-new-vendor-website").val());
+    var new_vendor_address = encodeURIComponent($("#add-new-item-new-vendor-address").val());
 
     // Error div
     var error_div = $('#add-new-item-error-div');
@@ -208,6 +216,9 @@ function addNewItem() {
                 if (json_data.status === 'success') {
                     $('#orders-table tbody').html(json_data.html_tbody);
                     $('#add-new-item-popup-window').html(json_data.add_new_item_popup);
+                    $('#orders-search-cancel-button').hide();
+                    $('#orders-search-input').val('');
+                    $('.reset-sort-button').hide();
                     unblockUI();
                     add_new_item_popup_window.fadeOut();
                 } else if (json_data.status === "no_session") {

@@ -75,21 +75,21 @@ function hideEditFields() {
 
 function updateOrderDetails() {
     var item_details_popup_window = $("#item-details-popup-window");
-    var description = $("#item-details-popup-window-description").val();
-    var quantity = $("#item-details-popup-window-quantity").val();
-    var uom = $("#item-details-popup-window-uom").val();
-    var vendor = $("#item-details-popup-window-vendor").val();
-    var vendor_name = $("#item-details-popup-window-vendor option:selected").html();
-    var catalog_no = $("#item-details-popup-window-catalog-no").val();
-    var price = $("#item-details-popup-window-price").val();
-    var weblink = $("#item-details-popup-window-weblink").val();
-    var cost_center = $("#item-details-popup-window-cost-center").val();
-    var project = $("#item-details-popup-window-project").val();
-    var comments = $("#item-details-popup-window-comments").val();
-    var order_id = $("#popup-item-order-number").html();
-    var status = $("#item-details-popup-window-status").val();
-    var invoice_no = $("#item-details-popup-window-invoice-no").val();
-    var vendor_order_no = $("#item-details-popup-window-vendor-order-no").val();
+    var description = encodeURIComponent($("#item-details-popup-window-description").val());
+    var quantity = encodeURIComponent($("#item-details-popup-window-quantity").val());
+    var uom = encodeURIComponent($("#item-details-popup-window-uom").val());
+    var vendor = encodeURIComponent($("#item-details-popup-window-vendor").val());
+    var vendor_name = encodeURIComponent($("#item-details-popup-window-vendor option:selected").html());
+    var catalog_no = encodeURIComponent($("#item-details-popup-window-catalog-no").val());
+    var price = encodeURIComponent($("#item-details-popup-window-price").val());
+    var weblink = encodeURIComponent($("#item-details-popup-window-weblink").val());
+    var cost_center = encodeURIComponent($("#item-details-popup-window-cost-center").val());
+    var project = encodeURIComponent($("#item-details-popup-window-project").val());
+    var comments = encodeURIComponent($("#item-details-popup-window-comments").val());
+    var order_id = encodeURIComponent($("#popup-item-order-number").html());
+    var status = encodeURIComponent($("#item-details-popup-window-status").val());
+    var invoice_no = encodeURIComponent($("#item-details-popup-window-invoice-no").val());
+    var vendor_order_no = encodeURIComponent($("#item-details-popup-window-vendor-order-no").val());
     var error_div = $('#item-details-popup-window-error-div');
     error_div.html("");
     error_div.html('&nbsp;');
@@ -129,7 +129,7 @@ function updateOrderDetails() {
                     if (!/^https?:\/\//i.test(weblink)) {
                         weblink = 'http://' + weblink;
                     }
-                    weblink = "<a href='" + weblink + "'>Link</a>";
+                    weblink = "<a target='_blank' href='" + weblink + "'>Link</a>";
                     $("#popup-item-weblink").html(weblink);
                 } else {
                     $("#popup-item-weblink").html('');

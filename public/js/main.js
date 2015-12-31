@@ -60,12 +60,12 @@ function logoutAction() {
 
 function blockUI() {
     var block_ui_div = $(".gray-out-div");
-    block_ui_div.css('visibility', 'visible');
+    block_ui_div.fadeIn(100);
 }
 
 function unblockUI() {
     var block_ui_div = $(".gray-out-div");
-    block_ui_div.css('visibility', 'hidden');
+    block_ui_div.fadeOut(100);
 }
 
 function showProgressCircle() {

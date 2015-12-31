@@ -1,0 +1,16 @@
+#activation-main-body-wrapper {
+    max-width: 500px;
+    min-width: 400px;
+    width: auto;
+    height: auto;
+    margin: 100px auto 0px auto;
+    padding: 0 0 20px 0px;
+    background-color: #ffffff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#activation-main-body-wrapper div {
+    padding: 20px;
+}

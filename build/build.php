@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/13/2015                                                                 */
+/* Created on 12/31/2015                                                                 */
 /* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
@@ -30,35 +30,56 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-final class Constants {
+// Opening the json file that holds the file paths and file modification dates
+$string = file_get_contents(BUILD_PATH . 'files.json');
+$json_a = json_decode($string, true);
 
-    // Database details
-    const DB_SERVER = 'localhost';
-    const DB_USER = 'order_user';
-    const DB_PASS = 'ka8*Q5(8Tku.hBs';
-    const DB_NAME = 'orderings';
-    
-    // User types
-    const USER_TYPE_END_USER = 0;
-    const USER_TYPE_PURCHASING_PERSON = 1;
-    const USER_TYPE_ADMINISTRATOR = 2;
-    
-    // Order status
-    const ORDER_STATUS_PENDING = 'Pending';
-    const ORDER_STATUS_PROCESSING = 'Processing';
-    const ORDER_STATUS_ORDERED = 'Ordered';
-    const ORDER_STATUS_DELIVERED = 'Delivered';
-    const ORDER_STATUS_BACKORDERED = 'Backordered';
-    
-    // Item ordered status
-    const ORDER_PLACED = 1;
-    
-    // Domain name
-    const DOMAIN_NAME = 'hireforall.com';
-    const DOMAIN_NAME_HTTP = 'http://hireforall.com';
-
-    private function __construct() {
-        throw new Exception("Can't get an instance of Constants");
-    }
-
+// Putting the values into a local array
+$jsonFileArray = array();
+foreach ($json_a as $person_name => $person_a) {
+    $jsonFileArray[$person_name] = $person_a;
 }
+
+// Iterating through the directories and putting the file paths and modification dates into a local array
+$filesArray = array();
+$dir_iterator = new RecursiveDirectoryIterator(PUBLIC_PATH); // public directory
+$recursive_iterator = new RecursiveIteratorIterator($dir_iterator);
+foreach ($recursive_iterator as $file) {
+    if ($file->isDir()) {
+        continue;
+    }
+    if (substr($file, -7) != 'php.log' && substr($file, -9) != 'error_log') {
+        $fileName = 'public/' . $file->getPathname();
+        $fileModifiedDate = date('m/d/y H:i:s', $file->getMTime());
+        $filesArray[$fileName] = $fileModifiedDate;
+    }
+}
+
+$dir_iterator = new RecursiveDirectoryIterator(PRIVATE_PATH); // private directory
+$recursive_iterator = new RecursiveIteratorIterator($dir_iterator);
+foreach ($recursive_iterator as $file) {
+    if ($file->isDir()) {
+        continue;
+    }
+    if (!preg_match('/private\/attachments/', $file) &&
+            substr($file, -7) != 'php.log' &&
+            substr($file, -9) != 'error_log') {
+        $fileName = $file->getPathname();
+        $fileModifiedDate = date('m/d/y H:i:s', $file->getMTime());
+        $filesArray[$fileName] = $fileModifiedDate;
+    }
+}
+
+// Checking if there are any files that are modified/created/deleted
+if (!empty(array_diff($jsonFileArray, $filesArray)) ||
+        !empty(array_diff($filesArray, $jsonFileArray))) {
+    $file = BUILD_PATH . "build";
+    file_put_contents($file, file_get_contents($file) + 1);
+}
+
+// Updating the json file with the latest modifiedDates
+$jsonFile = fopen(BUILD_PATH . 'files.json', 'w');
+fwrite($jsonFile, json_encode($filesArray, JSON_UNESCAPED_SLASHES));
+fclose($jsonFile);
+?>
+

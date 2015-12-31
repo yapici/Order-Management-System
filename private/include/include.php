@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -33,19 +33,23 @@
 define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
 define("PRIVATE_PATH", ROOT . "/private/");
 define("PUBLIC_PATH", ROOT . "/public/");
+define("BUILD_PATH", ROOT . "/build/");
 define("CLASSES_PATH", PRIVATE_PATH . 'include/classes/');
 
-require_once(CLASSES_PATH . "constants.class.php");
-require_once(PRIVATE_PATH . "include/database.php");
-require_once(CLASSES_PATH . "functions.class.php");
-require_once(CLASSES_PATH . "session.class.php");
-require_once(CLASSES_PATH . "vendors.class.php");
-require_once(CLASSES_PATH . "cost_centers.class.php");
-require_once(CLASSES_PATH . "projects.class.php");
-require_once(CLASSES_PATH . "users.class.php");
-require_once(CLASSES_PATH . "item_details.class.php");
-require_once(CLASSES_PATH . "admin.class.php");
-require_once(CLASSES_PATH . "orders.class.php");
-
+// Setting the timezone to CDT
 date_default_timezone_set('America/Chicago');
+
+// Including all the class files under CLASSES_PATH
+foreach (glob(CLASSES_PATH . '*.php') as $file) {
+    include($file);
+}
+
+// Initializing the PDO Database ($Database)
+require_once(PRIVATE_PATH . "include/database.php");
+
+// Initializing all the required classes
+require_once(PRIVATE_PATH . "include/init_classes.php");
+
+// Including the automatic build number increase functions
+require_once(BUILD_PATH . "build.php");
 ?>

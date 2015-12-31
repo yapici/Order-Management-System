@@ -218,6 +218,10 @@
     word-wrap: break-word;
 }
 
+#item-details-popup-window #popup-item-status-ordered-tr {
+    display: hidden;
+}
+
 .edit-button {
     padding-left: 6px;
     display: none;
