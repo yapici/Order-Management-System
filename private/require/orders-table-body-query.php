@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 01/05/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -37,118 +37,102 @@
 $ordersArray = $Orders->getOrdersArray();
 if (!empty($ordersArray)) {
     foreach ($ordersArray as $id => $order) {
-        $mItemId = $id;
+        $itemId = $id;
         $orderDetailsArray = $ordersArray[$id];
-        $mDescription = $orderDetailsArray['description'];
-        $mQuantity = $orderDetailsArray['quantity'];
-        $mUom = $orderDetailsArray['uom'];
-        $mVendorId = $orderDetailsArray['vendor'];
-        $mCatalogNo = $orderDetailsArray['catalog_no'];
-        $mPrice = $orderDetailsArray['price'];
-        $mWeblink = $orderDetailsArray['weblink'];
-        $mCostCenterId = $orderDetailsArray['cost_center'];
-        $mProjectId = $orderDetailsArray['project'];
-        $mComments = $orderDetailsArray['comments'];
-        $mRequestedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['requested_datetime']);
-        $mStatusUpdatedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['status_updated_date']);
-        $mItemNeededByDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['item_needed_by_date']);
-        $mStatus = $orderDetailsArray['status'];
-        $mRequestedByUsername = $orderDetailsArray['requested_by_username'];
-        $mStatusUpdatedByUsername = $orderDetailsArray['status_updated_by_username'];
-        $mOrdered = $orderDetailsArray['ordered'];
-        $mOrderedDate = $orderDetailsArray['ordered_date'];
+        $description = $orderDetailsArray['description'];
+        $quantity = $orderDetailsArray['quantity'];
+        $uom = $orderDetailsArray['uom'];
+        $vendorId = $orderDetailsArray['vendor'];
+        $catalogNo = $orderDetailsArray['catalog_no'];
+        $price = $orderDetailsArray['price'];
+        $weblink = $orderDetailsArray['weblink'];
+        $costCenterId = $orderDetailsArray['cost_center'];
+        $projectId = $orderDetailsArray['project'];
+        $comments = $orderDetailsArray['comments'];
+        $requestedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['requested_datetime']);
+        $statusUpdatedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['status_updated_date']);
+        $itemNeededByDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['item_needed_by_date']);
+        $status = $orderDetailsArray['status'];
+        $requestedByUsername = $orderDetailsArray['requested_by_username'];
+        $statusUpdatedByUsername = $orderDetailsArray['status_updated_by_username'];
+        $ordered = $orderDetailsArray['ordered'];
+        $orderedDate = $orderDetailsArray['ordered_date'];
 
-        if ($mOrderedDate != '0000-00-00 00:00:00' || $mOrderedDate != '') {
-            $mOrderedDate = $Functions->convertMysqlDateToPhpDate($mOrderedDate);
+        if ($orderedDate != '0000-00-00 00:00:00' || $orderedDate != '') {
+            $orderedDate = $Functions->convertMysqlDateToPhpDate($orderedDate);
         }
-        $mOrderedByUsername = $orderDetailsArray['ordered_by_username'];
+        $orderedByUsername = $orderDetailsArray['ordered_by_username'];
 
         if ($Admin->isAdmin()) {
-            $mVendorOrderNo = $orderDetailsArray['vendor_order_no'];
-            $mInvoiceNo = $orderDetailsArray['invoice_no'];
+            $vendorOrderNo = $orderDetailsArray['vendor_order_no'];
+            $invoiceNo = $orderDetailsArray['invoice_no'];
         }
 
-        $mCostCenterName = '';
-        if ($mCostCenterId != '0') {
-            $mCostCenterName = $CostCenters->getCostCentersArray()[$mCostCenterId]['name'];
+        $costCenterName = '';
+        if ($costCenterId != '0') {
+            $costCenterName = $CostCenters->getCostCentersArray()[$costCenterId]['name'];
         }
 
-        $mVendorName = $Vendors->getVendorsArray()[$mVendorId]['name'];
-        $mVendorAccountNo = $Vendors->getVendorsArray()[$mVendorId]['account_number'];
+        $vendorName = $Vendors->getVendorsArray()[$vendorId]['name'];
+        $vendorAccountNo = $Vendors->getVendorsArray()[$vendorId]['account_number'];
 
-        $mProject = '';
-        if ($mProjectId != '0') {
-            $project = $Projects->getProjectsArray()[$mProjectId];
-            $mProject = $project['name'] . ' / ' . $project['number'];
+        $project = '';
+        if ($projectId != '0') {
+            $project = $Projects->getProjectsArray()[$projectId];
+            $project = $project['name'] . ' / ' . $project['number'];
         }
 
-        echo "<tr onclick=\"showItemDetailsPopupWindow("
-        . "'$mItemId', "
-        . "'$mDescription', "
-        . "'$mQuantity', "
-        . "'$mUom', "
-        . "'$mVendorName', "
-        . "'$mCatalogNo', "
-        . "'$mPrice', "
-        . "'$mWeblink', "
-        . "'$mCostCenterName', "
-        . "'$mProject', "
-        . "'$mComments', "
-        . "'$mRequestedByUsername', "
-        . "'$mRequestedDate', "
-        . "'$mStatusUpdatedByUsername', "
-        . "'$mStatusUpdatedDate', "
-        . "'$mStatus', "
-        . "'$mItemNeededByDate', "
-        . "'$mOrdered', "
-        . "'$mOrderedDate', "
-        . "'$mOrderedByUsername'"
-        . ");";
+        $popupWindowParamArray = array($itemId, $description, $quantity, $uom, $vendorName, $catalogNo,
+            $price, $weblink, $costCenterName, $project, $comments, $requestedByUsername, $requestedDate,
+            $statusUpdatedByUsername, $statusUpdatedDate, $status, $itemNeededByDate, $ordered, $orderedDate
+        );
+        echo "<tr onclick='showItemDetailsPopupWindow(";
+        echoJsFunctionParams($popupWindowParamArray);
+        echo "\"" . $Functions->escapeQuotes($orderedByUsername) . "\");";
         if ($Admin->isAdmin()) {
-            echo " showItemDetailsPopupWindowAdmin("
-            . "'$mItemId', "
-            . "'$mVendorAccountNo', "
-            . "'$mInvoiceNo', "
-            . "'$mVendorOrderNo'"
-            . "); ";
-            echo " prepareItemDetailsPopupWindowInputs("
-            . "'$mDescription', "
-            . "'$mQuantity', "
-            . "'$mUom', "
-            . "'$mVendorName', "
-            . "'$mCatalogNo', "
-            . "'$mPrice', "
-            . "'$mWeblink', "
-            . "'$mCostCenterName', "
-            . "'$mProject', "
-            . "'$mComments', "
-            . "'$mInvoiceNo', "
-            . "'$mVendorOrderNo', "
-            . "'$mStatus'"
-            . ");";
+            $popupWindowAdminParamArray = array($itemId, $vendorAccountNo, $invoiceNo);
+            echo " showItemDetailsPopupWindowAdmin(";
+            echoJsFunctionParams($popupWindowAdminParamArray);
+            echo "\"" . $Functions->escapeQuotes($vendorOrderNo) . "\");";
+
+            $inputParamsArray = array($description, $quantity, $uom, $vendorName, $catalogNo,
+                $price, $weblink, $costCenterName, $project, $comments, $invoiceNo, $vendorOrderNo
+            );
+            echo " prepareItemDetailsPopupWindowInputs(";
+            echoJsFunctionParams($inputParamsArray);
+            echo "\"" . $Functions->escapeQuotes($status) . "\");";
         }
-        echo "\">";
+        echo "'>";
         if ($Admin->isAdmin()) {
-            echo "<td title='$mItemId'>" . $mItemId . "</td>";
-            echo "<td title='$mDescription'>" . $mDescription . "</td>";
-            echo "<td title='$mVendorName'>" . $mVendorName . "</td>";
-            echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
-            echo "<td title='$mVendorAccountNo'>" . $mVendorAccountNo . "</td>";
-            echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
-            echo "<td title='$mItemNeededByDate'>" . $mItemNeededByDate . "</td>";
-            echo "<td title='$mStatus'>" . $mStatus . "</td>";
+            echo "<td title='$itemId'>" . $itemId . "</td>";
+            echo "<td title=\"$description\">" . $description . "</td>";
+            echo "<td title='$vendorName'>" . $vendorName . "</td>";
+            echo "<td title='$catalogNo'>" . $catalogNo . "</td>";
+            echo "<td title='$vendorAccountNo'>" . $vendorAccountNo . "</td>";
+            echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
+            echo "<td title='$itemNeededByDate'>" . $itemNeededByDate . "</td>";
+            echo "<td title='$status'>" . $status . "</td>";
         } else {
-            echo "<td title='$mItemId'>" . $mItemId . "</td>";
-            echo "<td title='$mDescription'>" . $mDescription . "</td>";
-            echo "<td title='$mVendorName'>" . $mVendorName . "</td>";
-            echo "<td title='$mCatalogNo'>" . $mCatalogNo . "</td>";
-            echo "<td title='$$mPrice'>$" . $mPrice . "</td>";
-            echo "<td title='$mRequestedByUsername'>" . $mRequestedByUsername . "</td>";
-            echo "<td title='$mStatus'>" . $mStatus . "</td>";
+            echo "<td title='$itemId'>" . $itemId . "</td>";
+            echo "<td title='$description'>" . $description . "</td>";
+            echo "<td title='$vendorName'>" . $vendorName . "</td>";
+            echo "<td title='$catalogNo'>" . $catalogNo . "</td>";
+            echo "<td title='$$price'>$" . $price . "</td>";
+            echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
+            echo "<td title='$status'>" . $status . "</td>";
         }
         echo "</tr>";
     }
 }
+
+function echoJsFunctionParams($paramArray) {
+    global $Functions;
+
+    foreach ($paramArray as $param) {
+        echo "\"" . $Functions->escapeQuotes($param) . "\", ";
+    }
+}
+
 /* ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ */
 /* | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | */
 /* ########################################################## tbody Content ######################################################## */

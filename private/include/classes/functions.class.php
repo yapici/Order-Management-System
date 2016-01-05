@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/23/2015                                                                 */
-/* Last modified on 01/03/2016                                                           */
+/* Last modified on 01/05/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -171,6 +171,13 @@ class Functions {
         return $filePath;
     }
 
+    /** @param string $string 
+     *  @return string Returned string with excaped quotes
+     */
+    public function escapeQuotes($string) {
+        return htmlspecialchars($string, ENT_QUOTES);
+    }
+
     /** @param array $array 
      *  @return array $sanitizedArray
      */
@@ -278,7 +285,7 @@ class Functions {
         $alpha_numeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         return substr(str_shuffle($alpha_numeric), 0, $string_length);
     }
-    
+
     /**
      * @param string $username
      * @return string User first name with uppercase first letter

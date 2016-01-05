@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/14/2015                                                           */
+/* Last modified on 01/05/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -34,6 +34,7 @@
 <script src="js/main.js"></script>
 <link href="css/jquery-ui-1.11.4.min.css" rel="stylesheet">
 <link href="css/main.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
 <?php
 /* Getting the current file's name without the extension and checking whether
  * there is are css and js files with the same name. If there are, they are included.

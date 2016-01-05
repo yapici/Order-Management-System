@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/05/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -156,8 +156,7 @@ class Orders {
         $stmt->execute();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $sanitizedArray = $this->Functions->sanitizeArray($row);
-            $this->ordersArray[$sanitizedArray['id']] = $sanitizedArray;
+            $this->ordersArray[$row['id']] = $row;
         }
 
         $this->refreshTotalNumberOfItems();

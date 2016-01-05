@@ -15,15 +15,15 @@ function prepareItemDetailsPopupWindowInputs(
         vendorOrderNo,
         status) {
 
-    $("#item-details-popup-window-description").val(description);
-    $("#item-details-popup-window-quantity").val(quantity);
-    $("#item-details-popup-window-uom").val(uom);
-    $("#item-details-popup-window-catalog-no").val(catalogNo);
-    $("#item-details-popup-window-price").val(price);
-    $("#item-details-popup-window-weblink").val(weblink);
-    $("#item-details-popup-window-comments").val(comments);
-    $("#item-details-popup-window-invoice-no").val(invoiceNo);
-    $("#item-details-popup-window-vendor-order-no").val(vendorOrderNo);
+    $("#item-details-popup-window-description").val(decodeEntities(description));
+    $("#item-details-popup-window-quantity").val(decodeEntities(quantity));
+    $("#item-details-popup-window-uom").val(decodeEntities(uom));
+    $("#item-details-popup-window-catalog-no").val(decodeEntities(catalogNo));
+    $("#item-details-popup-window-price").val(decodeEntities(price));
+    $("#item-details-popup-window-weblink").val(decodeEntities(weblink));
+    $("#item-details-popup-window-comments").val(decodeEntities(comments));
+    $("#item-details-popup-window-invoice-no").val(decodeEntities(invoiceNo));
+    $("#item-details-popup-window-vendor-order-no").val(decodeEntities(vendorOrderNo));
 
     if (vendor !== '') {
         $("#item-details-popup-window-vendor > option").each(function () {
@@ -46,6 +46,12 @@ function prepareItemDetailsPopupWindowInputs(
     }
 
     $("#item-details-popup-window-status option:contains('" + status + "')").prop('selected', true);
+}
+
+function decodeEntities(encodedString) {
+    var textArea = document.createElement('textarea');
+    textArea.innerHTML = encodedString;
+    return textArea.value;
 }
 
 function toggleItemDetailsPopupInputFields(showHide) {
@@ -79,21 +85,21 @@ function hideEditFields() {
 
 function updateOrderDetails() {
     var item_details_popup_window = $("#item-details-popup-window");
-    var description = encodeURIComponent($("#item-details-popup-window-description").val());
-    var quantity = encodeURIComponent($("#item-details-popup-window-quantity").val());
-    var uom = encodeURIComponent($("#item-details-popup-window-uom").val());
-    var vendor = encodeURIComponent($("#item-details-popup-window-vendor").val());
-    var vendor_name = encodeURIComponent($("#item-details-popup-window-vendor option:selected").html());
-    var catalog_no = encodeURIComponent($("#item-details-popup-window-catalog-no").val());
-    var price = encodeURIComponent($("#item-details-popup-window-price").val());
-    var weblink = encodeURIComponent($("#item-details-popup-window-weblink").val());
-    var cost_center = encodeURIComponent($("#item-details-popup-window-cost-center").val());
-    var project = encodeURIComponent($("#item-details-popup-window-project").val());
-    var comments = encodeURIComponent($("#item-details-popup-window-comments").val());
-    var order_id = encodeURIComponent($("#popup-item-order-number").html());
-    var status = encodeURIComponent($("#item-details-popup-window-status").val());
-    var invoice_no = encodeURIComponent($("#item-details-popup-window-invoice-no").val());
-    var vendor_order_no = encodeURIComponent($("#item-details-popup-window-vendor-order-no").val());
+    var description = $("#item-details-popup-window-description").val();
+    var quantity = $("#item-details-popup-window-quantity").val();
+    var uom = $("#item-details-popup-window-uom").val();
+    var vendor = $("#item-details-popup-window-vendor").val();
+    var vendor_name = $("#item-details-popup-window-vendor option:selected").html();
+    var catalog_no = $("#item-details-popup-window-catalog-no").val();
+    var price = $("#item-details-popup-window-price").val();
+    var weblink = $("#item-details-popup-window-weblink").val();
+    var cost_center = $("#item-details-popup-window-cost-center").val();
+    var project = $("#item-details-popup-window-project").val();
+    var comments = $("#item-details-popup-window-comments").val();
+    var order_id = $("#popup-item-order-number").html();
+    var status = $("#item-details-popup-window-status").val();
+    var invoice_no = $("#item-details-popup-window-invoice-no").val();
+    var vendor_order_no = $("#item-details-popup-window-vendor-order-no").val();
     var error_div = $('#item-details-popup-window-error-div');
     error_div.html("");
     error_div.html('&nbsp;');
@@ -109,20 +115,22 @@ function updateOrderDetails() {
     $.ajax({
         url: "../ajax/admin/update-item-details.php",
         type: "POST",
-        data: "description=" + description +
-                "&quantity=" + quantity +
-                "&uom=" + uom +
-                "&vendor=" + vendor +
-                "&catalog_no=" + catalog_no +
-                "&price=" + price +
-                "&weblink=" + weblink +
-                "&cost_center=" + cost_center +
-                "&project=" + project +
-                "&comments=" + comments +
-                "&order_id=" + order_id +
-                "&invoice_no=" + invoice_no +
-                "&vendor_order_no=" + vendor_order_no +
-                "&status=" + status,
+        data: { 
+            description: description, 
+            uom: uom, 
+            quantity: quantity, 
+            vendor: vendor, 
+            catalog_no: catalog_no, 
+            price: price, 
+            weblink: weblink, 
+            cost_center: cost_center, 
+            project: project, 
+            comments: comments, 
+            order_id: order_id, 
+            invoice_no: invoice_no, 
+            vendor_order_no: vendor_order_no, 
+            status: status
+        },
         cache: false,
         dataType: "json",
         success: function (json_data) {
