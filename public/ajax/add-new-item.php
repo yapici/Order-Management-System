@@ -79,6 +79,17 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             $result = $stmt->execute();
             $vendorId = $Database->lastInsertId();
             $Vendors->refreshArrays();
+
+            if (!$Purchasers->isPuchaser()) {
+                foreach ($Purchasers->getPurchasersArray() as $purchaser) {
+                    $purchaserUsername = $Functions->getUserFirstName($purchaser['username']);
+                    $purchaserEmail = $purchaser['email'];
+                    $subject = "OMS Notification: New Vendor Added";
+                    $messageBody = "<p>There is a new vendor added by $username.</p>";
+                    
+                    $Email->sendEmail($purchaserEmail, $purchaserUsername, $subject, $messageBody);
+                }
+            }
         }
         $vendorsArray = $Vendors->getVendorsArray();
         $vendorName = $vendorsArray[$vendorId]['name'];
@@ -113,6 +124,18 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $result = $stmt->execute();
 
         if ($result) {
+
+            if (!$Purchasers->isPuchaser()) {
+                foreach ($Purchasers->getPurchasersArray() as $purchaser) {
+                    $purchaserUsername = $Functions->getUserFirstName($purchaser['username']);
+                    $purchaserEmail = $purchaser['email'];
+                    $subject = "OMS Notification: New Order Request";
+                    $messageBody = "<p>There is a new item in OMS requested by $username.</p>";
+
+                    $Email->sendEmail($purchaserEmail, $purchaserUsername, $subject, $messageBody);
+                }
+            }
+
             $Orders->refreshTotalNumberOfItems();
             renameAttachmentsDirectory($Database->lastInsertId(), PRIVATE_PATH);
             $_SESSION['pagination_page_number'] = 1;

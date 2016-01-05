@@ -1,15 +1,15 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/13/2015                                                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Created on 01/03/2016                                                                 */
 /* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -30,43 +30,57 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-require('../../../private/include/include.php');
+require('../../private/include/include.php');
 // Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
 if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
-    $adminCheckResponse = $Admin->ajaxAdminChecks();
-    if ($adminCheckResponse !== true) {
-        $jsonResponse['status'] = $adminCheckResponse;
-    } else {
-        // Getting the parameters passed through AJAX
-        $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        $costCenterId = $sanitizedPostArray['cost_center'];
-        $projectId = $sanitizedPostArray['project'];
-        $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
-        $status = $sanitizedPostArray['status'];
 
-        if ($ItemDetails->updateItemDetails($sanitizedPostArray)) {
-            
-            if ($status == 'Ordered') {
-                $ItemDetails->sendStatusChangeEmail($orderId, 'Ordered');
-            } else if ($status == 'Backordered') {
-                $ItemDetails->sendStatusChangeEmail($orderId, 'Backordered');
-            } else if ($status == 'Delivered') {
-                $ItemDetails->sendStatusChangeEmail($orderId, 'Delivered');
+    // Getting the parameters passed through AJAX
+    $sanitizedPostArray = $Functions->sanitizePostedVariables();
+    $email = $sanitizedPostArray['email'];
+    $code = $sanitizedPostArray['code'];
+    $enteredPassword = $sanitizedPostArray['password'];
+    $hashedPassword = password_hash($enteredPassword, PASSWORD_DEFAULT);
+
+    $sql = "SELECT id FROM users ";
+    $sql .= "WHERE email = :email AND password_reset = 1";
+    $stmt = $Database->prepare($sql);
+    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+        if ($stmt->rowCount() == 1) {
+            $sql = "SELECT * FROM users ";
+            $sql .= "WHERE email = :email AND forgot_password = :code";
+            $stmt = $Database->prepare($sql);
+            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+            $stmt->bindValue(":code", $code, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                if ($stmt->rowCount() == 1) {
+                    $sql = "UPDATE users SET ";
+                    $sql .= "password_reset = 0, password = :password WHERE email = :email AND forgot_password = :forgot_password";
+
+                    $stmt = $Database->prepare($sql);
+
+                    $stmt->bindValue(":password", $hashedPassword, PDO::PARAM_STR);
+                    $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+                    $stmt->bindValue(":forgot_password", $code, PDO::PARAM_STR);
+
+                    if ($stmt->execute()) {
+                        $jsonResponse['status'] = 'success';
+                    } else {
+                        $jsonResponse['status'] = 'fail';
+                    }
+                } else {
+                    $jsonResponse['status'] = 'wrong_password_reset_code';
+                }
+            } else {
+                $jsonResponse['status'] = 'fail';
             }
-            
-            ob_start();
-            require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
-            $jsonResponse['html_tbody'] = ob_get_clean();
-            $jsonResponse['html_pagination'] = $pagination;
-            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$costCenterId]['name'];
-            
-            $project = $Projects->getProjectsArray()[$projectId];
-            $jsonResponse['project'] = $project['name'] . ' / ' . $project['number'];
-            
-            $jsonResponse['status'] = "success";
         } else {
-            $jsonResponse['status'] = "fail";
+            $jsonResponse['status'] = 'no_password_reset_request_found_for_this_email';
         }
+    } else {
+        $jsonResponse['status'] = 'fail';
     }
     echo json_encode($jsonResponse);
 } else {

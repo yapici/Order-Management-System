@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -40,11 +40,9 @@ if ($Session->isSessionValid()) {
 
 <html>
     <head>
-        <base href="/"> 
-            <title>Order Management System</title>
-            <?php
-            require_once ('include_references.php');
-            ?>
+        <base href="/"/> 
+        <title>Order Management System</title>
+        <?php require_once ('include_references.php'); ?>
     </head>
 
     <body>
@@ -77,7 +75,7 @@ if ($Session->isSessionValid()) {
                         $stmt = $Database->prepare($sql);
                         $stmt->bindValue(1, $email, PDO::PARAM_STR);
                         $result = $stmt->execute();
-                        
+
                         if ($result) {
                             $sql = "SELECT id, username, password, account_status, user_type FROM users ";
                             $sql .= "WHERE email = ?";

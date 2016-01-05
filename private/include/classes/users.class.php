@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/29/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -114,16 +114,16 @@ class Users {
                 $tableBody .= "<span>End User</span>";
                 $tableBody .= "<select id='users-popup-window-user-user_type'>";
                 $tableBody .= "<option value='0' selected>End User</option>";
-                $tableBody .= "<option value='1'>Admin</option>";
+                $tableBody .= "<option value='2'>Admin</option>";
                 $tableBody .= "</select>";
             } else {
                 $tableBody .= "<span>Admin</span>";
                 $tableBody .= "<select id='users-popup-window-user-user_type'>";
                 $tableBody .= "<option value='0'>End User</option>";
-                $tableBody .= "<option value='1' selected>Admin</option>";
+                $tableBody .= "<option value='2' selected>Admin</option>";
                 $tableBody .= "</select>";
             }
-            $tableBody .= "</td>";            
+            $tableBody .= "</td>";       
             
             $tableBody .= "</tr>";
         }

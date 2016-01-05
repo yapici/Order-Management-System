@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -34,6 +34,7 @@ class ItemDetails {
 
     private $Database;
     private $Functions;
+    private $Email;
     private $Vendors;
 
     /**
@@ -41,10 +42,11 @@ class ItemDetails {
      * @param Functions $functions
      * @param Vendors $vendors
      */
-    function __construct($database, $functions, $vendors) {
+    function __construct($database, $functions, $vendors, $email) {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Vendors = $vendors;
+        $this->Email = $email;
     }
 
     public function getVendors() {
@@ -153,6 +155,11 @@ class ItemDetails {
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
 
+        $statusChanged = true;
+        if ($status == 'no_change') {
+            $statusChanged = false;
+        }
+
         // Inserting the information to the database
         $sql = "UPDATE orders SET ";
         $sql .= "description = :description, ";
@@ -166,9 +173,11 @@ class ItemDetails {
         $sql .= "cost_center = :cost_center, ";
         $sql .= "project = :project, ";
         $sql .= "comments = :comments, ";
-        $sql .= "status = :status, ";
+        if ($statusChanged) {
+            $sql .= "status = :status, ";
+        }
         $sql .= "ordered = :ordered, ";
-        if ($status == 'Ordered') {
+        if ($statusChanged && $status == 'Ordered') {
             $sql .= "ordered_date = :ordered_date, ";
             $sql .= "ordered_by_user_id = :ordered_by_user_id, ";
             $sql .= "ordered_by_username = :ordered_by_username, ";
@@ -193,14 +202,16 @@ class ItemDetails {
         $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
         $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
         $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
-        $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+        if ($statusChanged) {
+            $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+        }
         $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
         $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
-        if ($status == 'Ordered') {
+        if ($statusChanged && $status == 'Ordered') {
             $stmt->bindValue(':ordered', "1", PDO::PARAM_STR);
             $stmt->bindValue(':ordered_date', $currentDate, PDO::PARAM_STR);
             $stmt->bindValue(':ordered_by_user_id', $userId, PDO::PARAM_STR);
@@ -210,6 +221,25 @@ class ItemDetails {
         }
 
         return $stmt->execute();
+    }
+
+    public function sendStatusChangeEmail($orderId, $status) {
+        $sql = "SELECT o.requested_by_username, o.description, u.email FROM orders o JOIN users u ON o.requested_by_id = u.id WHERE o.id = :orderId";
+        $stmt = $this->Database->prepare($sql);
+
+        $stmt->bindValue(':orderId', $orderId, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $sanitizedArray = $this->Functions->sanitizeArray($stmt->fetch(PDO::FETCH_ASSOC));
+
+        $userFirstName = $this->Functions->getUserFirstName($sanitizedArray['requested_by_username']);
+        $userEmail = $sanitizedArray['email'];
+
+        $itemDescription = $sanitizedArray['description'];
+        $subject = "OMS Notification: Order Status Change";
+        $messageBody = "<p>The status for '$itemDescription' was updated to '$status'.</p>";
+
+        $this->Email->sendEmail($userEmail, $userFirstName, $subject, $messageBody);
     }
 
 }

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -49,7 +49,7 @@ $Vendors = new Vendors($Database, $Functions);
 $CostCenters = new CostCenters($Database, $Functions);
 
 /** @var ItemDetails $ItemDetails */
-$ItemDetails = new ItemDetails($Database, $Functions, $Vendors);
+$ItemDetails = new ItemDetails($Database, $Functions, $Vendors, $Email);
 
 /** @var Orders $Orders */
 $Orders = new Orders($Database, $Functions, $Admin);
@@ -59,4 +59,7 @@ $Projects = new Projects($Database, $Functions);
 
 /** @var Users $Users */
 $Users = new Users($Database, $Functions);
+
+/** @var Purchasers $Purchasers */
+$Purchasers = new Purchasers($Database, $Functions);
 

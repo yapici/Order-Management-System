@@ -1,14 +1,15 @@
 <?php
+
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 10/19/2015                                                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Created on 01/03/2016                                                                 */
 /* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -28,13 +29,62 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
+
+class Purchasers {
+
+    private $Database;
+    private $Functions;
+
+    /** @var array $purchasersArray */
+    public $purchasersArray = array();
+
+    /**
+     * @param Database $database
+     * @param Functions $functions
+     */
+    function __construct($database, $functions) {
+        $this->Database = $database;
+        $this->Functions = $functions;
+        $this->populateArray();
+    }
+
+    private function populateArray() {
+        $sql = "SELECT id, username, email FROM users WHERE user_type = :user_type ";
+        $stmt = $this->Database->prepare($sql);
+        $stmt->bindValue(':user_type', Constants::USER_TYPE_PURCHASING_PERSON, PDO::PARAM_STR);
+        $stmt->execute();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $sanitizedArray = $this->Functions->sanitizeArray($row);
+            array_push($this->purchasersArray, $sanitizedArray);
+        }
+    }
+
+    /**
+     * @return array $purchasersArray
+     */
+    public function getPurchasersArray() {
+        return $this->purchasersArray;
+    }
+    
+    /**
+     * @return boolean Returns true if the logged in user is a purchasing person
+     */
+    public function isPuchaser() {
+        $userId = $_SESSION['id'];
+        $purchasersArray = $this->purchasersArray;
+        
+        $isPurchaser = false;
+        
+        foreach ($purchasersArray as $purchaser) {
+            if ($purchaser['id'] == $userId) {
+                $isPurchaser = true;
+            }
+        }
+        
+        return $isPurchaser;
+    }
+
+}
 ?>
-
-<div class='header'>
-    <a href="/"><img id='header-logo' src='images/logo.png'></a>
-    <h2>Order Management System</h2>
-    <span id='version-span'>Version 1.0.0.0</span>
-</div>
-
 
 

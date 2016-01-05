@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2015                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -32,12 +32,12 @@
 
 // Opening the json file that holds the file paths and file modification dates
 $string = file_get_contents(BUILD_PATH . 'files.json');
-$json_a = json_decode($string, true);
+$jsonArray = json_decode($string, true);
 
 // Putting the values into a local array
 $jsonFileArray = array();
-foreach ($json_a as $person_name => $person_a) {
-    $jsonFileArray[$person_name] = $person_a;
+foreach ($jsonArray as $filePath => $modifiedDate) {
+    $jsonFileArray[$filePath] = $modifiedDate;
 }
 
 // Iterating through the directories and putting the file paths and modification dates into a local array
@@ -71,8 +71,7 @@ foreach ($recursive_iterator as $file) {
 }
 
 // Checking if there are any files that are modified/created/deleted
-if (!empty(array_diff($jsonFileArray, $filesArray)) ||
-        !empty(array_diff($filesArray, $jsonFileArray))) {
+if ($jsonFileArray != $filesArray) {
     $file = BUILD_PATH . "build";
     file_put_contents($file, file_get_contents($file) + 1);
 }

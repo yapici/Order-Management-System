@@ -9,7 +9,10 @@ RewriteRule ^[^/]+/([^.]+\.(?:js|css|jpe?g|png|gif))$ /$1 [L,R=301,NC]
 RewriteRule ^$ index.php [QSA,L]
 RewriteRule ^([a-zA-Z_]+)?$ $1.php [QSA,L]
 RewriteRule ^download/(.*)$ download.php?file=$1 [L]
+RewriteRule ^forgot-password forgot-password.php [L]
 RewriteRule ^activation/([^/]+)/([^/]+)/?$ activation.php?activation_code=$1&email=$2 [L]
+RewriteRule ^reset-password/([^/]+)/([^/]+)/?$ reset-password.php?code=$1&email=$2 [L]
+RewriteRule ^forgot-password forgot-password.php [L]
 
 #Redirecting the 404s to homepage
 ErrorDocument 404 /

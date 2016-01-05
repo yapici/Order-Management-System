@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -59,6 +59,7 @@ if ($Session->isSessionValid()) {
             <div><a class="button" onclick="registerUser()">Submit</a></div>
         </div>
         <div><a class='text-only-button' href="/">Already have an account? Log in here</a></div>
+        <div><a class='text-only-button' href="/forgot-password">Forgot password?</a></div>
         <div class="error-div" id="register-error-div"></div>
     </body>
 </html>

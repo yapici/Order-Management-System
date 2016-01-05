@@ -152,11 +152,11 @@ function addNewItem() {
     var description = encodeURIComponent($("#add-new-item-description").val());
     var quantity = encodeURIComponent($("#add-new-item-quantity").val());
     var uom = encodeURIComponent($("#add-new-item-uom").val());
-    var vendor = encodeURIComponent($("#add-new-item-vendor").val());
+    var vendor = $("#add-new-item-vendor").val();
     var catalog_no = encodeURIComponent($("#add-new-item-catalog-no").val());
     var price = encodeURIComponent($("#add-new-item-price").val());
     var cost_center = encodeURIComponent($("#add-new-item-cost-center").val());
-    var project = encodeURIComponent($("#add-new-item-project").val());
+    var project = $("#add-new-item-project").val();
     var comments = encodeURIComponent($("#add-new-item-comments").val());
     var date_needed = encodeURIComponent($("#add-new-item-date-needed").val());
     var weblink = encodeURIComponent($("#add-new-item-weblink").val());
@@ -198,7 +198,7 @@ function addNewItem() {
             data: "description=" + description +
                     "&quantity=" + quantity +
                     "&uom=" + uom +
-                    "&vendor=" + vendor +
+                    "&vendor=" + encodeURIComponent(vendor) +
                     "&new_vendor_name=" + new_vendor_name +
                     "&new_vendor_phone=" + new_vendor_phone +
                     "&new_vendor_website=" + new_vendor_website +
@@ -206,7 +206,7 @@ function addNewItem() {
                     "&catalog_no=" + catalog_no +
                     "&price=" + price +
                     "&cost_center=" + cost_center +
-                    "&project=" + project +
+                    "&project=" + encodeURIComponent(project) +
                     "&date_needed=" + date_needed +
                     "&weblink=" + weblink +
                     "&comments=" + comments,

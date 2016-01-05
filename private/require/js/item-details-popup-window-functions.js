@@ -1,3 +1,5 @@
+var initial_order_status = '';
+
 function prepareItemDetailsPopupWindowInputs(
         description,
         quantity,
@@ -55,6 +57,8 @@ function toggleItemDetailsPopupInputFields(showHide) {
         $("#item-details-popup-window-edit-icon").fadeOut();
         $("#item-details-popup-window-save-icon").fadeIn();
         $("#item-details-popup-window-cancel-icon").fadeIn();
+
+        initial_order_status = $("#item-details-popup-window-status").val();
     } else if (showHide === "hide") {
         hideEditFields();
         updateOrderDetails();
@@ -94,6 +98,10 @@ function updateOrderDetails() {
     error_div.html("");
     error_div.html('&nbsp;');
     error_div.css('color', '#cc0000');
+
+    if (status === initial_order_status) {
+        status = 'no_change';
+    }
 
     item_details_popup_window.css('z-index', '9');
     showProgressCircle();
@@ -139,7 +147,9 @@ function updateOrderDetails() {
                 $("#popup-item-cost-center").html(json_data.cost_center_name);
                 $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(comments);
-                $("#popup-item-status").html(status);
+                if (status !== 'no_change') {
+                    $("#popup-item-status").html(status);
+                }
                 $("#popup-item-invoice-no").html(invoice_no);
                 $("#popup-item-vendor-order-no").html(vendor_order_no);
             } else if (json_data.status === "no_session") {

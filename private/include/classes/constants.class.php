@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/03/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -34,9 +34,9 @@ final class Constants {
 
     // Database details
     const DB_SERVER = 'localhost';
-    const DB_USER = 'order_user';
+    const DB_USER = 'oms_user';
     const DB_PASS = 'ka8*Q5(8Tku.hBs';
-    const DB_NAME = 'orderings';
+    const DB_NAME = 'oms_database';
     
     // User types
     const USER_TYPE_END_USER = 0;
@@ -54,8 +54,8 @@ final class Constants {
     const ORDER_PLACED = 1;
     
     // Domain name
-    const DOMAIN_NAME = 'hireforall.com';
-    const DOMAIN_NAME_HTTP = 'http://hireforall.com';
+    const DOMAIN_NAME = 'oms.petchum.com';
+    const DOMAIN_NAME_HTTP = 'http://oms.petchum.com';
 
     private function __construct() {
         throw new Exception("Can't get an instance of Constants");
