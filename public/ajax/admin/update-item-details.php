@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 01/03/2016                                                           */
+/* Last modified on 01/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -39,28 +39,28 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     } else {
         // Getting the parameters passed through AJAX
         $sanitizedPostArray = $Functions->sanitizePostedVariables();
-        $costCenterId = $sanitizedPostArray['cost_center'];
-        $projectId = $sanitizedPostArray['project'];
-        $orderId = trim(substr($sanitizedPostArray['order_id'], 5));
-        $status = $sanitizedPostArray['status'];
+        $postedCostCenterId = $sanitizedPostArray['cost_center'];
+        $postedProjectId = $sanitizedPostArray['project'];
+        $postedOrderId = trim(substr($sanitizedPostArray['order_id'], 5));
+        $postedStatus = $sanitizedPostArray['status'];
 
         if ($ItemDetails->updateItemDetails($sanitizedPostArray)) {
             
-            if ($status == 'Ordered') {
-                $ItemDetails->sendStatusChangeEmail($orderId, 'Ordered');
-            } else if ($status == 'Backordered') {
-                $ItemDetails->sendStatusChangeEmail($orderId, 'Backordered');
-            } else if ($status == 'Delivered') {
-                $ItemDetails->sendStatusChangeEmail($orderId, 'Delivered');
+            if ($postedStatus == 'Ordered') {
+                $ItemDetails->sendStatusChangeEmail($postedOrderId, 'Ordered');
+            } else if ($postedStatus == 'Backordered') {
+                $ItemDetails->sendStatusChangeEmail($postedOrderId, 'Backordered');
+            } else if ($postedStatus == 'Delivered') {
+                $ItemDetails->sendStatusChangeEmail($postedOrderId, 'Delivered');
             }
             
             ob_start();
             require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
             $jsonResponse['html_tbody'] = ob_get_clean();
             $jsonResponse['html_pagination'] = $pagination;
-            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$costCenterId]['name'];
+            $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$postedCostCenterId]['name'];
             
-            $project = $Projects->getProjectsArray()[$projectId];
+            $project = $Projects->getProjectsArray()[$postedProjectId];
             $jsonResponse['project'] = $project['name'] . ' / ' . $project['number'];
             
             $jsonResponse['status'] = "success";

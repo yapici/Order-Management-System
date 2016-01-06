@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 01/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -109,7 +109,6 @@ if (!$Session->isSessionValid()) {
                             <td onclick='sortByColumn($(this))'>Description <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
-                            <td onclick='sortByColumn($(this))'>Price <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Requested By <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>
                         <?php } ?>

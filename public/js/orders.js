@@ -397,7 +397,7 @@ function datepickerFunctions() {
     $(function () {
         $(document).on('focus', '.datepicker', function () {
             $(this).datepicker({
-                dateFormat: 'mm-dd-yy',
+                dateFormat: 'dd-M-yy',
                 onSelect: function (dateText) {
                     var input = $(this);
                     input.css('color', '#1C4D6F');

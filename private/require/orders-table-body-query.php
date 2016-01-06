@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/05/2016                                                           */
+/* Last modified on 01/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -117,7 +117,6 @@ if (!empty($ordersArray)) {
             echo "<td title='$description'>" . $description . "</td>";
             echo "<td title='$vendorName'>" . $vendorName . "</td>";
             echo "<td title='$catalogNo'>" . $catalogNo . "</td>";
-            echo "<td title='$$price'>$" . $price . "</td>";
             echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
             echo "<td title='$status'>" . $status . "</td>";
         }
