@@ -1,15 +1,15 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/29/2015                                                                 */
-/* Last modified on 01/03/2016                                                           */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -90,7 +90,7 @@ class Users {
             $userType = $user['user_type'];
 
             $tableBody .= "<tr id='user-$userId'>";
-            $tableBody .= "<td title='$userEmail'><div>$userEmail</div></td>";
+            $tableBody .= "<td title='$userEmail'><a href='mailto:$userEmail'>$userEmail</a></td>";
             $tableBody .= "<td title='$userPhone'><span>$userPhone</span><input id='users-popup-window-user-phone' value='$userPhone' type='text'/></td>";
             
             $tableBody .= "<td title='Account Status'>";

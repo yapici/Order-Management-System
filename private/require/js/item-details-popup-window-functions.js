@@ -48,12 +48,6 @@ function prepareItemDetailsPopupWindowInputs(
     $("#item-details-popup-window-status option:contains('" + status + "')").prop('selected', true);
 }
 
-function decodeEntities(encodedString) {
-    var textArea = document.createElement('textarea');
-    textArea.innerHTML = encodedString;
-    return textArea.value;
-}
-
 function toggleItemDetailsPopupInputFields(showHide) {
     if (showHide === "show") {
         $(".item-details-input-holder-td input").show();
@@ -136,11 +130,12 @@ function updateOrderDetails() {
         success: function (json_data) {
             if (json_data.status === 'success') {
                 $('#orders-table tbody').html(json_data.html_tbody);
-                $("#popup-item-description").html(description);
-                $("#popup-item-quantity").html(quantity);
-                $("#popup-item-uom").html(uom);
-                $("#popup-item-vendor").html(vendor_name);
-                $("#popup-item-catalog-no").html(catalog_no);
+                $("#popup-item-description").html(json_data.description);
+                $("#popup-item-quantity").html(json_data.quantity);
+                $("#popup-item-uom").html(json_data.uom);
+                $("#popup-item-vendor").html(json_data.vendor_name);
+                $("#popup-item-catalog-no").html(json_data.catalog_no);
+                weblink = json_data.weblink;
                 if (weblink !== '') {
                     if (!/^https?:\/\//i.test(weblink)) {
                         weblink = 'http://' + weblink;
@@ -150,16 +145,15 @@ function updateOrderDetails() {
                 } else {
                     $("#popup-item-weblink").html('');
                 }
-                $("#popup-item-weblink").html(weblink);
-                $("#popup-item-price").html(price);
+                $("#popup-item-price").html(json_data.price);
                 $("#popup-item-cost-center").html(json_data.cost_center_name);
                 $("#popup-item-project").html(json_data.project);
-                $("#popup-item-comments").html(comments);
+                $("#popup-item-comments").html(json_data.comments);
                 if (status !== 'no_change') {
                     $("#popup-item-status").html(status);
                 }
-                $("#popup-item-invoice-no").html(invoice_no);
-                $("#popup-item-vendor-order-no").html(vendor_order_no);
+                $("#popup-item-invoice-no").html(json_data.invoice_no);
+                $("#popup-item-vendor-order-no").html(json_data.vendor_order_no);
             } else if (json_data.status === "no_session") {
                 showLoginPopupWindow();
             } else if (json_data.status === "unauthorized_access") {

@@ -1,15 +1,15 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -44,6 +44,9 @@ class Email {
     /** @var string Domain name */
     private static $domain = Constants::DOMAIN_NAME;
 
+    /** @var string Domain name */
+    private static $domainEmailExt = Constants::DOMAIN_EMAIL_EXT;
+
     /** @var string Noreply e-mail adress */
     private static $fromEmailAdress;
 
@@ -61,8 +64,8 @@ class Email {
 
         self::$emailHtmlBodyFooter = "<p style='color: #444444; font-size: 0.9em;'><i>This is an automatically generated email. Please do not reply to this email.</i></p>";
         self::$emailHtmlBodyFooter .= "</div></div></body></html>";
-        
-        self::$fromEmailAdress = "noreply@" . self::$domain;
+
+        self::$fromEmailAdress = "noreply@" . self::$domainEmailExt;
     }
 
     /**
@@ -73,16 +76,28 @@ class Email {
      * @return boolean The result of PHP mail send
      */
     function sendEmail($email, $username, $subject, $messageBody) {
-        $mailHeaders = 'MIME-Version: 1.0' . "\r\n";
-        $mailHeaders .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $mailHeaders .= "From:\"Order Management System\" <" . self::$fromEmailAdress . ">";
+        $Mail = new PHPMailer;
+
+        $Mail->isSMTP();
+        $Mail->SMTPAuth = true;
+        $Mail->SMTPSecure = 'tls';
+        $Mail->Host = "smtp.gmail.com";
+        $Mail->Port = 587;
+        $Mail->IsHTML(true);
+        $Mail->Username = "username@gmail.com";
+        $Mail->Password = "password";
+
+        $Mail->setFrom(self::$fromEmailAdress, "Order Management System");
+        $Mail->addAddress($email);
+        $Mail->addBCC(Constants::WEBMASTER_EMAIL);
+        $Mail->isHTML(true);
 
         if ($username == "") {
             $username = 'Hi';
         } else {
             $username = 'Hi ' . $username;
         }
-        
+
         $message = self::$emailHtmlBodyHeader;
         $message .= "<h3 align='left' style='color: #0093d0'>$username,</h3>";
         $message .= "<div align='left' style='padding-bottom: 20px;'>";
@@ -91,12 +106,16 @@ class Email {
         $message .= "</div>";
         $message .= self::$emailHtmlBodyFooter;
 
-        if (mail($email, $subject, $message, $mailHeaders)) {
+        $Mail->Subject = $subject;
+        $Mail->Body = $message;
+
+        if ($Mail->send()) {
             return true;
         } else {
             return false;
         }
     }
+
 }
 ?>
 

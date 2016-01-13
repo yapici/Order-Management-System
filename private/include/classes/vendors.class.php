@@ -1,7 +1,7 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
 /* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
@@ -9,7 +9,7 @@
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -56,9 +56,8 @@ class Vendors {
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $sanitizedArray = $this->Functions->sanitizeArray($row);
-            $this->vendorsArray[$sanitizedArray['id']] = $sanitizedArray;
-            $this->vendorIdsArray[$sanitizedArray['name']] = $sanitizedArray['id'];
+            $this->vendorsArray[$row['id']] = $row;
+            $this->vendorIdsArray[$row['name']] = $row['id'];
         }
     }
 

@@ -2,19 +2,19 @@ $(document).ready(function() {
     var wasTrailingTextAdded = false;
     $("#email").click(function() {
         var currentValue = $(this).val();
-        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
         }
 
-        if (currentValue.indexOf('@example.com') < 0 && currentValue !== "Example E-mail Address") {
-            $(this).val(currentValue + "@example.com");
+        if (currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0 && currentValue !== "E-mail Address") {
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             wasTrailingTextAdded = true;
         }
         if (!wasTrailingTextAdded) {
             $(this)[0].setSelectionRange(0, 0);
         }
-        if (currentValue === "@example.com" || currentValue === "" || currentValue === "Example E-mail Address") {
-            $(this).val('@example.com');
+        if (currentValue === DOMAIN_EMAIL_EXT || currentValue === "" || currentValue === "E-mail Address") {
+            $(this).val(DOMAIN_EMAIL_EXT);
             $(this)[0].setSelectionRange(0, 0);
         }
     });
@@ -24,18 +24,18 @@ $(document).ready(function() {
         error_div.html('&nbsp;');
         var currentValue = $(this).val();
         var trimmedValue = currentValue.substring(0, currentValue.indexOf('@'));
-        if (currentValue.indexOf('@') < 0 && currentValue !== "Example E-mail Address" && currentValue !== "") {
-            $(this).val(currentValue + "@example.com");
+        if (currentValue.indexOf('@') < 0 && currentValue !== "E-mail Address" && currentValue !== "") {
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             $(this).css('color', '#1C4D6F');
-        } else if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+        } else if (currentValue.indexOf('@') !== -1 && currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
-            $(this).val(currentValue + "@example.com");
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             $(this).css('color', '#1C4D6F');
-        } else if (currentValue.indexOf('@example.com') !== 0 && trimmedValue !== "") {
+        } else if (currentValue.indexOf(DOMAIN_EMAIL_EXT) !== 0 && trimmedValue !== "") {
             $(this).css('color', '#1C4D6F');
         }
 
-        if ($(this).val() === "@example.com") {
+        if ($(this).val() === DOMAIN_EMAIL_EXT) {
             $(this).addClass('placeholder');
             $(this).val($(this).attr('placeholder'));
             $(this).css('color', '#aaaaaa');
@@ -94,7 +94,7 @@ function registerUser() {
                 if (html_response.trim() === "success") {
                     error_div.html("An activation link has been sent to your e-mail address. Please activate your account by clicking the link.");
                 } else if (html_response.trim() === "invalid_domain_name") {
-                    error_div.html("Please use your 'example' email");
+                    error_div.html("Please use your '" + DOMAIN_BODY +"' email");
                 } else if (html_response.trim() === "invalid_email_address") {
                     error_div.html("Please enter a valid email address");
                 } else if (html_response.trim() === "already_exists") {

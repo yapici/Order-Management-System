@@ -2,18 +2,18 @@ $(document).ready(function() {
     var wasTrailingTextAdded = false;
     $("#email").click(function() {
         var currentValue = $(this).val();
-        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
         }
 
-        if (currentValue.indexOf('@example.com') < 0) {
-            $(this).val(currentValue + "@example.com");
+        if (currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             wasTrailingTextAdded = true;
         }
         if (!wasTrailingTextAdded) {
             $(this)[0].setSelectionRange(0, 0);
         }
-        if (currentValue === "@example.com" || currentValue === "E-mail Address" || currentValue === "") {
+        if (currentValue === DOMAIN_EMAIL_EXT || currentValue === "E-mail Address" || currentValue === "") {
             $(this)[0].setSelectionRange(0, 0);
         }
     });
@@ -22,14 +22,14 @@ $(document).ready(function() {
         var error_div = $('#forgot-password-error-div');
         error_div.html('&nbsp;');
         var currentValue = $(this).val();
-        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
-            $(this).val(currentValue + "@example.com");
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
         } else if (currentValue.indexOf('@') === -1 && currentValue !== "E-mail Address" && currentValue !== "") {
-            $(this).val(currentValue + "@example.com");
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
         }
 
-        if ($(this).val() === "@example.com") {
+        if ($(this).val() === DOMAIN_EMAIL_EXT) {
             $(this).addClass('placeholder');
             $(this).val($(this).attr('placeholder'));
             $(this).css('color', '#aaaaaa');

@@ -205,12 +205,14 @@ function addNewVendor() {
         $.ajax({
             url: "../ajax/admin/add-new-vendor.php",
             type: "POST",
-            data: "name=" + vendor_name +
-                    "&phone=" + vendor_phone +
-                    "&website=" + vendor_website +
-                    "&address=" + vendor_address +
-                    "&contact_person=" + vendor_contact_person +
-                    "&account_number=" + vendor_account_no,
+            data: {
+                name: vendor_name,
+                phone: vendor_phone,
+                website: vendor_website,
+                address: vendor_address,
+                contact_person: vendor_contact_person,
+                account_number: vendor_account_no
+            },
             cache: false,
             dataType: "json",
             success: function (json_data) {

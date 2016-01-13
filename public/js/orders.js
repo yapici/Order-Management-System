@@ -1,4 +1,8 @@
+var onFocusTableUpdateFlag = true;
+var setIntervalForRefreshFlag;
+
 $(function () {
+    setIntervalForRefreshFlag = true;
     $("#orders-search-input").keyup(function (event) {
         if (event.keyCode === 13) {
             searchAction('search');
@@ -15,7 +19,26 @@ $(function () {
     $("#add-new-item-popup-window").on('change', 'select', function () {
         showHideClearButton();
     });
+
+    setInterval(function () {
+        if (setIntervalForRefreshFlag) {
+            refreshOrdersTable();
+        }
+    }, 30000);
 });
+
+window.onfocus = function () {
+    if (onFocusTableUpdateFlag) {
+        refreshOrdersTable();
+        onFocusTableUpdateFlag = false;
+    }
+    setIntervalForRefreshFlag = true;
+};
+
+window.onblur = function () {
+    onFocusTableUpdateFlag = true;
+    setIntervalForRefreshFlag = false;
+};
 
 function showHideClearButton() {
     if ($("#add-new-item-popup-window input").filter(function () {
@@ -118,16 +141,16 @@ function showItemDetailsPopupWindow(
 
 function reorder() {
     $("#item-details-popup-window").fadeOut();
-    $("#add-new-item-description").val($("#popup-item-description").html());
-    $("#add-new-item-quantity").val($("#popup-item-quantity").html());
-    $("#add-new-item-uom").val($("#popup-item-uom").html());
+    $("#add-new-item-description").val(decodeEntities($("#popup-item-description").html()));
+    $("#add-new-item-quantity").val(decodeEntities($("#popup-item-quantity").html()));
+    $("#add-new-item-uom").val(decodeEntities($("#popup-item-uom").html()));
     $('#add-new-item-vendor option:contains("' + $("#popup-item-vendor").html() + '")').prop('selected', true);
-    $("#add-new-item-catalog-no").val($("#popup-item-catalog-no").html());
-    $("#add-new-item-price").val($("#popup-item-price").html().substring(1));
-    $("#add-new-item-weblink").val($($("#popup-item-weblink").html()).attr('href'));
+    $("#add-new-item-catalog-no").val(decodeEntities($("#popup-item-catalog-no").html()));
+    $("#add-new-item-price").val(decodeEntities($("#popup-item-price").html().substring(1)));
+    $("#add-new-item-weblink").val(decodeEntities($($("#popup-item-weblink").html()).attr('href')));
     $('#add-new-item-cost-center option:contains("' + $("#popup-item-cost-center").html() + '")').prop('selected', true);
     $('#add-new-item-project option:contains("' + $("#popup-item-project").html() + '")').prop('selected', true);
-    $("#add-new-item-comments").val($("#popup-item-comments").html());
+    $("#add-new-item-comments").val(decodeEntities($("#popup-item-comments").html()));
     showAddNewItemPopupWindow();
 }
 
@@ -484,19 +507,19 @@ function popupLoginWindowInputFunctions() {
     var wasTrailingTextAdded = false;
     $("#popup-login-email").click(function () {
         var currentValue = $(this).val();
-        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+        if (currentValue.indexOf('@') !== -1 && currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
         }
 
-        if (currentValue.indexOf('@example.com') < 0 && currentValue !== "Example E-mail Address") {
-            $(this).val(currentValue + "@example.com");
+        if (currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0 && currentValue !== "E-mail Address") {
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             wasTrailingTextAdded = true;
         }
         if (!wasTrailingTextAdded) {
             $(this)[0].setSelectionRange(0, 0);
         }
-        if (currentValue === "@example.com" || currentValue === "" || currentValue === "Example E-mail Address") {
-            $(this).val('@example.com');
+        if (currentValue === DOMAIN_EMAIL_EXT || currentValue === "" || currentValue === "E-mail Address") {
+            $(this).val(DOMAIN_EMAIL_EXT);
             $(this)[0].setSelectionRange(0, 0);
         }
     });
@@ -506,18 +529,18 @@ function popupLoginWindowInputFunctions() {
         error_div.html('&nbsp;');
         var currentValue = $(this).val();
         var trimmedValue = currentValue.substring(0, currentValue.indexOf('@'));
-        if (currentValue.indexOf('@') < 0 && currentValue !== "Example E-mail Address" && currentValue !== "") {
-            $(this).val(currentValue + "@example.com");
+        if (currentValue.indexOf('@') < 0 && currentValue !== "E-mail Address" && currentValue !== "") {
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             $(this).css('color', '#1C4D6F');
-        } else if (currentValue.indexOf('@') !== -1 && currentValue.indexOf('@example.com') < 0) {
+        } else if (currentValue.indexOf('@') !== -1 && currentValue.indexOf(DOMAIN_EMAIL_EXT) < 0) {
             currentValue = currentValue.substring(0, currentValue.indexOf('@'));
-            $(this).val(currentValue + "@example.com");
+            $(this).val(currentValue + DOMAIN_EMAIL_EXT);
             $(this).css('color', '#1C4D6F');
-        } else if (currentValue.indexOf('@example.com') !== 0 && trimmedValue !== "") {
+        } else if (currentValue.indexOf(DOMAIN_EMAIL_EXT) !== 0 && trimmedValue !== "") {
             $(this).css('color', '#1C4D6F');
         }
 
-        if ($(this).val() === "@example.com") {
+        if ($(this).val() === DOMAIN_EMAIL_EXT) {
             $(this).addClass('placeholder');
             $(this).val($(this).attr('placeholder'));
             $(this).css('color', '#aaaaaa');
@@ -564,7 +587,7 @@ function popupLoginUser() {
                         || html_response.trim() === "wrong_combination") {
                     error_div.html("Information you entered does not match with our records");
                 } else if (html_response.trim() === "invalid_domain_name") {
-                    error_div.html("Please use your 'example' email");
+                    error_div.html("Please use your '" + DOMAIN_BODY + "' email");
                 } else if (html_response.trim() === "invalid_email_address") {
                     error_div.html("Please enter a valid email address");
                 } else if (html_response.trim() === "no_activation") {
@@ -578,6 +601,21 @@ function popupLoginUser() {
             }
         });
     }
+}
+
+function refreshOrdersTable() {
+    $.ajax({
+        url: "ajax/refresh-orders-table.php",
+        type: "GET",
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+                $('#orders-table tbody').html(json_data.html_tbody);
+                $("#pagination-holder-div").html(json_data.html_pagination);
+            }
+        }
+    });
 }
 
 function showLoginPopupWindow() {

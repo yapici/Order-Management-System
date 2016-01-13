@@ -1,6 +1,6 @@
 <?php
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
 /* Last modified on 12/12/2015                                                           */
 /* ===================================================================================== */
@@ -8,7 +8,7 @@
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */

@@ -51,6 +51,11 @@
     border-left: 1px #cccccc solid;
 }
 
+#users-popup-window .admin-popup-window-table tr td:first-child {
+    white-space: nowrap;
+    text-align: left;
+}
+
 .admin-popup-window-table tbody tr td:last-child {
     border: 0px;
 }

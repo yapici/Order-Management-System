@@ -1,7 +1,7 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/23/2015                                                                 */
 /* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
@@ -9,7 +9,7 @@
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -38,6 +38,9 @@ class Projects {
     /** @var array $projectsArray */
     public $projectsArray;
 
+    /** @var array $activeProjectsArray */
+    public $activeProjectsArray;
+
     /**
      * @param Database $database
      * @param Functions $functions
@@ -55,6 +58,12 @@ class Projects {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $sanitizedArray = $this->Functions->sanitizeArray($row);
             $this->projectsArray[$sanitizedArray['id']] = $sanitizedArray;
+            $tempArray = array();
+            if ($sanitizedArray['active'] == '1') {
+                $tempArray['number'] = $sanitizedArray['number'];
+                $tempArray['id'] = $sanitizedArray['id'];
+                $this->activeProjectsArray[$sanitizedArray['name']] = $tempArray;
+            }
         }
     }
 
@@ -71,12 +80,11 @@ class Projects {
 
     public function populateProjectsList() {
         $html = '';
-        foreach ($this->projectsArray as $projectId => $project) {
-            if ($project['active'] == '1') {
-                $projectName = $project['name'];
-                $projectNumber = $project['number'];
-                $html .= "<option value='$projectId'>$projectName / $projectNumber</option>";
-            }
+        ksort($this->activeProjectsArray); // Sorting the projects by name
+        foreach ($this->activeProjectsArray as $name => $array) {
+            $number = $array['number'];
+            $id = $array['id'];
+            $html .= "<option value='$id'>$name / $number</option>";
         }
         echo $html;
     }
@@ -133,7 +141,7 @@ class Projects {
         $projectId = $projectDetailsArray['project_id'];
         $fieldName = $projectDetailsArray['field_name'];
         $value = $projectDetailsArray['value'];
-        
+
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
@@ -158,4 +166,5 @@ class Projects {
     }
 
 }
+
 ?>

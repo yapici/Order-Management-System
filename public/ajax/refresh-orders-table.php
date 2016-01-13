@@ -2,8 +2,8 @@
 
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/28/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Created on 01/11/2016                                                                 */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -29,38 +29,23 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
+
+require('../../private/include/include.php');
+// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
+if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+    if (!$Session->isSessionValid()) {
+        $jsonResponse['status'] = "no_session";
+    } else {
+        ob_start();
+        require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
+        $jsonResponse['html_tbody'] = ob_get_clean();
+        $jsonResponse['html_pagination'] = $pagination;
+        $jsonResponse['status'] = "success";
+    }
+    echo json_encode($jsonResponse);
+} else {
+    $Functions->phpRedirect('');
+}
 ?>
 
-<div class="popup-window admin-popup-window" id="cost-centers-popup-window">
-    <h1>Cost Centers</h1>
-    <a class="popup-window-cancel-button" onclick="hidePopupWindows();">&#10006;</a>
-    <table class="admin-popup-window-table" id="cost-centers-popup-window-cost-centers-table">
-        <thead>
-            <tr>
-                <td>Id</td>
-                <td>Cost Center Name</td>
-                <td>Active</td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $CostCenters->populateCostCentersTable();
-            ?>
-        </tbody>
-        <tfoot>
-            <tr class="empty-row">
-                <td colspan="9">&nbsp;</td>
-            </tr>
-            <tr class="add-new-item-title-tr">
-                <td colspan="9">Add New Cost Center</td>
-            </tr>
-            <tr class="add-new-item-input-wrapper-tr">
-                <td><b>+</b></td>
-                <td><input id="add-new-cost-center-name" type="text" placeholder="Name"/></td>
-                <td colspan="3" class="add-new-item-button-holder-td"><a class="button" onclick="addNewCostCenter();">Add Cost Center</a></td>
-            </tr>
-        </tfoot>
-    </table>
-    <div class="error-div" id="cost-centers-popup-window-error-div"></div>
-    <a class="button admin-popup-window-close-button" onclick="hidePopupWindows()">Close</a>
-</div>
+

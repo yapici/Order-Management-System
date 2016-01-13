@@ -1,7 +1,7 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
 /* Last modified on 12/31/2015                                                           */
 /* ===================================================================================== */
@@ -9,7 +9,7 @@
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -44,7 +44,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $domain = $Functions->getDomainFromEmail($email);
 
-        if ($domain == 'example.com') {
+        if ($domain == Constants::DOMAIN_EMAIL_EXT) {
             // Checking if the email already is in use
             $sql = "SELECT * FROM users ";
             $sql .= "WHERE email = ? ";

@@ -1,15 +1,15 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 01/05/2016                                                           */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -218,9 +218,12 @@ class Orders {
                 $_SESSION['sort_column_name'] != "") {
             if ($_SESSION['sort_column_name'] == "account_number") {
                 $sortSqlString = " ORDER BY v.account_number";
+            } else if ($_SESSION['sort_column_name'] == "vendor") {
+                $sortSqlString = " ORDER BY v.name";
             } else {
                 $sortSqlString = " ORDER BY " . $_SESSION['sort_column_name'];
             }
+            
             if ($_SESSION['sort_up_or_down'] == 'up') {
                 $sortSqlString .= " ASC ";
             } else {

@@ -1,15 +1,15 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 01/06/2016                                                           */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -59,6 +59,13 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             $jsonResponse['html_tbody'] = ob_get_clean();
             $jsonResponse['html_pagination'] = $pagination;
             $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$postedCostCenterId]['name'];
+            $jsonResponse['quantity'] = $sanitizedPostArray['quantity'];
+            $jsonResponse['catalog_no'] = $sanitizedPostArray['catalog_no'];
+            $jsonResponse['uom'] = $sanitizedPostArray['uom'];
+            $jsonResponse['weblink'] = $sanitizedPostArray['weblink'];
+            $jsonResponse['comments'] = $sanitizedPostArray['comments'];
+            $jsonResponse['invoice_no'] = $sanitizedPostArray['invoice_no'];
+            $jsonResponse['vendor_order_no'] = $sanitizedPostArray['vendor_order_no'];
             
             $project = $Projects->getProjectsArray()[$postedProjectId];
             $jsonResponse['project'] = $project['name'] . ' / ' . $project['number'];

@@ -1,14 +1,14 @@
 <?php
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -175,6 +175,7 @@ if ($Admin->isAdmin()) {
                                 echo '<option>Ordered</option>';
                                 echo '<option>Delivered</option>';
                                 echo '<option>Backordered</option>';
+                                echo '<option>Canceled</option>';
                                 echo '</select>';
                             }
                             ?>

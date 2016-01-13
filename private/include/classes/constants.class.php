@@ -1,15 +1,15 @@
 <?php
 
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 01/03/2016                                                           */
+/* Last modified on 01/11/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -54,8 +54,12 @@ final class Constants {
     const ORDER_PLACED = 1;
     
     // Domain name
-    const DOMAIN_NAME = 'oms.petchum.com';
-    const DOMAIN_NAME_HTTP = 'http://oms.petchum.com';
+    const DOMAIN_NAME = 'www.example.com';
+    const DOMAIN_NAME_HTTP = 'http://www.example.com';
+    const DOMAIN_EMAIL_EXT = 'example.com';
+    
+    // Webmaster E-mail
+    const WEBMASTER_EMAIL = 'engin.yapici@example.com';
 
     private function __construct() {
         throw new Exception("Can't get an instance of Constants");

@@ -1,6 +1,6 @@
 <?php
 /* ===================================================================================== */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>                                  */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
 /* Last modified on 01/06/2016                                                           */
 /* ===================================================================================== */
@@ -8,7 +8,7 @@
 /* ===================================================================================== */
 /* The MIT License                                                                       */
 /*                                                                                       */
-/* Copyright 2015 Engin Yapici <engin.yapici@gmail.com>.                                 */
+/* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>.                                 */
 /*                                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining a copy          */
 /* of this software and associated documentation files (the "Software"), to deal         */
@@ -73,7 +73,7 @@ if (!$Session->isSessionValid()) {
                     echo "value='" . $_SESSION['search_keywords'] . "'";
                 }
                 ?>
-                       />
+                />
 
                 <a class='search-cancel-button' id='orders-search-cancel-button' <?php
                 if (!isset($_SESSION['search_keywords']) || $_SESSION['search_keywords'] == "" || $_SESSION['search_keywords'] == "Search") {
@@ -91,7 +91,7 @@ if (!$Session->isSessionValid()) {
                 echo 'style="display: none" ';
             }
             echo 'onclick="sortByColumn(\'\')">Reset Sort</a></div>';
-            ?>    
+            ?>
             <table id="orders-table">
                 <thead>
                     <tr>
