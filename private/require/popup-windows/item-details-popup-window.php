@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/11/2016                                                           */
+/* Last modified on 01/14/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -193,6 +193,13 @@ if ($Admin->isAdmin()) {
                         <td>
                             <span id="popup-item-status-ordered-by"></span>&nbsp;on&nbsp;
                             <span id="popup-item-status-ordered-date"></span>
+                        </td>
+                    </tr>
+                    <tr id='popup-item-status-delivered-tr'>
+                        <td>Delivered By:</td>
+                        <td>
+                            <span id="popup-item-status-delivered-by"></span>&nbsp;on&nbsp;
+                            <span id="popup-item-status-delivered-date"></span>
                         </td>
                     </tr>
                 </table>

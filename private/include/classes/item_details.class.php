@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 01/03/2016                                                           */
+/* Last modified on 01/14/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -174,13 +174,29 @@ class ItemDetails {
         $sql .= "project = :project, ";
         $sql .= "comments = :comments, ";
         if ($statusChanged) {
+            if ($status == 'Ordered') {
+                $sql .= "ordered = :ordered, ";
+                $sql .= "ordered_date = :ordered_date, ";
+                $sql .= "ordered_by_user_id = :ordered_by_user_id, ";
+                $sql .= "ordered_by_username = :ordered_by_username, ";
+            } else if ($status == 'Delivered') {
+                $sql .= "delivered = :delivered, ";
+                $sql .= "delivered_date = :delivered_date, ";
+                $sql .= "delivered_by_user_id = :delivered_by_user_id, ";
+                $sql .= "delivered_by_username = :delivered_by_username, ";
+            }
+
+            if ($status != 'Ordered' && $status != 'Delivered') {
+                $sql .= "ordered = :ordered, ";
+            }
+
+            if ($status != 'Delivered') {
+                $sql .= "delivered = :delivered, ";
+            }
             $sql .= "status = :status, ";
-        }
-        $sql .= "ordered = :ordered, ";
-        if ($statusChanged && $status == 'Ordered') {
-            $sql .= "ordered_date = :ordered_date, ";
-            $sql .= "ordered_by_user_id = :ordered_by_user_id, ";
-            $sql .= "ordered_by_username = :ordered_by_username, ";
+            $sql .= "status_updated_date = :status_updated_date, ";
+            $sql .= "status_updated_by_user_id = :status_updated_by_user_id, ";
+            $sql .= "status_updated_by_username = :status_updated_by_username, ";
         }
         $sql .= "invoice_no = :invoice_no, ";
         $sql .= "vendor_order_no = :vendor_order_no, ";
@@ -203,7 +219,29 @@ class ItemDetails {
         $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
         $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
         if ($statusChanged) {
+            if ($status == 'Ordered') {
+                $stmt->bindValue(':ordered', "1", PDO::PARAM_STR);
+                $stmt->bindValue(':ordered_date', $currentDate, PDO::PARAM_STR);
+                $stmt->bindValue(':ordered_by_user_id', $userId, PDO::PARAM_STR);
+                $stmt->bindValue(':ordered_by_username', $username, PDO::PARAM_STR);
+            } else if ($status == 'Delivered') {
+                $stmt->bindValue(':delivered', "1", PDO::PARAM_STR);
+                $stmt->bindValue(':delivered_date', $currentDate, PDO::PARAM_STR);
+                $stmt->bindValue(':delivered_by_user_id', $userId, PDO::PARAM_STR);
+                $stmt->bindValue(':delivered_by_username', $username, PDO::PARAM_STR);
+            }
+
+            if ($status != 'Ordered' && $status != 'Delivered') {
+                $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
+            }
+
+            if ($status != 'Delivered') {
+                $stmt->bindValue(':delivered', "0", PDO::PARAM_STR);
+            }
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+            $stmt->bindValue(':status_updated_by_user_id', $userId, PDO::PARAM_STR);
+            $stmt->bindValue(':status_updated_by_username', $username, PDO::PARAM_STR);
+            $stmt->bindValue(':status_updated_date', $currentDate, PDO::PARAM_STR);
         }
         $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
         $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
@@ -211,14 +249,6 @@ class ItemDetails {
         $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
         $stmt->bindValue(':order_id', $orderId, PDO::PARAM_STR);
-        if ($statusChanged && $status == 'Ordered') {
-            $stmt->bindValue(':ordered', "1", PDO::PARAM_STR);
-            $stmt->bindValue(':ordered_date', $currentDate, PDO::PARAM_STR);
-            $stmt->bindValue(':ordered_by_user_id', $userId, PDO::PARAM_STR);
-            $stmt->bindValue(':ordered_by_username', $username, PDO::PARAM_STR);
-        } else {
-            $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
-        }
 
         return $stmt->execute();
     }

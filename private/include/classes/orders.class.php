@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 01/11/2016                                                           */
+/* Last modified on 01/14/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -61,6 +61,9 @@ class Orders {
         'status_updated_by_username',
         'item_needed_by_date',
         'ordered_date',
+        'ordered_by_username',
+        'delivered_date',
+        'delivered_by_username',
         'requested_by_username'
     ];
 
@@ -138,6 +141,9 @@ class Orders {
         $sql .= $o . "ordered, ";
         $sql .= $o . "ordered_date, ";
         $sql .= $o . "ordered_by_username, ";
+        $sql .= $o . "delivered, ";
+        $sql .= $o . "delivered_date, ";
+        $sql .= $o . "delivered_by_username, ";
         if ($this->Admin->isAdmin()) {
             $sql .= $o . "vendor_order_no, ";
             $sql .= $o . "invoice_no, ";

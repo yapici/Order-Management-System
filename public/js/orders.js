@@ -82,7 +82,10 @@ function showItemDetailsPopupWindow(
         itemNeededByDate,
         ordered,
         orderedDate,
-        orderedByUsername) {
+        orderedByUsername,
+        delivered,
+        deliveredDate,
+        deliveredByUsername) {
     blockUI();
     $('.popup-error-div').html('');
 
@@ -118,6 +121,14 @@ function showItemDetailsPopupWindow(
         $("#popup-item-status-ordered-date").html(orderedDate);
     } else {
         $("#popup-item-status-ordered-tr").hide();
+    }
+
+    if (delivered === '1') {
+        $("#popup-item-status-delivered-tr").show();
+        $("#popup-item-status-delivered-by").html(deliveredByUsername);
+        $("#popup-item-status-delivered-date").html(deliveredDate);
+    } else {
+        $("#popup-item-status-delivered-tr").hide();
     }
 
     showProgressCircle();

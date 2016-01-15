@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 01/11/2016                                                           */
+/* Last modified on 01/14/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -59,6 +59,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             $jsonResponse['html_tbody'] = ob_get_clean();
             $jsonResponse['html_pagination'] = $pagination;
             $jsonResponse['cost_center_name'] = $CostCenters->getCostCentersArray()[$postedCostCenterId]['name'];
+            $jsonResponse['description'] = $sanitizedPostArray['description'];
             $jsonResponse['quantity'] = $sanitizedPostArray['quantity'];
             $jsonResponse['catalog_no'] = $sanitizedPostArray['catalog_no'];
             $jsonResponse['uom'] = $sanitizedPostArray['uom'];

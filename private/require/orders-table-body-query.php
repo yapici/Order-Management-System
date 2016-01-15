@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/06/2016                                                           */
+/* Last modified on 01/14/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -57,11 +57,18 @@ if (!empty($ordersArray)) {
         $statusUpdatedByUsername = $orderDetailsArray['status_updated_by_username'];
         $ordered = $orderDetailsArray['ordered'];
         $orderedDate = $orderDetailsArray['ordered_date'];
+        $orderedByUsername = $orderDetailsArray['ordered_by_username'];
+        $delivered = $orderDetailsArray['delivered'];
+        $deliveredDate = $orderDetailsArray['delivered_date'];
+        $deliveredByUsername = $orderDetailsArray['delivered_by_username'];
 
-        if ($orderedDate != '0000-00-00 00:00:00' || $orderedDate != '') {
+        if ($orderedDate != '0000-00-00 00:00:00' && $orderedDate != '') {
             $orderedDate = $Functions->convertMysqlDateToPhpDate($orderedDate);
         }
-        $orderedByUsername = $orderDetailsArray['ordered_by_username'];
+
+        if ($deliveredDate != '0000-00-00 00:00:00' && $deliveredDate != '') {
+            $deliveredDate = $Functions->convertMysqlDateToPhpDate($deliveredDate);
+        }
 
         if ($Admin->isAdmin()) {
             $vendorOrderNo = $orderDetailsArray['vendor_order_no'];
@@ -84,23 +91,24 @@ if (!empty($ordersArray)) {
 
         $popupWindowParamArray = array($itemId, $description, $quantity, $uom, $vendorName, $catalogNo,
             $price, $weblink, $costCenterName, $project, $comments, $requestedByUsername, $requestedDate,
-            $statusUpdatedByUsername, $statusUpdatedDate, $status, $itemNeededByDate, $ordered, $orderedDate
+            $statusUpdatedByUsername, $statusUpdatedDate, $status, $itemNeededByDate, $ordered, $orderedDate,
+            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername
         );
         echo "<tr onclick='showItemDetailsPopupWindow(";
         echoJsFunctionParams($popupWindowParamArray);
-        echo "\"" . $Functions->escapeQuotes($orderedByUsername) . "\");";
+        echo ");";
         if ($Admin->isAdmin()) {
-            $popupWindowAdminParamArray = array($itemId, $vendorAccountNo, $invoiceNo);
+            $popupWindowAdminParamArray = array($itemId, $vendorAccountNo, $invoiceNo, $vendorOrderNo);
             echo " showItemDetailsPopupWindowAdmin(";
             echoJsFunctionParams($popupWindowAdminParamArray);
-            echo "\"" . $Functions->escapeQuotes($vendorOrderNo) . "\");";
+            echo ");";
 
             $inputParamsArray = array($description, $quantity, $uom, $vendorName, $catalogNo,
-                $price, $weblink, $costCenterName, $project, $comments, $invoiceNo, $vendorOrderNo
+                $price, $weblink, $costCenterName, $project, $comments, $invoiceNo, $vendorOrderNo, $status
             );
             echo " prepareItemDetailsPopupWindowInputs(";
             echoJsFunctionParams($inputParamsArray);
-            echo "\"" . $Functions->escapeQuotes($status) . "\");";
+            echo ");";
         }
         echo "'>";
         if ($Admin->isAdmin()) {
@@ -108,7 +116,6 @@ if (!empty($ordersArray)) {
             echo "<td title=\"$description\">" . $description . "</td>";
             echo "<td title='$vendorName'>" . $vendorName . "</td>";
             echo "<td title='$catalogNo'>" . $catalogNo . "</td>";
-            echo "<td title='$vendorAccountNo'>" . $vendorAccountNo . "</td>";
             echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
             echo "<td title='$itemNeededByDate'>" . $itemNeededByDate . "</td>";
             echo "<td title='$status'>" . $status . "</td>";
@@ -126,9 +133,15 @@ if (!empty($ordersArray)) {
 
 function echoJsFunctionParams($paramArray) {
     global $Functions;
-
-    foreach ($paramArray as $param) {
-        echo "\"" . $Functions->escapeQuotes($param) . "\", ";
+    $totalNumberOfParams = count($paramArray);
+    $lastParam = $totalNumberOfParams - 1;
+    for ($i = 0; $i < $totalNumberOfParams; $i++) {
+        $param = $paramArray[$i];
+        if ($i == $lastParam) {
+            echo "\"" . $Functions->escapeQuotes($param) . "\"";
+        } else {
+            echo "\"" . $Functions->escapeQuotes($param) . "\", ";
+        }
     }
 }
 
