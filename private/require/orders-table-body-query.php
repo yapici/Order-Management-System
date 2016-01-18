@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/14/2016                                                           */
+/* Last modified on 01/18/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -113,17 +113,17 @@ if (!empty($ordersArray)) {
         echo "'>";
         if ($Admin->isAdmin()) {
             echo "<td title='$itemId'>" . $itemId . "</td>";
-            echo "<td title=\"$description\">" . $description . "</td>";
-            echo "<td title='$vendorName'>" . $vendorName . "</td>";
-            echo "<td title='$catalogNo'>" . $catalogNo . "</td>";
+            echo "<td title=\"$description\"><div>" . $description . "</div></td>";
+            echo "<td title='$vendorName'><div>" . $vendorName . "</div></td>";
+            echo "<td title='$catalogNo'><div>" . $catalogNo . "</div></td>";
             echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
             echo "<td title='$itemNeededByDate'>" . $itemNeededByDate . "</td>";
             echo "<td title='$status'>" . $status . "</td>";
         } else {
             echo "<td title='$itemId'>" . $itemId . "</td>";
-            echo "<td title='$description'>" . $description . "</td>";
-            echo "<td title='$vendorName'>" . $vendorName . "</td>";
-            echo "<td title='$catalogNo'>" . $catalogNo . "</td>";
+            echo "<td title='$description'><div>" . $description . "</div></td>";
+            echo "<td title='$vendorName'><div>" . $vendorName . "</div></td>";
+            echo "<td title='$catalogNo'><div>" . $catalogNo . "</div></td>";
             echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
             echo "<td title='$status'>" . $status . "</td>";
         }

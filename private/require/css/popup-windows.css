@@ -6,12 +6,15 @@
     padding-bottom: 40px;
 }
 
-.admin-popup-window-close-button {
+.admin-popup-window-close-button-holder {
     position: absolute;
-    display: inline-block;
+    width: 100%;
+    text-align: center;
     bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+.admin-popup-window-close-button {
+    display: inline-block;
     width: auto;
 }
 
@@ -72,6 +75,9 @@
 .admin-popup-window-table tbody tr td span {
     visibility: hidden;
     white-space: nowrap;
+    overflow: hidden;
+    max-width: 120px;
+    text-overflow: ellipsis;
 }
 
 .admin-popup-window-table tbody tr:nth-child(even) > td {

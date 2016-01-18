@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 01/14/2016                                                           */
+/* Last modified on 01/18/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -33,7 +33,7 @@
 <div class='header'>
     <a href="/"><img id='header-logo' src='images/logo.png'></a>
     <h2>Order Management System</h2>
-    <span id='version-span'>Version 1.1.0.111</span>
+    <span id='version-span'>Version 1.1.1.146</span>
 </div>
 
 

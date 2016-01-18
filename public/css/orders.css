@@ -23,7 +23,15 @@
     padding: 6px 10px 6px 6px;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 160px;
+    max-width: 50vh;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+#orders-table tr td div {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 50vh;
     text-overflow: ellipsis;
     cursor: pointer;
 }

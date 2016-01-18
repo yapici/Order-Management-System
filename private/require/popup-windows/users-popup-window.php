@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/29/2015                                                                 */
-/* Last modified on 12/29/2015                                                           */
+/* Last modified on 01/18/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -50,7 +50,9 @@
         </tbody>
     </table>
     <div class="error-div" id="users-popup-window-error-div"></div>
-    <a class="button admin-popup-window-close-button" onclick="hidePopupWindows()">Close</a>
+    <div class="admin-popup-window-close-button-holder">
+        <a class="button admin-popup-window-close-button" onclick="hidePopupWindows()">Close</a>
+    </div>
 </div>
 
 
