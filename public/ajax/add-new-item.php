@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 12/28/2015                                                           */
+/* Last modified on 01/19/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -103,6 +103,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $sql .= "(:description, :quantity, :uom, :vendor, :catalog_no, :price, :cost_center, :project, :comments, :user_id, :username, :current_date, :user_id, ";
         $sql .= ":username, :current_date, :status, :user_id, :username, :current_date, :item_needed_by_date, :vendor_name, :weblink)";
 
+		$Database->setAttribute(PDO::ATTR_EMULATE_PREPARES,TRUE);
         $stmt = $Database->prepare($sql);
 
         $stmt->bindValue(":description", $description, PDO::PARAM_STR);
@@ -124,6 +125,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $result = $stmt->execute();
 
         if ($result) {
+			$lastInsertedId = $Database->lastInsertId();
 
             if (!$Purchasers->isPuchaser()) {
                 foreach ($Purchasers->getPurchasersArray() as $purchaser) {
@@ -137,7 +139,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             }
 
             $Orders->refreshTotalNumberOfItems();
-            renameAttachmentsDirectory($Database->lastInsertId(), PRIVATE_PATH);
+            renameAttachmentsDirectory($lastInsertedId, PRIVATE_PATH);
             $_SESSION['pagination_page_number'] = 1;
             $_SESSION['sort_column_name'] = "";
             $_SESSION['search_keywords'] = "";
@@ -163,10 +165,26 @@ function renameAttachmentsDirectory($itemId, $rootPath) {
         $oldPath = $rootPath . 'attachments/' . $_SESSION['temp-file-upload-directory'];
         $newPath = $rootPath . 'attachments/' . $itemId;
 
-        rename($oldPath, $newPath);
-
+		recurse_copy($oldPath, $newPath);
+		
         unset($_SESSION['temp-file-upload-directory']);
     }
 }
+
+function recurse_copy($src,$dst) { 
+    $dir = opendir($src); 
+    @mkdir($dst); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+} 
 
 ?>
