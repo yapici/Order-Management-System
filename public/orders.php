@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 01/14/2016                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -100,6 +100,7 @@ if (!$Session->isSessionValid()) {
                             <td onclick='sortByColumn($(this))'>Description <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Vendor <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Catalog No <a>&#9650;</a></td>
+                            <td onclick='sortByColumn($(this))'>Quantity <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Requested By <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Item Needed By <a>&#9650;</a></td>
                             <td onclick='sortByColumn($(this))'>Status <a>&#9650;</a></td>

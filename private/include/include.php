@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -29,7 +29,7 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
-
+ini_set('display_errors', 0);
 define("ROOT", dirname(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT')));
 define("PRIVATE_PATH", ROOT . "/private/");
 define("PUBLIC_PATH", ROOT . "/public/");

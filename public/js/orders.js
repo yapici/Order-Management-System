@@ -624,6 +624,8 @@ function refreshOrdersTable() {
             if (json_data.status === 'success') {
                 $('#orders-table tbody').html(json_data.html_tbody);
                 $("#pagination-holder-div").html(json_data.html_pagination);
+            } else if (json_data.status === 'no_session') {
+                    window.location = "/";
             }
         }
     });

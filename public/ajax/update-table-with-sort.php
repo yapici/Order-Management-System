@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/23/2015                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -52,6 +52,9 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
                 break;
             case "Cat":
                 $Functions->storeSortInSession('catalog_no');
+                break;
+            case "Qua":
+                $Functions->storeSortInSession('quantity');
                 break;
             case "Acc":
                 $Functions->storeSortInSession('account_number');

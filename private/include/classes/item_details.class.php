@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 01/14/2016                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -36,17 +36,19 @@ class ItemDetails {
     private $Functions;
     private $Email;
     private $Vendors;
+    private $Admin;
 
     /**
      * @param Database $database
      * @param Functions $functions
      * @param Vendors $vendors
      */
-    function __construct($database, $functions, $vendors, $email) {
+    function __construct($database, $functions, $vendors, $email, $admin) {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Vendors = $vendors;
         $this->Email = $email;
+        $this->Admin = $admin;
     }
 
     public function getVendors() {
@@ -61,7 +63,11 @@ class ItemDetails {
     }
 
     public function populateVendorsList() {
-        $sql = "SELECT id, name, phone, website FROM vendors WHERE approved = 1 AND deleted = 0";
+        if ($this->Admin->isAdmin()) {
+            $sql = "SELECT id, name, phone, website FROM vendors WHERE deleted = 0 ORDER BY name";
+        } else {
+            $sql = "SELECT id, name, phone, website FROM vendors WHERE approved = 1 AND deleted = 0 ORDER BY name";
+        }
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
 
@@ -186,11 +192,11 @@ class ItemDetails {
                 $sql .= "delivered_by_username = :delivered_by_username, ";
             }
 
-            if ($status != 'Ordered' && $status != 'Delivered') {
+            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur') {
                 $sql .= "ordered = :ordered, ";
             }
 
-            if ($status != 'Delivered') {
+            if ($status != 'Delivered' && $status != 'In Concur') {
                 $sql .= "delivered = :delivered, ";
             }
             $sql .= "status = :status, ";
@@ -231,11 +237,11 @@ class ItemDetails {
                 $stmt->bindValue(':delivered_by_username', $username, PDO::PARAM_STR);
             }
 
-            if ($status != 'Ordered' && $status != 'Delivered') {
+            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur') {
                 $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
             }
 
-            if ($status != 'Delivered') {
+            if ($status != 'Delivered' && $status != 'In Concur') {
                 $stmt->bindValue(':delivered', "0", PDO::PARAM_STR);
             }
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);

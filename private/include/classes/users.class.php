@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/29/2015                                                                 */
-/* Last modified on 01/11/2016                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -49,7 +49,7 @@ class Users {
     }
 
     private function populateArray() {
-        $sql = "SELECT id, email, phone, account_status, user_type FROM users";
+        $sql = "SELECT id, email, phone, account_status, user_type FROM users ORDER BY id DESC";
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

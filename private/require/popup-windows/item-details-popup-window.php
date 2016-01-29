@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/14/2016                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -175,7 +175,9 @@ if ($Admin->isAdmin()) {
                                 echo '<option>Ordered</option>';
                                 echo '<option>Delivered</option>';
                                 echo '<option>Backordered</option>';
+                                echo '<option>In Concur</option>';
                                 echo '<option>Canceled</option>';
+                                echo '<option>Archived</option>';
                                 echo '</select>';
                             }
                             ?>

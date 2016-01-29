@@ -1,4 +1,5 @@
 var initial_order_status = '';
+var vendor_account_no = '';
 
 function prepareItemDetailsPopupWindowInputs(
         description,
@@ -58,6 +59,9 @@ function toggleItemDetailsPopupInputFields(showHide) {
         $("#item-details-popup-window-save-icon").fadeIn();
         $("#item-details-popup-window-cancel-icon").fadeIn();
 
+        vendor_account_no = $("#popup-item-vendor-account-no").html();
+        $("#popup-item-vendor-account-no").html('<i>Please use vendors window to edit</i>');
+
         initial_order_status = $("#item-details-popup-window-status").val();
     } else if (showHide === "hide") {
         hideEditFields();
@@ -75,6 +79,8 @@ function hideEditFields() {
     $("#item-details-popup-window-edit-icon").fadeIn();
     $("#item-details-popup-window-save-icon").fadeOut();
     $("#item-details-popup-window-cancel-icon").fadeOut();
+
+    $("#popup-item-vendor-account-no").html(vendor_account_no);
 }
 
 function updateOrderDetails() {
@@ -109,20 +115,20 @@ function updateOrderDetails() {
     $.ajax({
         url: "../ajax/admin/update-item-details.php",
         type: "POST",
-        data: { 
-            description: description, 
-            uom: uom, 
-            quantity: quantity, 
-            vendor: vendor, 
-            catalog_no: catalog_no, 
-            price: price, 
-            weblink: weblink, 
-            cost_center: cost_center, 
-            project: project, 
-            comments: comments, 
-            order_id: order_id, 
-            invoice_no: invoice_no, 
-            vendor_order_no: vendor_order_no, 
+        data: {
+            description: description,
+            uom: uom,
+            quantity: quantity,
+            vendor: vendor,
+            catalog_no: catalog_no,
+            price: price,
+            weblink: weblink,
+            cost_center: cost_center,
+            project: project,
+            comments: comments,
+            order_id: order_id,
+            invoice_no: invoice_no,
+            vendor_order_no: vendor_order_no,
             status: status
         },
         cache: false,
@@ -145,7 +151,7 @@ function updateOrderDetails() {
                 } else {
                     $("#popup-item-weblink").html('');
                 }
-                $("#popup-item-price").html(json_data.price);
+                $("#popup-item-price").html("$" + json_data.price);
                 $("#popup-item-cost-center").html(json_data.cost_center_name);
                 $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(json_data.comments);

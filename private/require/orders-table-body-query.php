@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/18/2016                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -85,8 +85,11 @@ if (!empty($ordersArray)) {
 
         $project = '';
         if ($projectId != '0') {
-            $project = $Projects->getProjectsArray()[$projectId];
-            $project = $project['name'] . ' / ' . $project['number'];
+            $projectDetails = $Projects->getProjectsArray()[$projectId];
+            $project = $projectDetails['name'];
+            if ($projectDetails['number'] != '') {
+                $project .= ' / ' . $projectDetails['number'];
+            }
         }
 
         $popupWindowParamArray = array($itemId, $description, $quantity, $uom, $vendorName, $catalogNo,
@@ -116,6 +119,7 @@ if (!empty($ordersArray)) {
             echo "<td title=\"$description\"><div>" . $description . "</div></td>";
             echo "<td title='$vendorName'><div>" . $vendorName . "</div></td>";
             echo "<td title='$catalogNo'><div>" . $catalogNo . "</div></td>";
+            echo "<td title='$quantity'><div>" . $quantity . "</div></td>";
             echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
             echo "<td title='$itemNeededByDate'>" . $itemNeededByDate . "</td>";
             echo "<td title='$status'>" . $status . "</td>";
@@ -125,7 +129,11 @@ if (!empty($ordersArray)) {
             echo "<td title='$vendorName'><div>" . $vendorName . "</div></td>";
             echo "<td title='$catalogNo'><div>" . $catalogNo . "</div></td>";
             echo "<td title='$requestedByUsername'>" . $requestedByUsername . "</td>";
-            echo "<td title='$status'>" . $status . "</td>";
+            if ($status != 'In Concur') {
+                echo "<td title='$status'>" . $status . "</td>";
+            } else {
+                echo "<td title='Delivered'>Delivered</td>";
+            }
         }
         echo "</tr>";
     }

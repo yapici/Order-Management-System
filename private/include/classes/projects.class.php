@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/23/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 01/28/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -84,7 +84,11 @@ class Projects {
         foreach ($this->activeProjectsArray as $name => $array) {
             $number = $array['number'];
             $id = $array['id'];
-            $html .= "<option value='$id'>$name / $number</option>";
+            $html .= "<option value='$id'>$name";
+            if ($number !== '') {
+                $html .= " / $number";
+            }
+            $html .= "</option>";
         }
         echo $html;
     }
