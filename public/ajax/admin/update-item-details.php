@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/13/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 02/07/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -69,6 +69,8 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             $jsonResponse['vendor_order_no'] = $sanitizedPostArray['vendor_order_no'];
             $jsonResponse['vendor_name'] = $Vendors->getVendorsArray()[$sanitizedPostArray['vendor']]['name'];
             $jsonResponse['price'] = $sanitizedPostArray['price'];
+            $jsonResponse['user'] = $_SESSION['username'];
+            $jsonResponse['date'] = date('d-M-Y');
             
             $project = $Projects->getProjectsArray()[$postedProjectId];
             $jsonResponse['project'] = $project['name'] . ' / ' . $project['number'];

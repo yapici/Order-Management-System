@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 02/07/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -106,9 +106,9 @@ if ($Admin->isAdmin()) {
             <td class="right-panel">
                 <table> 
                     <tr>
-                        <td>Price:</td>
+                        <td>Unit Price:</td>
                         <td class="item-details-input-holder-td">
-                            <span id="popup-item-price"></span>
+                            <span id="popup-item-price"></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<i>Total Price: <span id="popup-item-total-price"></span></i>)</span>
                             <?php if ($isAdmin) echo '<input id="item-details-popup-window-price" type="number" step="any"/>'; ?>
                         </td>
                     </tr>   

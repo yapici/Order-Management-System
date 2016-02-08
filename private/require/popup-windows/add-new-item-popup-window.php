@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 02/07/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -51,7 +51,9 @@
             <input id="add-new-item-uom" type="text"/>
         </td>
     </tr>
-    <?php $ItemDetails->populateVendorsList(); ?>
+    <tr id="add-new-item-popup-window-vendors-list">
+        <?php $Vendors->populateVendorsList(); ?>
+    </tr>
     <tr>
         <td>Catalog No<span class="red-font"> *</span></td>
         <td class="add-new-item-input-holder-td">

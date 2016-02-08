@@ -152,11 +152,26 @@ function updateOrderDetails() {
                     $("#popup-item-weblink").html('');
                 }
                 $("#popup-item-price").html("$" + json_data.price);
+                var totalPrice = json_data.price * json_data.quantity;
+                $("#popup-item-total-price").html("$" + totalPrice.toFixed(2));
                 $("#popup-item-cost-center").html(json_data.cost_center_name);
                 $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(json_data.comments);
                 if (status !== 'no_change') {
                     $("#popup-item-status").html(status);
+                    if (status === 'Ordered') {
+                        $("#popup-item-status-ordered-tr").show();
+                        $("#popup-item-status-ordered-by").html(json_data.user);
+                        $("#popup-item-status-ordered-date").html(json_data.date);
+                        $("#popup-item-status-delivered-tr").hide();
+                    } else if (status === 'Delivered') {
+                        $("#popup-item-status-delivered-tr").show();
+                        $("#popup-item-status-delivered-by").html(json_data.user);
+                        $("#popup-item-status-delivered-date").html(json_data.date);
+                    } else if (status !== 'In Concur' && status !== 'Archived') {
+                        $("#popup-item-status-ordered-tr").hide();
+                        $("#popup-item-status-delivered-tr").hide();
+                    }
                 }
                 $("#popup-item-invoice-no").html(json_data.invoice_no);
                 $("#popup-item-vendor-order-no").html(json_data.vendor_order_no);

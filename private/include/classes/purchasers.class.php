@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 01/03/2016                                                                 */
-/* Last modified on 01/03/2016                                                           */
+/* Last modified on 02/07/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -69,7 +69,7 @@ class Purchasers {
     /**
      * @return boolean Returns true if the logged in user is a purchasing person
      */
-    public function isPuchaser() {
+    public function isPurchaser() {
         $userId = $_SESSION['id'];
         $purchasersArray = $this->purchasersArray;
         

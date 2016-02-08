@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 02/07/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -36,19 +36,17 @@ class ItemDetails {
     private $Functions;
     private $Email;
     private $Vendors;
-    private $Admin;
 
     /**
      * @param Database $database
      * @param Functions $functions
      * @param Vendors $vendors
      */
-    function __construct($database, $functions, $vendors, $email, $admin) {
+    function __construct($database, $functions, $vendors, $email) {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Vendors = $vendors;
         $this->Email = $email;
-        $this->Admin = $admin;
     }
 
     public function getVendors() {
@@ -61,81 +59,7 @@ class ItemDetails {
         }
         echo '</select>';
     }
-
-    public function populateVendorsList() {
-        if ($this->Admin->isAdmin()) {
-            $sql = "SELECT id, name, phone, website FROM vendors WHERE deleted = 0 ORDER BY name";
-        } else {
-            $sql = "SELECT id, name, phone, website FROM vendors WHERE approved = 1 AND deleted = 0 ORDER BY name";
-        }
-        $stmt = $this->Database->prepare($sql);
-        $stmt->execute();
-
-        $optionsHtml = "";
-        $vendorDetailsHtml = "";
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $sanitizedArray = $this->Functions->sanitizeArray($row);
-            $vendorId = $sanitizedArray['id'];
-            $vendorName = $sanitizedArray['name'];
-            $vendorPhone = $sanitizedArray['phone'];
-            $vendorWebsite = $sanitizedArray['website'];
-
-            $optionsHtml .= "<option value='$vendorId'>$vendorName</option>";
-            $vendorDetailsHtml .= "<tr class='add-new-item-vendor-details-holder-tr add-new-item-vendor-details-$vendorId'>";
-            $vendorDetailsHtml .= "<td>Vendor Phone:</td>";
-            $vendorDetailsHtml .= "<td><span class='vendor-details-span'>$vendorPhone</span></td>";
-            $vendorDetailsHtml .= "</tr>";
-            $vendorDetailsHtml .= "<tr class='add-new-item-vendor-details-holder-tr add-new-item-vendor-details-$vendorId'>";
-            $vendorDetailsHtml .= "<td>Vendor Website:</td>";
-            $vendorDetailsHtml .= "<td><span class='vendor-details-span'>$vendorWebsite</span></td>";
-            $vendorDetailsHtml .= "</tr>";
-        }
-
-        $this->echoVendorsListHtml($optionsHtml, $vendorDetailsHtml);
-    }
-
-    /**
-     * @param string $optionsHtml
-     * @param string $vendorDetailsHtml
-     */
-    private function echoVendorsListHtml($optionsHtml, $vendorDetailsHtml) {
-        echo "<tr>
-            <td>Vendor<span class='red-font'> *</span></td>
-            <td class='add-new-item-input-holder-td'>
-                <select id='add-new-item-vendor' onchange='showVendorDetails(this.value);'>
-                    <option>Please Choose a Vendor</option>
-                    $optionsHtml
-                    <option value='new'>Add New Vendor</option>
-                </select>
-            </td>
-        </tr>
-        $vendorDetailsHtml
-        <tr class='add-new-item-vendor-details-holder-tr add-new-item-new-vendor-details'>
-            <td class='new-vendor-title-td'>Vendor Name:<span class='red-font'> *</span></td>
-            <td class='add-new-item-input-holder-td'>
-                <input id='add-new-item-new-vendor-name' type='text'/>
-            </td>
-        </tr>
-        <tr class='add-new-item-vendor-details-holder-tr add-new-item-new-vendor-details'>
-            <td class='new-vendor-title-td'>Vendor Phone:<span class='red-font'> *</span></td>
-            <td class='add-new-item-input-holder-td'>
-                <input id='add-new-item-new-vendor-phone' type='text'/>
-            </td>
-        </tr>
-        <tr class='add-new-item-vendor-details-holder-tr add-new-item-new-vendor-details'>
-            <td class='new-vendor-title-td'>Vendor Website:</td>
-            <td class='add-new-item-input-holder-td'>
-                <input id='add-new-item-new-vendor-website' type='text'/>
-            </td>
-        </tr>
-        <tr class='add-new-item-vendor-details-holder-tr add-new-item-new-vendor-details'>
-            <td class='new-vendor-title-td'>Vendor Address:</td>
-            <td class='add-new-item-input-holder-td'>
-                <input id='add-new-item-new-vendor-address' type='text'/>
-            </td>
-        </tr>";
-    }
-
+    
     /**
      * @param array $itemDetailsArray
      * @return boolean PDO execute result
@@ -192,11 +116,11 @@ class ItemDetails {
                 $sql .= "delivered_by_username = :delivered_by_username, ";
             }
 
-            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur') {
+            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
                 $sql .= "ordered = :ordered, ";
             }
 
-            if ($status != 'Delivered' && $status != 'In Concur') {
+            if ($status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
                 $sql .= "delivered = :delivered, ";
             }
             $sql .= "status = :status, ";
@@ -237,11 +161,11 @@ class ItemDetails {
                 $stmt->bindValue(':delivered_by_username', $username, PDO::PARAM_STR);
             }
 
-            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur') {
+            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
                 $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
             }
 
-            if ($status != 'Delivered' && $status != 'In Concur') {
+            if ($status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
                 $stmt->bindValue(':delivered', "0", PDO::PARAM_STR);
             }
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);

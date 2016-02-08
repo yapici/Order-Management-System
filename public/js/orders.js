@@ -96,6 +96,8 @@ function showItemDetailsPopupWindow(
     if (weblink !== '') {
         var weblink = "<a target='_blank' href='" + weblink + "'>Link</a>";
     }
+    
+    var totalPrice = price * quantity;
     $("#popup-item-order-number").html("Order " + orderNo);
     $("#popup-item-description").html(description);
     $("#popup-item-quantity").html(quantity);
@@ -103,6 +105,7 @@ function showItemDetailsPopupWindow(
     $("#popup-item-vendor").html(vendor);
     $("#popup-item-catalog-no").html(catalogNo);
     $("#popup-item-price").html("$" + price);
+    $("#popup-item-total-price").html("$" + totalPrice.toFixed(2));
     $("#popup-item-weblink").html(weblink);
     $("#popup-item-cost-center").html(costCenter);
     $("#popup-item-project").html(project);

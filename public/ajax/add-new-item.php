@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/19/2016                                                           */
+/* Last modified on 02/07/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -80,13 +80,13 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             $vendorId = $Database->lastInsertId();
             $Vendors->refreshArrays();
 
-            if (!$Purchasers->isPuchaser()) {
+            if (!$Purchasers->isPurchaser()) {
                 foreach ($Purchasers->getPurchasersArray() as $purchaser) {
                     $purchaserUsername = $Functions->getUserFirstName($purchaser['username']);
                     $purchaserEmail = $purchaser['email'];
                     $subject = "OMS Notification: New Vendor Added";
                     $messageBody = "<p>There is a new vendor added by $username.</p>";
-                    
+
                     $Email->sendEmail($purchaserEmail, $purchaserUsername, $subject, $messageBody);
                 }
             }
@@ -103,7 +103,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $sql .= "(:description, :quantity, :uom, :vendor, :catalog_no, :price, :cost_center, :project, :comments, :user_id, :username, :current_date, :user_id, ";
         $sql .= ":username, :current_date, :status, :user_id, :username, :current_date, :item_needed_by_date, :vendor_name, :weblink)";
 
-		$Database->setAttribute(PDO::ATTR_EMULATE_PREPARES,TRUE);
+        $Database->setAttribute(PDO::ATTR_EMULATE_PREPARES, TRUE);
         $stmt = $Database->prepare($sql);
 
         $stmt->bindValue(":description", $description, PDO::PARAM_STR);
@@ -125,9 +125,9 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $result = $stmt->execute();
 
         if ($result) {
-			$lastInsertedId = $Database->lastInsertId();
+            $lastInsertedId = $Database->lastInsertId();
 
-            if (!$Purchasers->isPuchaser()) {
+            if (!$Purchasers->isPurchaser()) {
                 foreach ($Purchasers->getPurchasersArray() as $purchaser) {
                     $purchaserUsername = $Functions->getUserFirstName($purchaser['username']);
                     $purchaserEmail = $purchaser['email'];
@@ -165,26 +165,25 @@ function renameAttachmentsDirectory($itemId, $rootPath) {
         $oldPath = $rootPath . 'attachments/' . $_SESSION['temp-file-upload-directory'];
         $newPath = $rootPath . 'attachments/' . $itemId;
 
-		recurse_copy($oldPath, $newPath);
-		
+        recurse_copy($oldPath, $newPath);
+
         unset($_SESSION['temp-file-upload-directory']);
     }
 }
 
-function recurse_copy($src,$dst) { 
-    $dir = opendir($src); 
-    @mkdir($dst); 
-    while(false !== ( $file = readdir($dir)) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . '/' . $file) ) { 
-                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
-            } 
-            else { 
-                copy($src . '/' . $file,$dst . '/' . $file); 
-            } 
-        } 
-    } 
-    closedir($dir); 
-} 
+function recurse_copy($src, $dst) {
+    $dir = opendir($src);
+    @mkdir($dst);
+    while (false !== ( $file = readdir($dir))) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if (is_dir($src . '/' . $file)) {
+                recurse_copy($src . '/' . $file, $dst . '/' . $file);
+            } else {
+                copy($src . '/' . $file, $dst . '/' . $file);
+            }
+        }
+    }
+    closedir($dir);
+}
 
 ?>
