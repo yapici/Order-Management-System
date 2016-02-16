@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/29/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 02/15/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -123,7 +123,10 @@ class Users {
                 $tableBody .= "<option value='2' selected>Admin</option>";
                 $tableBody .= "</select>";
             }
-            $tableBody .= "</td>";       
+            $tableBody .= "<span title='Reset Password' class='user-reset-password-button' onclick='showResetPasswordConfirmationPopup(this);'>";
+            $tableBody .= "<img src='images/key-icon.png'/>";
+            $tableBody .= "</span>";
+            $tableBody .= "</td>";
             
             $tableBody .= "</tr>";
         }

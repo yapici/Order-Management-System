@@ -1,3 +1,6 @@
+var selectedUserId;
+var selectedUserEmail;
+
 $(function () {
     var initial_input_value = '';
 
@@ -101,6 +104,12 @@ $(function () {
         var id = $(this).parent().parent().prop('id');
         var input_id = $(this).prop('id');
         updateUserDetails(id, input_id);
+    });
+
+    $("#vendors-popup-window-vendors-table tbody").on('change', 'select', function () {
+        var id = $(this).parent().parent().prop('id');
+        var input_id = $(this).prop('id');
+        updateVendorDetails(id, input_id);
     });
 });
 
@@ -456,6 +465,53 @@ function updateUserDetails(tr_id, input_id) {
                 error_div.html(json_data.status);
             }
             users_popup_window.css('z-index', '9999');
+            hideProgressCircle();
+        }
+    });
+}
+
+function showResetPasswordConfirmationPopup(element) {
+    var elementId = $(element).parent().parent().attr("id");
+    selectedUserId = elementId.split('-').pop().trim();
+    selectedUserEmail = $("#" + elementId + " td:first-child").attr("title");
+    $("#reset-password-confirmation-popup-window-p").html("Are you sure you want to reset the password for <b><i>" + selectedUserEmail + "</i></b>?");
+
+    blockUI();
+    var popup_window = $("#reset-password-confirmation-popup-window");
+    popup_window.fadeIn();
+    popup_window.css('z-index', '9999999');
+    $(".gray-out-div").css('z-index', '999999');
+}
+
+function hideResetPasswordConfirmationWindow() {
+    hidePopupWindow('reset-password-confirmation-popup-window');
+    selectedUserId = "";
+    selectedUserEmail = "";
+}
+
+function adminResetUserPassword() {
+    var error_div = $("#users-popup-window-error-div");
+
+    $("#reset-password-confirmation-popup-window").css('z-index', '99999');
+    showProgressCircle();
+    blockUI();
+    $.ajax({
+        url: "../ajax/admin/reset-user-password.php",
+        type: "POST",
+        data: {user_id: selectedUserId},
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+                error_div.html("Password for the user '" + selectedUserEmail + "' has been changed to 'password'.");
+            } else if (json_data.status === "no_session") {
+                showLoginPopupWindow();
+            } else if (json_data.status === "unauthorized_access") {
+                location.reload();
+            } else {
+                error_div.html(json_data.status);
+            }
+            hideResetPasswordConfirmationWindow();
             hideProgressCircle();
         }
     });

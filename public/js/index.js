@@ -87,6 +87,8 @@ function loginUser() {
                     error_div.html("Please enter a valid email address");
                 } else if (html_response.trim() === "no_activation") {
                     window.location = "/activation";
+                } else if (html_response.trim() === "reset_password") {
+                    window.location = "/reset-password/1/1";
                 } else {
                     error_div.html(html_response);
                 }

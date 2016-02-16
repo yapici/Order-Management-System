@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/23/2015                                                                 */
+/* Created on 02/15/2016                                                                 */
 /* Last modified on 02/15/2016                                                           */
 /* ===================================================================================== */
 
@@ -29,26 +29,11 @@
 /* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN             */
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
-
-require_once (PRIVATE_PATH . 'require/popup-windows/item-details-popup-window.php');
-require_once (PRIVATE_PATH . 'require/popup-windows/delete-file-confirmation-popup-window.php');
-require_once (PRIVATE_PATH . 'require/popup-windows/login-popup-window.php');
-
-echo '<div class="popup-window" id="add-new-item-popup-window">';
-require_once (PRIVATE_PATH . 'require/popup-windows/add-new-item-popup-window.php');
-echo '</div>';
-
-if ($Admin->isAdmin()) {
-    require_once (PRIVATE_PATH . 'require/popup-windows/vendors-popup-window.php');
-    require_once (PRIVATE_PATH . 'require/popup-windows/projects-popup-window.php');
-    require_once (PRIVATE_PATH . 'require/popup-windows/cost-centers-popup-window.php');
-    require_once (PRIVATE_PATH . 'require/popup-windows/users-popup-window.php');
-    require_once (PRIVATE_PATH . 'require/popup-windows/reset-password-confirmation-popup-window.php');
-    echo "<style>";
-    require(PRIVATE_PATH . 'require/css/popup-windows.css');
-    echo "</style>";
-    echo "<script type='text/javascript'>";
-    require(PRIVATE_PATH . 'require/js/popup-windows.js');
-    echo "</script>";
-}
 ?>
+
+<div class="popup-window" id="reset-password-confirmation-popup-window">
+    <a class="popup-window-cancel-button" onclick="hideResetPasswordConfirmationWindow();">&#10006;</a>
+    <h1>Reset Password</h1>
+    <p id="reset-password-confirmation-popup-window-p">Are you sure you want to reset the password for this user?</p>
+    <a class="button" onclick="adminResetUserPassword();">Yes</a>&nbsp;&nbsp;<a class="button" onclick="hideResetPasswordConfirmationWindow();">Cancel</a>
+</div>

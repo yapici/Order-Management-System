@@ -39,6 +39,8 @@ function resetPassword() {
                     error_div.html("<div>The password reset code couldn't be found for this e-mail address.</div><div>Please use the link in the e-mail without modifying it. If it still doesn't work, please contact the webmaster.</div>");
                 } else if (json_response.status === 'no_password_reset_request_found_for_this_email') {
                     error_div.html("<div>No password request is found for this e-mail address.</div><div>Please send a new request from <a href='/forgot-password'><u>Forgot Password</u></a>.</div>");
+                } else if (json_response.status === 'no_password_reset_request_found_for_user') {
+                    error_div.html("<div>No password request is found.</div><div>Please contact an admin to reset your password.</div>");
                 } else {
                     error_div.html('Something went wrong. Please try again.');
                 }

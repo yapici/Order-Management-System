@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
-/* Last modified on 02/07/2016                                                           */
+/* Last modified on 02/15/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -109,7 +109,29 @@ class Vendors {
             $tableBody .= "<td title='$vendorContactPerson'><span>$vendorContactPerson</span><input id='vendors-popup-window-vendor-contact_person' value='$vendorContactPerson' type='text'/></td>";
             $tableBody .= "<td title='$vendorAccountNo'><span>$vendorAccountNo</span><input id='vendors-popup-window-vendor-account_number' value='$vendorAccountNo' type='text'/></td>";
             $tableBody .= "<td title='$vendorAddedBy'>$vendorAddedBy</td>";
-            $tableBody .= "<td><span>$vendorApproved</span><input id='vendors-popup-window-vendor-approved' value='$vendorApproved' type='text'/></td>";
+            
+            $tableBody .= "<td title='Vendor Approval Status'>";
+            if ($vendorApproved == '2') {
+                $tableBody .= "<span>New Vendor</span>";
+                $tableBody .= "<select id='vendors-popup-window-vendor-approved'>";
+                $tableBody .= "<option value='2' selected>New Vendor</option>";
+                $tableBody .= "<option value='0'>No</option>";
+                $tableBody .= "<option value='1'>Yes</option>";
+                $tableBody .= "</select>";
+            } else if ($vendorApproved == '0') {
+                $tableBody .= "<span>No</span>";
+                $tableBody .= "<select id='vendors-popup-window-vendor-approved'>";
+                $tableBody .= "<option value='0' selected>No</option>";
+                $tableBody .= "<option value='1'>Yes</option>";
+                $tableBody .= "</select>";
+            } else if ($vendorApproved == '1') {
+                $tableBody .= "<span>Yes</span>";
+                $tableBody .= "<select id='vendors-popup-window-vendor-approved'>";
+                $tableBody .= "<option value='0'>No</option>";
+                $tableBody .= "<option value='1' selected>Yes</option>";
+                $tableBody .= "</select>";
+            }
+            $tableBody .= "</td>";
             $tableBody .= "<td title='Delete Vendor'><a class='delete-button' onclick='deleteVendor(this);'>&#10006;</a></td>";
             $tableBody .= "</tr>";
         }
