@@ -1,3 +1,2 @@
-# OMS Version 1.3.1.264 Changes
-- Changed 1/0 in vendors popup window to a user friendly dropdown (e.g. Yes/No/New Vendor); 2/15/2016
-- Added reset password option to the admin panel and prepared the the associated functionality in login and reset-password pages; 2/15/2016
+# Build 299 Changes
+Some functions and the HTML were prepared for preparation of the item edit functionality for the end user. The whole functionality is not complete yet, therefore the system is not released yet.
