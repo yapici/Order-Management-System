@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 02/07/2016                                                           */
+/* Last modified on 02/29/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -55,8 +55,20 @@ if ($Admin->isAdmin()) {
         echo "<img src='images/cancel-icon.png'/>";
         echo "</a>";
         echo "</div>";
-    }
-    ?>
+    } else {
+        ?>
+        <div id="item-details-popup-window-user-edit-icon-wrapper">
+            <a class='item-details-popup-window-icons' id='item-details-popup-window-edit-icon' onclick='toggleItemDetailsEditFields("show");' title='Edit Order Details'>
+                <img src='images/edit-icon.png'/>
+            </a>
+            <a class='item-details-popup-window-icons' id='item-details-popup-window-save-icon' onclick='toggleItemDetailsEditFields("hide");' title='Save Changes'>
+                <img src='images/tick-icon.png'/>
+            </a>
+            <a class='item-details-popup-window-icons' id='item-details-popup-window-cancel-icon' onclick='hideEditFields();' title='Discard Changes'>
+                <img src='images/cancel-icon.png'/>
+            </a>
+        </div>
+    <?php } ?>
 
     <table class="top-panel panel-table">
         <tr>

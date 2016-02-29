@@ -151,6 +151,12 @@
     position: relative;
 }
 
+#item-details-popup-window-user-edit-icon-wrapper {
+    position: relative;
+    display: none;
+    width: 100%;
+}
+
 .item-details-popup-window-icons {
     position: absolute;
     top: -10px;

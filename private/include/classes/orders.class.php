@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 01/14/2016                                                           */
+/* Last modified on 02/29/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -136,6 +136,7 @@ class Orders {
         $sql .= $o . "requested_datetime, ";
         $sql .= $o . "status_updated_date, ";
         $sql .= $o . "status, ";
+        $sql .= $o . "requested_by_id, ";
         $sql .= $o . "requested_by_username, ";
         $sql .= $o . "item_needed_by_date, ";
         $sql .= $o . "ordered, ";

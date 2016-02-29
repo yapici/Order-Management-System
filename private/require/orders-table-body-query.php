@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 02/29/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -52,7 +52,6 @@ if (!empty($ordersArray)) {
         $requestedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['requested_datetime']);
         $statusUpdatedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['status_updated_date']);
         $itemNeededByDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['item_needed_by_date']);
-        $status = $orderDetailsArray['status'];
         $requestedByUsername = $orderDetailsArray['requested_by_username'];
         $statusUpdatedByUsername = $orderDetailsArray['status_updated_by_username'];
         $ordered = $orderDetailsArray['ordered'];
@@ -61,6 +60,15 @@ if (!empty($ordersArray)) {
         $delivered = $orderDetailsArray['delivered'];
         $deliveredDate = $orderDetailsArray['delivered_date'];
         $deliveredByUsername = $orderDetailsArray['delivered_by_username'];
+        
+        $status = $orderDetailsArray['status'];
+        $requestedById = $orderDetailsArray['requested_by_id'];
+        $loggedInUserId = $_SESSION['id'];
+        $isEditable = 'false';
+        
+        if ($status == "Pending" && $requestedById == $loggedInUserId) {
+            $isEditable = 'true';
+        }
 
         if ($orderedDate != '0000-00-00 00:00:00' && $orderedDate != '') {
             $orderedDate = $Functions->convertMysqlDateToPhpDate($orderedDate);
@@ -95,7 +103,7 @@ if (!empty($ordersArray)) {
         $popupWindowParamArray = array($itemId, $description, $quantity, $uom, $vendorName, $catalogNo,
             $price, $weblink, $costCenterName, $project, $comments, $requestedByUsername, $requestedDate,
             $statusUpdatedByUsername, $statusUpdatedDate, $status, $itemNeededByDate, $ordered, $orderedDate,
-            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername
+            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername, $isEditable
         );
         echo "<tr onclick='showItemDetailsPopupWindow(";
         echoJsFunctionParams($popupWindowParamArray);
