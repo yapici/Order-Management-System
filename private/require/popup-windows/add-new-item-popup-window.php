@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 02/07/2016                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -75,6 +75,17 @@
             </select>
         </td>
     </tr>
+    <tr>
+        <td title="Your order will not be processed if you do not complete the Safety Data Sheet (SDS) documentation.">SDS Complete<sup>?</sup><span class="red-font"> *</span></td>
+        <td class="add-new-item-input-holder-td">
+            <select id="add-new-item-sds">
+                <option></option>
+                <option>Yes</option>
+                <option>No</option>
+                <option>N/A</option>
+            </select>
+        </td>
+    </tr> 
     <tr>
         <td>Unit Price (USD)</td>
         <td class="add-new-item-input-holder-td">

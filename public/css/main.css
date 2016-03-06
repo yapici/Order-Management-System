@@ -43,6 +43,14 @@ a, img {
     outline: none;
 }
 
+sup {
+    font-weight: bold;
+    font-size: 0.8em;
+    padding-left: 4px;
+    padding-right: 4px;
+    cursor: pointer;
+}
+
 .gray-out-div {
     margin: 0;
     width: 100%;
