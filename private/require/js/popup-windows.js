@@ -245,9 +245,24 @@ function addNewVendor() {
     }
 }
 
-function deleteVendor(element) {
+function showDeleteVendorConfirmPopup(element) {
     var vendor_id = $(element).parent().parent().prop('id');
+    $("#delete-vendor-confirmation-button").attr("onclick", "deleteVendor(" + vendor_id + ")");
 
+    blockUI();
+    var popup_window = $("#delete-vendor-confirmation-popup-window");
+    popup_window.fadeIn();
+    popup_window.css('z-index', '9999999');
+    $(".gray-out-div").css('z-index', '999999');
+}
+
+function hideDeleteVendorConfirmationWindow() {
+    hidePopupWindow('delete-vendor-confirmation-popup-window');
+    $("#delete-vendor-confirmation-button").removeAttr('onclick');
+}
+
+function deleteVendor(vendor_id) {
+    $("#delete-vendor-confirmation-popup-window").css('z-index', '99999');
     var vendors_popup_window = $("#vendors-popup-window");
     var vendors_table_tbody = $("#vendors-popup-window-vendors-table tbody");
 
@@ -274,6 +289,7 @@ function deleteVendor(element) {
                 error_div.html(json_data.status);
             }
             vendors_popup_window.css('z-index', '9999');
+            hideDeleteVendorConfirmationWindow();
             hideProgressCircle();
         }
     });
@@ -516,6 +532,44 @@ function adminResetUserPassword() {
         }
     });
 }
+
+function sortVendor(element, column) {
+    var error_div = $('#vendors-popup-window-error-div');
+
+    showProgressCircle();
+    $.ajax({
+        url: "../ajax/admin/sort-vendors.php",
+        type: "GET",
+        data: {column: column},
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+                $('#vendors-popup-window-vendors-table tbody').html(json_data.html_tbody);
+
+                $('#vendors-popup-window-vendors-table thead tr td a').html('&#9650;');
+                $('#vendors-popup-window-vendors-table thead tr td a').css('opacity', '0.5');
+
+                if (element.length) {
+                    var up_or_down = json_data.up_or_down;
+
+                    if (up_or_down === 'up') {
+                        element.find('a').html('&#9660;');
+                    } else {
+                        element.find('a').html('&#9650;');
+                    }
+                    element.find('a').css('opacity', '1');
+                }
+            } else if (json_data.status === "no_session") {
+                showLoginPopupWindow();
+            } else {
+                error_div.html("Something went wrong, please try again later.");
+            }
+            hideProgressCircle();
+        }
+    });
+}
+
 
 if (msieversion() < 10 && msieversion()) {
     $("#admin-file-upload-td").html('File upload function is not supported in Internet Explorer 9. Please use a different browser to upload attachments.');

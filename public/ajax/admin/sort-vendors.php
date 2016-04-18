@@ -2,7 +2,7 @@
 
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
-/* Created on 12/31/2015                                                                 */
+/* Created on 04/17/2016                                                                 */
 /* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
@@ -30,57 +30,38 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-// Opening the json file that holds the file paths and file modification dates
-$string = file_get_contents(BUILD_PATH . 'files.json');
-$jsonArray = json_decode($string, true);
+require('../../../private/include/include.php');
+// Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
+if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+    if (!$Session->isSessionValid()) {
+        $jsonResponse['status'] = "no_session";
+    } else {
+        // Getting the parameter passed through AJAX
+        $selectedColumnName = trim(filter_input(INPUT_GET, 'column'));
+        
+        if ($selectedColumnName == "added_by") {
+            $selectedColumnName = "added_by_username";
+        }
 
-// Putting the values into a local array
-$jsonFileArray = array();
-foreach ($jsonArray as $filePath => $modifiedDate) {
-    $jsonFileArray[$filePath] = $modifiedDate;
+        if (isset($_SESSION['vendor_sort_column_name']) &&
+                $_SESSION['vendor_sort_column_name'] == $selectedColumnName &&
+                $_SESSION['vendor_sort_up_or_down'] == 'up') {
+            $_SESSION['vendor_sort_up_or_down'] = 'down';
+        } else {
+            $_SESSION['vendor_sort_up_or_down'] = 'up';
+            $_SESSION['vendor_sort_column_name'] = $selectedColumnName;
+        }
+
+        $Vendors->refreshArraysWithSort();
+        ob_start();
+        $Vendors->populateVendorsTable();
+        $jsonResponse['html_tbody'] = ob_get_clean();
+        $jsonResponse['status'] = 'success';
+        $jsonResponse['up_or_down'] = $_SESSION['vendor_sort_up_or_down'];
+    }
+    echo json_encode($jsonResponse);
+} else {
+    $Functions->phpRedirect('');
 }
 
-// Iterating through the directories and putting the file paths and modification dates into a local array
-$filesArray = array();
-$dir_iterator = new RecursiveDirectoryIterator(PUBLIC_PATH); // public directory
-$recursive_iterator = new RecursiveIteratorIterator($dir_iterator);
-foreach ($recursive_iterator as $file) {
-    if ($file->isDir()) {
-        continue;
-    }
-    if (substr($file, -7) != 'php.log' &&
-            substr($file, -9) != 'error_log' &&
-            substr($file, -9) != 'README.md') {
-        $fileName = 'public/' . $file->getPathname();
-        $fileModifiedDate = date('m/d/y H:i:s', $file->getMTime());
-        $filesArray[$fileName] = $fileModifiedDate;
-    }
-}
-
-$dir_iterator = new RecursiveDirectoryIterator(PRIVATE_PATH); // private directory
-$recursive_iterator = new RecursiveIteratorIterator($dir_iterator);
-foreach ($recursive_iterator as $file) {
-    if ($file->isDir()) {
-        continue;
-    }
-    if (!preg_match('/private\/attachments/', $file) &&
-            substr($file, -7) != 'php.log' &&
-            substr($file, -9) != 'error_log') {
-        $fileName = $file->getPathname();
-        $fileModifiedDate = date('m/d/y H:i:s', $file->getMTime());
-        $filesArray[$fileName] = $fileModifiedDate;
-    }
-}
-
-// Checking if there are any files that are modified/created/deleted
-if ($jsonFileArray != $filesArray) {
-    $file = BUILD_PATH . "build";
-    file_put_contents($file, file_get_contents($file) + 1);
-}
-
-// Updating the json file with the latest modifiedDates
-$jsonFile = fopen(BUILD_PATH . 'files.json', 'w');
-fwrite($jsonFile, json_encode($filesArray, JSON_UNESCAPED_SLASHES));
-fclose($jsonFile);
 ?>
-

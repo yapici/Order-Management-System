@@ -176,6 +176,21 @@
     max-width: 20vh;
 }
 
+#vendors-popup-window table thead tr td {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#vendors-popup-window table thead tr td a {
+    font-size: 0.8em;
+    color: #ffffff;
+    opacity: 0.5;
+}
+
+#vendors-popup-window table thead tr td:hover > a {
+    opacity: 1.0;
+}
+
 /* Users Popup */
 #users-popup-window #users-popup-window-users-table td tr {
     position: relative;
@@ -198,6 +213,7 @@
     height: 1em;
 }
 
-#reset-password-confirmation-popup-window {
+#reset-password-confirmation-popup-window,
+#delete-vendor-confirmation-popup-window {
     width: 300px;
 }
