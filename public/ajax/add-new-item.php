@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 02/07/2016                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -51,6 +51,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
             $weblink = $Functions->addHttp($sanitizedPostArray['weblink']);
         }
         $comments = $sanitizedPostArray['comments'];
+        $sds = $sanitizedPostArray['sds'];
         $dateNeeded = $Functions->convertStrDateToMysqlDate($sanitizedPostArray['date_needed']);
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
@@ -96,11 +97,11 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
 
         // Inserting the information to the database
         $sql = "INSERT INTO orders ";
-        $sql .= "(description, quantity, uom, vendor, catalog_no, price, cost_center, project, comments, requested_by_id, ";
+        $sql .= "(description, quantity, uom, vendor, catalog_no, price, cost_center, project, comments, sds, requested_by_id, ";
         $sql .= "requested_by_username, requested_datetime, last_updated_by_id, last_updated_by_username, last_updated_datetime, status, status_updated_by_user_id, ";
         $sql .= "status_updated_by_username, status_updated_date, item_needed_by_date, vendor_name, weblink) ";
         $sql .= "VALUES ";
-        $sql .= "(:description, :quantity, :uom, :vendor, :catalog_no, :price, :cost_center, :project, :comments, :user_id, :username, :current_date, :user_id, ";
+        $sql .= "(:description, :quantity, :uom, :vendor, :catalog_no, :price, :cost_center, :project, :comments, :sds, :user_id, :username, :current_date, :user_id, ";
         $sql .= ":username, :current_date, :status, :user_id, :username, :current_date, :item_needed_by_date, :vendor_name, :weblink)";
 
         $Database->setAttribute(PDO::ATTR_EMULATE_PREPARES, TRUE);
@@ -115,6 +116,7 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         $stmt->bindValue(":cost_center", $costCenter, PDO::PARAM_STR);
         $stmt->bindValue(":project", $project, PDO::PARAM_STR);
         $stmt->bindValue(":comments", $comments, PDO::PARAM_STR);
+        $stmt->bindValue(":sds", $sds, PDO::PARAM_STR);
         $stmt->bindValue(":user_id", $userId, PDO::PARAM_STR);
         $stmt->bindValue(":username", $username, PDO::PARAM_STR);
         $stmt->bindValue(":current_date", $currentDate, PDO::PARAM_STR);

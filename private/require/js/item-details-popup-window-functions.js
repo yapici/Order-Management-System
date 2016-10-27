@@ -14,7 +14,8 @@ function prepareItemDetailsPopupWindowInputs(
         comments,
         invoiceNo,
         vendorOrderNo,
-        status) {
+        status,
+        sds) {
 
     $("#item-details-popup-window-description").val(decodeEntities(description));
     $("#item-details-popup-window-quantity").val(decodeEntities(quantity));
@@ -25,6 +26,7 @@ function prepareItemDetailsPopupWindowInputs(
     $("#item-details-popup-window-comments").val(decodeEntities(comments));
     $("#item-details-popup-window-invoice-no").val(decodeEntities(invoiceNo));
     $("#item-details-popup-window-vendor-order-no").val(decodeEntities(vendorOrderNo));
+    $("#item-details-popup-window-sds").val(decodeEntities(sds));
 
     if (vendor !== '') {
         $("#item-details-popup-window-vendor > option").each(function () {
@@ -89,13 +91,13 @@ function updateOrderDetails() {
     var quantity = $("#item-details-popup-window-quantity").val();
     var uom = $("#item-details-popup-window-uom").val();
     var vendor = $("#item-details-popup-window-vendor").val();
-    var vendor_name = $("#item-details-popup-window-vendor option:selected").html();
     var catalog_no = $("#item-details-popup-window-catalog-no").val();
     var price = $("#item-details-popup-window-price").val();
     var weblink = $("#item-details-popup-window-weblink").val();
     var cost_center = $("#item-details-popup-window-cost-center").val();
     var project = $("#item-details-popup-window-project").val();
     var comments = $("#item-details-popup-window-comments").val();
+    var sds = $("#item-details-popup-window-sds").val();
     var order_id = $("#popup-item-order-number").html();
     var status = $("#item-details-popup-window-status").val();
     var invoice_no = $("#item-details-popup-window-invoice-no").val();
@@ -129,7 +131,8 @@ function updateOrderDetails() {
             order_id: order_id,
             invoice_no: invoice_no,
             vendor_order_no: vendor_order_no,
-            status: status
+            status: status,
+            sds: sds
         },
         cache: false,
         dataType: "json",
@@ -157,6 +160,7 @@ function updateOrderDetails() {
                 $("#popup-item-cost-center").html(json_data.cost_center_name);
                 $("#popup-item-project").html(json_data.project);
                 $("#popup-item-comments").html(json_data.comments);
+                $("#popup-item-sds").html(json_data.sds);
                 if (status !== 'no_change') {
                     $("#popup-item-status").html(status);
                     if (status === 'Ordered') {

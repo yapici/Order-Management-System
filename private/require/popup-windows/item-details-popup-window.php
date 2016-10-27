@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 02/29/2016                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -78,39 +78,35 @@ if ($Admin->isAdmin()) {
                         <td>Description:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-description"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-description" type="text"/>'; ?>
+                            <input id="item-details-popup-window-description" type="text"/>
                         </td>
                     </tr>      
                     <tr>
                         <td>Quantity:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-quantity"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-quantity" type="number"/>'; ?>
+                            <input id="item-details-popup-window-quantity" type="number"/>
                         </td>
                     </tr>
                     <tr>
                         <td title="Unit of Measurement">UoM:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-uom"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-uom" type="text"/>'; ?>
+                            <input id="item-details-popup-window-uom" type="text"/>
                         </td>
                     </tr>
                     <tr>
                         <td>Vendor:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-vendor"></span>
-                            <?php
-                            if ($isAdmin) {
-                                $ItemDetails->getVendors();
-                            }
-                            ?>
+                            <?php $ItemDetails->getVendors(); ?>
                         </td>
                     </tr>
                     <tr>
                         <td>Catalog No:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-catalog-no"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-catalog-no" type="text"/>'; ?>
+                            <input id="item-details-popup-window-catalog-no" type="text"/>
                         </td>
                     </tr>              
                 </table>
@@ -121,14 +117,14 @@ if ($Admin->isAdmin()) {
                         <td>Unit Price:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-price"></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<i>Total Price: <span id="popup-item-total-price"></span></i>)</span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-price" type="number" step="any"/>'; ?>
+                            <input id="item-details-popup-window-price" type="number" step="any"/>
                         </td>
                     </tr>   
                     <tr>
                         <td>Item Web Link:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-weblink"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-weblink" type="text"/>'; ?>
+                            <input id="item-details-popup-window-weblink" type="text"/>
                         </td>
                     </tr>  
                     <tr>
@@ -136,12 +132,10 @@ if ($Admin->isAdmin()) {
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-cost-center"></span>
                             <?php
-                            if ($isAdmin) {
-                                echo '<select id="item-details-popup-window-cost-center">';
-                                echo '<option></option>';
-                                $CostCenters->populateCostCentersList();
-                                echo '</select>';
-                            }
+                            echo '<select id="item-details-popup-window-cost-center">';
+                            echo '<option></option>';
+                            $CostCenters->populateCostCentersList();
+                            echo '</select>';
                             ?>
                         </td>
                     </tr>
@@ -150,12 +144,10 @@ if ($Admin->isAdmin()) {
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-project"></span>
                             <?php
-                            if ($isAdmin) {
-                                echo '<select id="item-details-popup-window-project">';
-                                echo '<option></option>';
-                                $Projects->populateProjectsList();
-                                echo '</select>';
-                            }
+                            echo '<select id="item-details-popup-window-project">';
+                            echo '<option></option>';
+                            $Projects->populateProjectsList();
+                            echo '</select>';
                             ?>
                         </td>
                     </tr>   
@@ -163,9 +155,21 @@ if ($Admin->isAdmin()) {
                         <td>Comments:</td>
                         <td class="item-details-input-holder-td">
                             <span id="popup-item-comments"></span>
-                            <?php if ($isAdmin) echo '<input id="item-details-popup-window-comments" type="text"/>'; ?>
+                            <input id="item-details-popup-window-comments" type="text"/>
                         </td>
                     </tr>  
+                    <tr>
+                        <td>SDS Complete:</td>
+                        <td class="item-details-input-holder-td">
+                            <span id="popup-item-sds"></span>
+                            <select id="item-details-popup-window-sds">
+                                <option></option>
+                                <option>Yes</option>
+                                <option>No</option>
+                                <option>N/A</option>
+                            </select>
+                        </td>
+                    </tr> 
                 </table>
             </td>
         </tr>
@@ -177,7 +181,9 @@ if ($Admin->isAdmin()) {
                 <table>
                     <tr>
                         <td>Status:</td>
-                        <td class="item-details-input-holder-td">
+                        <td 
+                        <?php if ($isAdmin) echo 'class="item-details-input-holder-td"'; ?>
+                            >
                             <span id="popup-item-status"></span>
                             <?php
                             if ($isAdmin) {

@@ -86,7 +86,8 @@ function showItemDetailsPopupWindow(
         delivered,
         deliveredDate,
         deliveredByUsername,
-        editable) {
+        editable,
+        sds) {
     blockUI();
     $('.popup-error-div').html('');
 
@@ -97,7 +98,7 @@ function showItemDetailsPopupWindow(
     if (weblink !== '') {
         var weblink = "<a target='_blank' href='" + weblink + "'>Link</a>";
     }
-    
+
     var totalPrice = price * quantity;
     $("#popup-item-order-number").html("Order " + orderNo);
     $("#popup-item-description").html(description);
@@ -111,6 +112,7 @@ function showItemDetailsPopupWindow(
     $("#popup-item-cost-center").html(costCenter);
     $("#popup-item-project").html(project);
     $("#popup-item-comments").html(comments);
+    $("#popup-item-sds").html(sds);
     $("#popup-item-status-updated-date").html(statusUpdatedDate);
     $("#popup-item-requested-date").html(requestedDate);
     $('#popup-item-requested-by').html(requestedByUsername);
@@ -134,7 +136,7 @@ function showItemDetailsPopupWindow(
     } else {
         $("#popup-item-status-delivered-tr").hide();
     }
-    
+
     if (editable === "true") {
         $("#item-details-popup-window-user-edit-icon-wrapper").css("display", "inline-block");
     } else {
@@ -145,7 +147,9 @@ function showItemDetailsPopupWindow(
     $.ajax({
         url: "ajax/populate-attachments.php",
         type: "GET",
-        data: "order_id=" + orderNo,
+        data: {
+            order_id: orderNo
+        },
         cache: false,
         dataType: "json",
         success: function (json_response) {
@@ -202,6 +206,7 @@ function addNewItem() {
     var cost_center = encodeURIComponent($("#add-new-item-cost-center").val());
     var project = $("#add-new-item-project").val();
     var comments = encodeURIComponent($("#add-new-item-comments").val());
+    var sds = $("#add-new-item-sds").val();
     var date_needed = encodeURIComponent($("#add-new-item-date-needed").val());
     var weblink = encodeURIComponent($("#add-new-item-weblink").val());
 
@@ -221,7 +226,8 @@ function addNewItem() {
             || vendor === 'Please Choose a Vendor'
             || catalog_no === ''
             || date_needed === ''
-            || project === 'Please Choose a Project') {
+            || project === 'Please Choose a Project'
+            || sds === '') {
         error_div.html("Please fill all the mandatory fields");
     } else if (vendor === "Add New Vendor"
             && (new_vendor_name === ''
@@ -253,7 +259,8 @@ function addNewItem() {
                     "&project=" + encodeURIComponent(project) +
                     "&date_needed=" + date_needed +
                     "&weblink=" + weblink +
-                    "&comments=" + comments,
+                    "&comments=" + comments +
+                    "&sds=" + sds,
             cache: false,
             dataType: "json",
             success: function (json_data) {
@@ -635,7 +642,7 @@ function refreshOrdersTable() {
                 $('#orders-table tbody').html(json_data.html_tbody);
                 $("#pagination-holder-div").html(json_data.html_pagination);
             } else if (json_data.status === 'no_session') {
-                    window.location = "/";
+                window.location = "/";
             }
         }
     });
@@ -654,28 +661,153 @@ function hideLoginPopupWindow() {
 
 function toggleItemDetailsEditFields(showHide) {
     if (showHide === "show") {
-//        $(".item-details-input-holder-td input").show();
-//        $(".item-details-input-holder-td select").show();
-//        $(".item-details-input-holder-td span").hide();
+        $(".item-details-input-holder-td input").show();
+        $(".item-details-input-holder-td select").show();
+        $(".item-details-input-holder-td span").hide();
 
         $("#item-details-popup-window-edit-icon").fadeOut();
         $("#item-details-popup-window-save-icon").fadeIn();
         $("#item-details-popup-window-cancel-icon").fadeIn();
     } else if (showHide === "hide") {
         hideEditFields();
+        updateItemDetails();
     } else {
         setTimeout(hideEditFields(), 1000);
     }
 }
 
 function hideEditFields() {
-//    $(".item-details-input-holder-td span").show();
-//    $(".item-details-input-holder-td input").hide();
-//    $(".item-details-input-holder-td select").hide();
+    $(".item-details-input-holder-td span").show();
+    $(".item-details-input-holder-td input").hide();
+    $(".item-details-input-holder-td select").hide();
 
     $("#item-details-popup-window-edit-icon").fadeIn();
     $("#item-details-popup-window-save-icon").fadeOut();
     $("#item-details-popup-window-cancel-icon").fadeOut();
+}
+
+function prepareItemEditInputs(
+        description,
+        quantity,
+        uom,
+        vendor,
+        catalogNo,
+        price,
+        weblink,
+        costCenter,
+        project,
+        comments,
+        sds) {
+
+    $("#item-details-popup-window-description").val(decodeEntities(description));
+    $("#item-details-popup-window-quantity").val(decodeEntities(quantity));
+    $("#item-details-popup-window-uom").val(decodeEntities(uom));
+    $("#item-details-popup-window-catalog-no").val(decodeEntities(catalogNo));
+    $("#item-details-popup-window-price").val(decodeEntities(price));
+    $("#item-details-popup-window-weblink").val(decodeEntities(weblink));
+    $("#item-details-popup-window-comments").val(decodeEntities(comments));
+    $("#item-details-popup-window-sds").val(decodeEntities(sds));
+
+    if (vendor !== '') {
+        $("#item-details-popup-window-vendor > option").each(function () {
+            if ($(this).html() === vendor) {
+                $(this).prop('selected', true);
+            }
+        });
+    }
+
+    if (costCenter !== '') {
+        $("#item-details-popup-window-cost-center option:contains('" + costCenter + "')").prop('selected', true);
+    } else {
+        $("#item-details-popup-window-cost-center")[0].selectedIndex = 0;
+    }
+
+    if (project !== '') {
+        $("#item-details-popup-window-project option:contains('" + project + "')").prop('selected', true);
+    } else {
+        $("#item-details-popup-window-project option:contains('')")[0].selectedIndex = 0;
+    }
+}
+
+function updateItemDetails() {
+    var item_details_popup_window = $("#item-details-popup-window");
+    var description = $("#item-details-popup-window-description").val();
+    var quantity = $("#item-details-popup-window-quantity").val();
+    var uom = $("#item-details-popup-window-uom").val();
+    var vendor = $("#item-details-popup-window-vendor").val();
+    var catalog_no = $("#item-details-popup-window-catalog-no").val();
+    var price = $("#item-details-popup-window-price").val();
+    var weblink = $("#item-details-popup-window-weblink").val();
+    var cost_center = $("#item-details-popup-window-cost-center").val();
+    var project = $("#item-details-popup-window-project").val();
+    var comments = $("#item-details-popup-window-comments").val();
+    var sds = $("#item-details-popup-window-sds").val();
+    var order_id = $("#popup-item-order-number").html();
+    var error_div = $('#item-details-popup-window-error-div');
+    error_div.html("");
+    error_div.html('&nbsp;');
+    error_div.css('color', '#cc0000');
+
+    item_details_popup_window.css('z-index', '9');
+    showProgressCircle();
+    blockUI();
+    $.ajax({
+        url: "../ajax/update-item-details.php",
+        type: "POST",
+        data: {
+            description: description,
+            uom: uom,
+            quantity: quantity,
+            vendor: vendor,
+            catalog_no: catalog_no,
+            price: price,
+            weblink: weblink,
+            cost_center: cost_center,
+            project: project,
+            comments: comments,
+            order_id: order_id,
+            sds: sds
+        },
+        cache: false,
+        dataType: "json",
+        success: function (json_data) {
+            if (json_data.status === 'success') {
+                $('#orders-table tbody').html(json_data.html_tbody);
+                $("#popup-item-description").html(json_data.description);
+                $("#popup-item-quantity").html(json_data.quantity);
+                $("#popup-item-uom").html(json_data.uom);
+                $("#popup-item-vendor").html(json_data.vendor_name);
+                $("#popup-item-catalog-no").html(json_data.catalog_no);
+                weblink = json_data.weblink;
+                if (weblink !== '') {
+                    if (!/^https?:\/\//i.test(weblink)) {
+                        weblink = 'http://' + weblink;
+                    }
+                    weblink = "<a target='_blank' href='" + weblink + "'>Link</a>";
+                    $("#popup-item-weblink").html(weblink);
+                } else {
+                    $("#popup-item-weblink").html('');
+                }
+                $("#popup-item-price").html("$" + json_data.price);
+                var totalPrice = json_data.price * json_data.quantity;
+                $("#popup-item-total-price").html("$" + totalPrice.toFixed(2));
+                $("#popup-item-cost-center").html(json_data.cost_center_name);
+                $("#popup-item-project").html(json_data.project);
+                $("#popup-item-comments").html(json_data.comments);
+                $("#popup-item-sds").html(json_data.sds);
+            } else if (json_data.status === "no_session") {
+                showLoginPopupWindow();
+            } else if (json_data.status === "status_changed") {
+                var err_message = "We couldn't update the order details. The status of this order has already been changed to '" + json_data.latest_status + "'.";
+                err_message += "</br>Please contact an admin to make changes on this order.";
+                error_div.html(err_message);
+            } else {
+                error_div.html(json_data.status);
+            }
+            item_details_popup_window.css('z-index', '9999');
+            hideProgressCircle();
+        }
+    });
 }
 
 function msieversion() {

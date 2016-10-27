@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 02/29/2016                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -133,6 +133,7 @@ class Orders {
         $sql .= $o . "cost_center, ";
         $sql .= $o . "project, ";
         $sql .= $o . "comments, ";
+        $sql .= $o . "sds, ";
         $sql .= $o . "requested_datetime, ";
         $sql .= $o . "status_updated_date, ";
         $sql .= $o . "status, ";

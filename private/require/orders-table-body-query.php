@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 02/29/2016                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -49,6 +49,7 @@ if (!empty($ordersArray)) {
         $costCenterId = $orderDetailsArray['cost_center'];
         $projectId = $orderDetailsArray['project'];
         $comments = $orderDetailsArray['comments'];
+        $sds = $orderDetailsArray['sds'];
         $requestedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['requested_datetime']);
         $statusUpdatedDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['status_updated_date']);
         $itemNeededByDate = $Functions->convertMysqlDateToPhpDate($orderDetailsArray['item_needed_by_date']);
@@ -103,7 +104,7 @@ if (!empty($ordersArray)) {
         $popupWindowParamArray = array($itemId, $description, $quantity, $uom, $vendorName, $catalogNo,
             $price, $weblink, $costCenterName, $project, $comments, $requestedByUsername, $requestedDate,
             $statusUpdatedByUsername, $statusUpdatedDate, $status, $itemNeededByDate, $ordered, $orderedDate,
-            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername, $isEditable
+            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername, $isEditable, $sds
         );
         echo "<tr onclick='showItemDetailsPopupWindow(";
         echoJsFunctionParams($popupWindowParamArray);
@@ -115,9 +116,16 @@ if (!empty($ordersArray)) {
             echo ");";
 
             $inputParamsArray = array($description, $quantity, $uom, $vendorName, $catalogNo,
-                $price, $weblink, $costCenterName, $project, $comments, $invoiceNo, $vendorOrderNo, $status
+                $price, $weblink, $costCenterName, $project, $comments, $invoiceNo, $vendorOrderNo, $status, $sds
             );
             echo " prepareItemDetailsPopupWindowInputs(";
+            echoJsFunctionParams($inputParamsArray);
+            echo ");";
+        } elseif ($isEditable == "true") {
+            $inputParamsArray = array($description, $quantity, $uom, $vendorName, $catalogNo,
+                $price, $weblink, $costCenterName, $project, $comments, $sds
+            );
+            echo " prepareItemEditInputs(";
             echoJsFunctionParams($inputParamsArray);
             echo ");";
         }

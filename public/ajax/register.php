@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/31/2015                                                                 */
-/* Last modified on 12/31/2015                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -34,7 +34,7 @@ require('../../private/include/include.php');
 // Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
 if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     // Getting the parameters passed through AJAX
-    $email = trim(filter_input(INPUT_POST, 'email'));
+    $email = strtolower(trim(filter_input(INPUT_POST, 'email')));
     $enteredPassword = trim(filter_input(INPUT_POST, 'password'));
     $currentDate = date("Y-m-d H:i:s");
     $hashedPassword = password_hash($enteredPassword, PASSWORD_DEFAULT);

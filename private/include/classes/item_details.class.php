@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/17/2015                                                                 */
-/* Last modified on 02/07/2016                                                           */
+/* Last modified on 03/06/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -36,17 +36,24 @@ class ItemDetails {
     private $Functions;
     private $Email;
     private $Vendors;
+    private $Admin;
+    private $isAdmin = false;
 
     /**
      * @param Database $database
      * @param Functions $functions
      * @param Vendors $vendors
      */
-    function __construct($database, $functions, $vendors, $email) {
+    function __construct($database, $functions, $vendors, $email, $admin) {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Vendors = $vendors;
         $this->Email = $email;
+        $this->Admin = $admin;
+
+        if ($this->Admin->isAdmin()) {
+            $this->isAdmin = true;
+        }
     }
 
     public function getVendors() {
@@ -59,7 +66,7 @@ class ItemDetails {
         }
         echo '</select>';
     }
-    
+
     /**
      * @param array $itemDetailsArray
      * @return boolean PDO execute result
@@ -77,17 +84,21 @@ class ItemDetails {
         $costCenter = $itemDetailsArray['cost_center'];
         $projectId = $itemDetailsArray['project'];
         $comments = $itemDetailsArray['comments'];
-        $status = $itemDetailsArray['status'];
-        $invoiceNo = $itemDetailsArray['invoice_no'];
-        $vendorOrderNo = $itemDetailsArray['vendor_order_no'];
+        $sds = $itemDetailsArray['sds'];
         $orderId = trim(substr($itemDetailsArray['order_id'], 5));
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
 
-        $statusChanged = true;
-        if ($status == 'no_change') {
-            $statusChanged = false;
+        if ($this->isAdmin) {
+            $status = $itemDetailsArray['status'];
+            $invoiceNo = $itemDetailsArray['invoice_no'];
+            $vendorOrderNo = $itemDetailsArray['vendor_order_no'];
+
+            $statusChanged = true;
+            if ($status == 'no_change') {
+                $statusChanged = false;
+            }
         }
 
         // Inserting the information to the database
@@ -103,33 +114,38 @@ class ItemDetails {
         $sql .= "cost_center = :cost_center, ";
         $sql .= "project = :project, ";
         $sql .= "comments = :comments, ";
-        if ($statusChanged) {
-            if ($status == 'Ordered') {
-                $sql .= "ordered = :ordered, ";
-                $sql .= "ordered_date = :ordered_date, ";
-                $sql .= "ordered_by_user_id = :ordered_by_user_id, ";
-                $sql .= "ordered_by_username = :ordered_by_username, ";
-            } else if ($status == 'Delivered') {
-                $sql .= "delivered = :delivered, ";
-                $sql .= "delivered_date = :delivered_date, ";
-                $sql .= "delivered_by_user_id = :delivered_by_user_id, ";
-                $sql .= "delivered_by_username = :delivered_by_username, ";
-            }
+        $sql .= "sds = :sds, ";
 
-            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
-                $sql .= "ordered = :ordered, ";
-            }
+        if ($this->isAdmin) {
+            if ($statusChanged) {
+                if ($status == 'Ordered') {
+                    $sql .= "ordered = :ordered, ";
+                    $sql .= "ordered_date = :ordered_date, ";
+                    $sql .= "ordered_by_user_id = :ordered_by_user_id, ";
+                    $sql .= "ordered_by_username = :ordered_by_username, ";
+                } else if ($status == 'Delivered') {
+                    $sql .= "delivered = :delivered, ";
+                    $sql .= "delivered_date = :delivered_date, ";
+                    $sql .= "delivered_by_user_id = :delivered_by_user_id, ";
+                    $sql .= "delivered_by_username = :delivered_by_username, ";
+                }
 
-            if ($status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
-                $sql .= "delivered = :delivered, ";
+                if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
+                    $sql .= "ordered = :ordered, ";
+                }
+
+                if ($status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
+                    $sql .= "delivered = :delivered, ";
+                }
+                $sql .= "status = :status, ";
+                $sql .= "status_updated_date = :status_updated_date, ";
+                $sql .= "status_updated_by_user_id = :status_updated_by_user_id, ";
+                $sql .= "status_updated_by_username = :status_updated_by_username, ";
             }
-            $sql .= "status = :status, ";
-            $sql .= "status_updated_date = :status_updated_date, ";
-            $sql .= "status_updated_by_user_id = :status_updated_by_user_id, ";
-            $sql .= "status_updated_by_username = :status_updated_by_username, ";
+            $sql .= "invoice_no = :invoice_no, ";
+            $sql .= "vendor_order_no = :vendor_order_no, ";
         }
-        $sql .= "invoice_no = :invoice_no, ";
-        $sql .= "vendor_order_no = :vendor_order_no, ";
+
         $sql .= "last_updated_by_id = :last_updated_by_id, ";
         $sql .= "last_updated_by_username = :last_updated_by_username, ";
         $sql .= "last_updated_datetime = :last_updated_datetime ";
@@ -148,33 +164,38 @@ class ItemDetails {
         $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
         $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
         $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
-        if ($statusChanged) {
-            if ($status == 'Ordered') {
-                $stmt->bindValue(':ordered', "1", PDO::PARAM_STR);
-                $stmt->bindValue(':ordered_date', $currentDate, PDO::PARAM_STR);
-                $stmt->bindValue(':ordered_by_user_id', $userId, PDO::PARAM_STR);
-                $stmt->bindValue(':ordered_by_username', $username, PDO::PARAM_STR);
-            } else if ($status == 'Delivered') {
-                $stmt->bindValue(':delivered', "1", PDO::PARAM_STR);
-                $stmt->bindValue(':delivered_date', $currentDate, PDO::PARAM_STR);
-                $stmt->bindValue(':delivered_by_user_id', $userId, PDO::PARAM_STR);
-                $stmt->bindValue(':delivered_by_username', $username, PDO::PARAM_STR);
-            }
+        $stmt->bindValue(':sds', $sds, PDO::PARAM_STR);
 
-            if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
-                $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
-            }
+        if ($this->isAdmin) {
+            if ($statusChanged) {
+                if ($status == 'Ordered') {
+                    $stmt->bindValue(':ordered', "1", PDO::PARAM_STR);
+                    $stmt->bindValue(':ordered_date', $currentDate, PDO::PARAM_STR);
+                    $stmt->bindValue(':ordered_by_user_id', $userId, PDO::PARAM_STR);
+                    $stmt->bindValue(':ordered_by_username', $username, PDO::PARAM_STR);
+                } else if ($status == 'Delivered') {
+                    $stmt->bindValue(':delivered', "1", PDO::PARAM_STR);
+                    $stmt->bindValue(':delivered_date', $currentDate, PDO::PARAM_STR);
+                    $stmt->bindValue(':delivered_by_user_id', $userId, PDO::PARAM_STR);
+                    $stmt->bindValue(':delivered_by_username', $username, PDO::PARAM_STR);
+                }
 
-            if ($status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
-                $stmt->bindValue(':delivered', "0", PDO::PARAM_STR);
+                if ($status != 'Ordered' && $status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
+                    $stmt->bindValue(':ordered', "0", PDO::PARAM_STR);
+                }
+
+                if ($status != 'Delivered' && $status != 'In Concur' && $status != 'Archived') {
+                    $stmt->bindValue(':delivered', "0", PDO::PARAM_STR);
+                }
+                $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+                $stmt->bindValue(':status_updated_by_user_id', $userId, PDO::PARAM_STR);
+                $stmt->bindValue(':status_updated_by_username', $username, PDO::PARAM_STR);
+                $stmt->bindValue(':status_updated_date', $currentDate, PDO::PARAM_STR);
             }
-            $stmt->bindValue(':status', $status, PDO::PARAM_STR);
-            $stmt->bindValue(':status_updated_by_user_id', $userId, PDO::PARAM_STR);
-            $stmt->bindValue(':status_updated_by_username', $username, PDO::PARAM_STR);
-            $stmt->bindValue(':status_updated_date', $currentDate, PDO::PARAM_STR);
+            $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
+            $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
         }
-        $stmt->bindValue(':invoice_no', $invoiceNo, PDO::PARAM_STR);
-        $stmt->bindValue(':vendor_order_no', $vendorOrderNo, PDO::PARAM_STR);
+        
         $stmt->bindValue(':last_updated_by_id', $userId, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_by_username', $username, PDO::PARAM_STR);
         $stmt->bindValue(':last_updated_datetime', $currentDate, PDO::PARAM_STR);
@@ -200,6 +221,18 @@ class ItemDetails {
         $messageBody = "<p>The status for '$itemDescription' was updated to '$status'.</p>";
 
         $this->Email->sendEmail($userEmail, $userFirstName, $subject, $messageBody);
+    }
+    
+    function getItemOrderStatus($orderId) {
+        $sql = "SELECT status FROM orders WHERE id = :orderId";
+        $stmt = $this->Database->prepare($sql);
+
+        $stmt->bindValue(':orderId', $orderId, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $sanitizedArray = $this->Functions->sanitizeArray($stmt->fetch(PDO::FETCH_ASSOC));
+
+        return $sanitizedArray['status'];
     }
 
 }
