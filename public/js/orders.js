@@ -87,7 +87,8 @@ function showItemDetailsPopupWindow(
         deliveredDate,
         deliveredByUsername,
         editable,
-        sds) {
+        sds,
+        vendorId) {
     blockUI();
     $('.popup-error-div').html('');
 
@@ -105,6 +106,7 @@ function showItemDetailsPopupWindow(
     $("#popup-item-quantity").html(quantity);
     $("#popup-item-uom").html(uom);
     $("#popup-item-vendor").html(vendor);
+    $("#popup-item-vendor").attr("vendor-id", vendorId);
     $("#popup-item-catalog-no").html(catalogNo);
     $("#popup-item-price").html("$" + price);
     $("#popup-item-total-price").html("$" + totalPrice.toFixed(2));
@@ -169,7 +171,7 @@ function reorder() {
     $("#add-new-item-description").val(decodeEntities($("#popup-item-description").html()));
     $("#add-new-item-quantity").val(decodeEntities($("#popup-item-quantity").html()));
     $("#add-new-item-uom").val(decodeEntities($("#popup-item-uom").html()));
-    $('#add-new-item-vendor option:contains("' + $("#popup-item-vendor").html() + '")').prop('selected', true);
+    $('#add-new-item-vendor option[value="' + $("#popup-item-vendor").attr("vendor-id") + '"]').prop('selected', true);
     $("#add-new-item-catalog-no").val(decodeEntities($("#popup-item-catalog-no").html()));
     $("#add-new-item-price").val(decodeEntities($("#popup-item-price").html().substring(1)));
     $("#add-new-item-weblink").val(decodeEntities($($("#popup-item-weblink").html()).attr('href')));

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/26/2015                                                                 */
-/* Last modified on 03/06/2016                                                           */
+/* Last modified on 10/27/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -104,7 +104,7 @@ if (!empty($ordersArray)) {
         $popupWindowParamArray = array($itemId, $description, $quantity, $uom, $vendorName, $catalogNo,
             $price, $weblink, $costCenterName, $project, $comments, $requestedByUsername, $requestedDate,
             $statusUpdatedByUsername, $statusUpdatedDate, $status, $itemNeededByDate, $ordered, $orderedDate,
-            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername, $isEditable, $sds
+            $orderedByUsername, $delivered, $deliveredDate, $deliveredByUsername, $isEditable, $sds, $vendorId
         );
         echo "<tr onclick='showItemDetailsPopupWindow(";
         echoJsFunctionParams($popupWindowParamArray);
