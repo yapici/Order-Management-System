@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/23/2015                                                                 */
-/* Last modified on 02/15/2016                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -44,6 +44,7 @@ if ($Admin->isAdmin()) {
     require_once (PRIVATE_PATH . 'require/popup-windows/cost-centers-popup-window.php');
     require_once (PRIVATE_PATH . 'require/popup-windows/users-popup-window.php');
     require_once (PRIVATE_PATH . 'require/popup-windows/reset-password-confirmation-popup-window.php');
+    require_once (PRIVATE_PATH . 'require/popup-windows/delete-vendor-confirmation-popup-window.php');
     echo "<style>";
     require(PRIVATE_PATH . 'require/css/popup-windows.css');
     echo "</style>";

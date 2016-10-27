@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/24/2015                                                                 */
-/* Last modified on 03/06/2016                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -112,7 +112,7 @@ class Orders {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Admin = $admin;
-        
+
         $this->setTotalNumberOfItems();
         if ($this->Admin->isAdmin()) {
             array_push($this->searchColumns, 'vendor_order_no', 'invoice_no');
@@ -231,7 +231,7 @@ class Orders {
             } else {
                 $sortSqlString = " ORDER BY " . $_SESSION['sort_column_name'];
             }
-            
+
             if ($_SESSION['sort_up_or_down'] == 'up') {
                 $sortSqlString .= " ASC ";
             } else {
@@ -242,8 +242,7 @@ class Orders {
     }
 
     private function setPaginationParameters() {
-        if (isset(
-                        $_SESSION['pagination_page_number'])) {
+        if (isset($_SESSION['pagination_page_number'])) {
             $this->paginationPageNumber = $_SESSION['pagination_page_number'];
             $this->paginationStartPoint = ($this->paginationPageNumber - 1) * $this->numberOfItemsPerPage
 
@@ -305,4 +304,5 @@ class Orders {
     }
 
 }
+
 ?>

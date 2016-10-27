@@ -1,8 +1,9 @@
 <?php
+
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/24/2015                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -29,80 +30,96 @@
 /* THE SOFTWARE.                                                                         */
 /* ===================================================================================== */
 
-$page = $Orders->paginationPageNumber - 1;
-$next = $Orders->paginationPageNumber + 1;
+$currentPage = $Orders->paginationPageNumber;
+$page = $currentPage - 1;
+$next = $currentPage + 1;
 $lastpage = ceil($Orders->totalNumberOfItems / $Orders->numberOfItemsPerPage);
 $lpm1 = $lastpage - 1;
+$lpm2 = $lastpage - 2;
 
 // Number of adjacent pages should be shown on each side
-$adjacents = 3;
+$adjacents = 1;
 
 $pagination = "";
 if ($lastpage > 1) {
     //previous button
-    if ($Orders->paginationPageNumber > 1) {
-        $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($page)\">&#10094;</a>";
+    if ($currentPage > 1) {
+        $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($page)\"><</a>";
     } else {
-        $pagination .= "<a class=\"button gray-out-button\">&#10094;</a>";
+        $pagination .= "<a class=\"button gray-out-button\"><</a>";
     }
 
     //pages	
-    if ($lastpage < 7 + ($adjacents * 2)) { //not enough pages to bother breaking it up
+    if ($lastpage < 9 + $adjacents) { //not enough pages to bother breaking it up
         for ($counter = 1; $counter <= $lastpage; $counter++) {
-            if ($counter == $Orders->paginationPageNumber) {
+            if ($counter == $currentPage) {
                 $pagination .= "<a class=\"button gray-out-button\">$counter</a>";
             } else {
                 $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($counter)\">$counter</a>";
             }
         }
-    } elseif ($lastpage > 5 + ($adjacents * 2)) { //enough pages to hide some
+    } else { //enough pages to hide some
         //close to beginning; only hide later pages
-        if ($Orders->paginationPageNumber < 1 + ($adjacents * 2)) {
-            for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
-                if ($counter == $Orders->paginationPageNumber) {
+        if ($currentPage < 5 + $adjacents) {
+            if ($currentPage == 1) {
+                $pagination .= "<a class=\"button gray-out-button\" onclick=\"goToPage(1)\">1</a>";
+            } else {
+                $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(1)\">1</a>";
+            }
+            for ($counter = 2; $counter < 6 + $adjacents; $counter++) {
+                if ($counter == $currentPage) {
                     $pagination .= "<a class=\"button gray-out-button\">$counter</a>";
                 } else {
                     $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($counter)\">$counter</a>";
                 }
             }
-            $pagination .= "...";
+            $pagination .= "&#8230;&nbsp;";
+            $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lpm2)\">$lpm2</a>";
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lpm1)\">$lpm1</a>";
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lastpage)\">$lastpage</a>";
-        } elseif ($lastpage - ($adjacents * 2) > $Orders->paginationPageNumber && $Orders->paginationPageNumber > ($adjacents * 2)) { //in middle; hide some front and some back
+        } elseif ($currentPage > $adjacents &&
+                $currentPage >= ($adjacents + 5) &&
+                $currentPage < ($lastpage - (3 + $adjacents))) { //in middle; hide some front and some back
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(1)\">1</a>";
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(2)\">2</a>";
-            $pagination .= "...";
-            for ($counter = $Orders->paginationPageNumber - $adjacents; $counter <= $Orders->paginationPageNumber + $adjacents; $counter++) {
-                if ($counter == $Orders->paginationPageNumber) {
+            $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(3)\">3</a>";
+            $pagination .= "&#8230;&nbsp;";
+            for ($counter = $currentPage - $adjacents; $counter <= $currentPage + $adjacents; $counter++) {
+                if ($counter == $currentPage) {
                     $pagination .= "<a class=\"button gray-out-button\">$counter</a>";
                 } else {
                     $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($counter)\">$counter</a>";
                 }
             }
-            $pagination .= "...";
+            $pagination .= "&#8230;&nbsp;";
+            $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lpm2)\">$lpm2</a>";
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lpm1)\">$lpm1</a>";
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lastpage)\">$lastpage</a>";
-        }
-        //close to end; only hide early pages
-        else {
+        } else { //close to end; only hide early pages
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(1)\">1</a>";
             $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(2)\">2</a>";
-            $pagination .= "...";
-            for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++) {
-                if ($counter == $Orders->paginationPageNumber) {
+            $pagination .= "<a class=\"button page-button\" onclick=\"goToPage(3)\">3</a>";
+            $pagination .= "&#8230;&nbsp;";
+            for ($counter = $lastpage - (4 + $adjacents); $counter <= $lastpage-1; $counter++) {
+                if ($counter == $currentPage) {
                     $pagination .= "<a class=\"button gray-out-button\">$counter</a>";
                 } else {
                     $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($counter)\">$counter</a>";
                 }
+            }
+            if ($currentPage == $lastpage) {
+                $pagination .= "<a class=\"button gray-out-button\" onclick=\"goToPage($lastpage)\">$lastpage</a>";
+            } else {
+                $pagination .= "<a class=\"button page-button\" onclick=\"goToPage($lastpage)\">$lastpage</a>";
             }
         }
     }
 
-    //next button
-    if ($Orders->paginationPageNumber < $counter - 1) {
-        $pagination .= "<a class=\"button page-button next_and_previous_buttons\" onclick=\"goToPage($next)\">&#10095;</a>";
+//next button
+    if ($currentPage < $counter - 1) {
+        $pagination .= "<a class=\"button page-button next_and_previous_buttons\" onclick=\"goToPage($next)\">></a>";
     } else {
-        $pagination .= "<a class=\"button gray-out-button next_and_previous_buttons\">&#10095;</a>";
+        $pagination .= "<a class=\"button gray-out-button next_and_previous_buttons\">></a>";
     }
 }
 ?>

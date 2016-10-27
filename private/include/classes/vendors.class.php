@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/16/2015                                                                 */
-/* Last modified on 02/15/2016                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -50,13 +50,28 @@ class Vendors {
         $this->Database = $database;
         $this->Functions = $functions;
         $this->Admin = $admin;
-        $this->populateArrays();
+        $this->populateArrays(false);
     }
 
-    private function populateArrays() {
-        $sql = "SELECT id, name, phone, website, address, contact_person, account_number, added_by_username, approved FROM vendors WHERE deleted = 0 ORDER BY name";
+    private function populateArrays($sort) {
+        if ($sort == true) {
+            $sortColumn = $_SESSION['vendor_sort_column_name'];
+
+            $sql = "SELECT id, name, phone, website, address, contact_person, account_number, added_by_username, approved FROM vendors WHERE deleted = 0 ORDER BY $sortColumn";
+
+            if ($_SESSION['vendor_sort_up_or_down'] == 'up') {
+                $sql .= " ASC ";
+            } else {
+                $sql .= " DESC ";
+            }
+        } else {
+            $sql = "SELECT id, name, phone, website, address, contact_person, account_number, added_by_username, approved FROM vendors WHERE deleted = 0 ORDER BY name";
+        }
+
         $stmt = $this->Database->prepare($sql);
         $stmt->execute();
+        $this->vendorsArray = array();
+        $this->vendorIdsArray = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $this->vendorsArray[$row['id']] = $row;
             $this->vendorIdsArray[$row['name']] = $row['id'];
@@ -64,7 +79,11 @@ class Vendors {
     }
 
     public function refreshArrays() {
-        $this->populateArrays();
+        $this->populateArrays(false);
+    }
+
+    public function refreshArraysWithSort() {
+        $this->populateArrays(true);
     }
 
     /**
@@ -109,7 +128,7 @@ class Vendors {
             $tableBody .= "<td title='$vendorContactPerson'><span>$vendorContactPerson</span><input id='vendors-popup-window-vendor-contact_person' value='$vendorContactPerson' type='text'/></td>";
             $tableBody .= "<td title='$vendorAccountNo'><span>$vendorAccountNo</span><input id='vendors-popup-window-vendor-account_number' value='$vendorAccountNo' type='text'/></td>";
             $tableBody .= "<td title='$vendorAddedBy'>$vendorAddedBy</td>";
-            
+
             $tableBody .= "<td title='Vendor Approval Status'>";
             if ($vendorApproved == '2') {
                 $tableBody .= "<span>New Vendor</span>";
@@ -132,7 +151,7 @@ class Vendors {
                 $tableBody .= "</select>";
             }
             $tableBody .= "</td>";
-            $tableBody .= "<td title='Delete Vendor'><a class='delete-button' onclick='deleteVendor(this);'>&#10006;</a></td>";
+            $tableBody .= "<td title='Delete Vendor'><a class='delete-button' onclick='showDeleteVendorConfirmPopup(this);'>&#10006;</a></td>";
             $tableBody .= "</tr>";
         }
         echo $tableBody;
@@ -207,7 +226,7 @@ class Vendors {
         $vendorId = $vendorDetailsArray['vendor_id'];
         $fieldName = $vendorDetailsArray['field_name'];
         $value = $vendorDetailsArray['value'];
-        
+
         $userId = $_SESSION['id'];
         $username = $_SESSION['username'];
         $currentDate = date("Y-m-d H:i:s");
@@ -304,4 +323,5 @@ class Vendors {
     }
 
 }
+
 ?>

@@ -399,6 +399,11 @@ function searchAction(action) {
             if (json_data.status === 'success') {
                 $('#orders-table tbody').html(json_data.html_tbody);
                 $("#pagination-holder-div").html(json_data.html_pagination);
+                if (action === 'search') {
+                    $("#number-of-search-results-holder").html(json_data.number_of_items);
+                } else {
+                    $("#number-of-search-results-holder").html("");
+                }
 
                 if (action === 'search' && keywords !== "") {
                     $('#orders-search-cancel-button').show();

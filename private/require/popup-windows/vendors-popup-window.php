@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/19/2015                                                                 */
-/* Last modified on 01/18/2016                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -36,15 +36,15 @@
     <table class="admin-popup-window-table" id="vendors-popup-window-vendors-table">
         <thead>
             <tr>
-                <td>Id</td>
-                <td>Name</td>
-                <td>Phone</td>
-                <td>Website</td>
-                <td>Address</td>
-                <td>Contact Person</td>
-                <td>Account No</td>
-                <td>Added By</td>
-                <td>Admin Approved</td>
+                <td onclick='sortVendor($(this), "id")'>Id <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "name")'>Name <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "phone")'>Phone <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "website")'>Website <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "address")'>Address <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "contact_person")'>Contact Person <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "account_number")'>Account No <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "added_by")'>Added By <a>&#9650;</a></td>
+                <td onclick='sortVendor($(this), "approved")'>Admin Approved <a>&#9650;</a></td>
             </tr>
         </thead>
         <tbody>

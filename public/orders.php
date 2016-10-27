@@ -2,7 +2,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 10/19/2015                                                                 */
-/* Last modified on 01/28/2016                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -73,7 +73,7 @@ if (!$Session->isSessionValid()) {
                     echo "value='" . $_SESSION['search_keywords'] . "'";
                 }
                 ?>
-                />
+                       />
 
                 <a class='search-cancel-button' id='orders-search-cancel-button' <?php
                 if (!isset($_SESSION['search_keywords']) || $_SESSION['search_keywords'] == "" || $_SESSION['search_keywords'] == "Search") {
@@ -81,6 +81,7 @@ if (!$Session->isSessionValid()) {
                 }
                 ?>onclick='searchAction("clear")'>Clear</a>
                 <a class="button search-button" onclick='searchAction("search")'><img src="images/search_icon.png"/></a>
+                <div id="number-of-search-results-holder"></div>
             </div>
             <div id="orders-error-div"></div>
             <?php

@@ -3,7 +3,7 @@
 /* ===================================================================================== */
 /* Copyright 2016 Engin Yapici <engin.yapici@gmail.com>                                  */
 /* Created on 12/12/2015                                                                 */
-/* Last modified on 12/12/2015                                                           */
+/* Last modified on 04/17/2016                                                           */
 /* ===================================================================================== */
 
 /* ===================================================================================== */
@@ -45,6 +45,11 @@ if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
         require_once(PRIVATE_PATH . 'require/orders-table-body-query.php');
         $jsonResponse['html_tbody'] = ob_get_clean();
         $jsonResponse['html_pagination'] = $pagination;
+        if ($Orders->totalNumberOfItems == 1) {
+            $jsonResponse['number_of_items'] = $Orders->totalNumberOfItems . " result";
+        } else {
+            $jsonResponse['number_of_items'] = $Orders->totalNumberOfItems . " results";
+        }
         $jsonResponse['status'] = "success";
     }
     echo json_encode($jsonResponse);
