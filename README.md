@@ -3,7 +3,7 @@
 
 <b>For a live demo:</b>
 
-<a href="http://oms.giderayak.net">Order Management System</a><br>
+<a href="http://oms.taskmeout.com">Order Management System</a><br>
 <i>For Admin Account:</i><br>
 Email: john.doe@example.com<br>
 Password: password<br><br>
