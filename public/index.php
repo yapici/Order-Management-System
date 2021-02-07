@@ -31,6 +31,12 @@
 
 require_once('../private/include/include.php');
 
+$currentUrlPath = $_SERVER[REQUEST_URI];
+
+if ($currentUrlPath == "/admin" || $currentUrlPath == "/enduser") {
+    $Session->afterSuccessfulLogout();
+}
+
 if ($Session->isSessionValid()) {
     $Functions->phpRedirect('orders');
 }

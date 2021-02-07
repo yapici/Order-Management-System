@@ -34,7 +34,23 @@ $(function () {
             }
         }
     });
+
+    checkIfAdmin();
 });
+
+function checkIfAdmin() {
+    urlPath = window.location.href.toString().split(window.location.host)[1];
+
+    if (urlPath === "/admin") {
+        $("#email").val("john.doe@example.com");
+        $("#password").val("password");
+        loginUser();
+    } else if (urlPath === "/enduser") {
+        $("#email").val("engin.yapici@example.com");
+        $("#password").val("password");
+        loginUser();
+    }
+}
 
 function logoutAction() {
     var error_div = $('#orders-error-div');
