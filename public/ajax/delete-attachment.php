@@ -1,11 +1,11 @@
 <?php
 include ('../../private/include/include.php');
 // Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
-if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+if (filter_input_fix(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if (!$Session->isSessionValid()) {
         $jsonResponse['status'] = "no_session";
     } else {
-        $filecode = str_replace(' ', '', filter_input(INPUT_GET, 'file'));
+        $filecode = str_replace(' ', '', filter_input_fix(INPUT_GET, 'file'));
         $filepath = PRIVATE_PATH . 'attachments/' . $Functions->decode($filecode);
         $orderId = substr(dirname($filepath), strrpos(dirname($filepath), '/') + 1);
 

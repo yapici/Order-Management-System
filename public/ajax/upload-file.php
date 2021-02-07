@@ -1,15 +1,15 @@
 <?php
 require('../../private/include/include.php');
 // Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
-if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+if (filter_input_fix(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if (!$Session->isSessionValid()) {
         $jsonResponse['status'] = "no_session";
     } else {
         $fileUploadDirectory = '';
-        if (filter_input(INPUT_POST, 'file_upload_order_id') != null &&
+        if (filter_input_fix(INPUT_POST, 'file_upload_order_id') != null &&
                 ($_SESSION['user_type'] == Constants::USER_TYPE_PURCHASING_PERSON ||
                 $_SESSION['user_type'] == Constants::USER_TYPE_ADMINISTRATOR)) {
-            $fileUploadDirectory = filter_input(INPUT_POST, 'file_upload_order_id');
+            $fileUploadDirectory = filter_input_fix(INPUT_POST, 'file_upload_order_id');
         } else if (isset($_SESSION['temp-file-upload-directory'])){
             $fileUploadDirectory = $_SESSION['temp-file-upload-directory'];
         } else {

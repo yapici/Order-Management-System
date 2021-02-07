@@ -1,8 +1,8 @@
 <?php
 require_once('../private/include/include.php');
 
-$email = filter_input(INPUT_GET, 'email');
-$code = filter_input(INPUT_GET, 'code');
+$email = filter_input_fix(INPUT_GET, 'email');
+$code = filter_input_fix(INPUT_GET, 'code');
 
 if ($email == '' || $email == null || $code == '' || $code == null) {
     $Functions->phpRedirect('');

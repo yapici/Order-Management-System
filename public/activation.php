@@ -22,10 +22,10 @@ if ($Session->isSessionValid()) {
             $errorMessage = "<h1>Something Went Wrong</h1>";
             $errorMessage .= "<div>Your account could not be activated. Please contact the webmaster.</div>";
 
-            if (filter_input(INPUT_GET, 'activation_code') !== null &&
-                    filter_input(INPUT_GET, 'email') !== null) {
-                $code = trim(filter_input(INPUT_GET, 'activation_code'));
-                $email = trim(filter_input(INPUT_GET, 'email'));
+            if (filter_input_fix(INPUT_GET, 'activation_code') !== null &&
+                    filter_input_fix(INPUT_GET, 'email') !== null) {
+                $code = trim(filter_input_fix(INPUT_GET, 'activation_code'));
+                $email = trim(filter_input_fix(INPUT_GET, 'email'));
 
                 $sql = "SELECT * FROM users ";
                 $sql .= "WHERE email = ? and activation = ?";

@@ -1,7 +1,7 @@
 <?php
 include ('../private/include/include.php');
 
-$filecode = str_replace(' ', '', filter_input(INPUT_GET, 'file'));
+$filecode = str_replace(' ', '', filter_input_fix(INPUT_GET, 'file'));
 $filename = $Functions->decode($filecode);
 $filepath = PRIVATE_PATH . 'attachments/' . $filename;
 
