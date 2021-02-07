@@ -195,7 +195,7 @@ class Functions {
     public function sanitizePostedVariables() {
         $sanitizedArray = array();
         foreach ($_POST as $key => $value) {
-            $sanitizedArray[$key] = htmlspecialchars(trim(filter_input(INPUT_POST, $key)));
+            $sanitizedArray[$key] = htmlspecialchars(trim(filter_input_fix(INPUT_POST, $key)));
         }
         return $sanitizedArray;
     }

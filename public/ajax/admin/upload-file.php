@@ -32,14 +32,14 @@
 
 require('../../../private/include/include.php');
 // Below if statement prevents direct access to the file. It can only be accessed through "AJAX".
-if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
+if (filter_input_fix(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) {
     if (!$Session->isSessionValid()) {
         $jsonResponse['status'] = "no_session";
     } else {
         $fileUploadDirectory = '';
-        if (filter_input(INPUT_POST, 'admin-file-upload-order-id') != null && $Admin->isAdmin()) {
+        if (filter_input_fix(INPUT_POST, 'admin-file-upload-order-id') != null && $Admin->isAdmin()) {
 
-            $fileUploadDirectory = filter_input(INPUT_POST, 'admin-file-upload-order-id');
+            $fileUploadDirectory = filter_input_fix(INPUT_POST, 'admin-file-upload-order-id');
 
             $orderId = $fileUploadDirectory;
 

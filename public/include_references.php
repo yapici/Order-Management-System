@@ -40,7 +40,7 @@
 /* Getting the current file's name without the extension and checking whether
  * there is are css and js files with the same name. If there are, they are included.
  */
-$name = basename(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME'), '.php');
+$name = basename(filter_input_fix(INPUT_SERVER, 'SCRIPT_FILENAME'), '.php');
 
 $cssFileName = "css/" . $name . ".css";
 $cssFilePath = PUBLIC_PATH . $cssFileName;
