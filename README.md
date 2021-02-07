@@ -1,13 +1,14 @@
-# OMS Version 2.1.1.482 Changes
-- Reorder item vendor select bug fix, 10/27/2016<br><br>
+# OMS Version 2.1.2.508 Changes
+- Add auto login for admin and end-user links
+- Add a fix for PHP filter_input method for FastCGI<br><br>
 
 <b>For a live demo:</b>
 
-<a href="http://oms.enginyapici.com">Order Management System</a><br>
-<i>For admin account use below credentials or <a href="http://oms.enginyapici.com/admin">click here</a></i><br>
+<a href="http://oms.yapici.com">Order Management System</a><br>
+<i>For the admin view, <a href="http://oms.yapici.net/admin">click here</a> or use the credentials below</i><br>
 Email: john.doe@example.com<br>
 Password: password<br><br>
 
-<i>For end-user account use below credentials or <a href="http://oms.enginyapici.com/enduser">click here</a></i><br>
+<i>For the end-user view, <a href="http://oms.yapici.net/enduser">click here</a> or use the credentials below</i><br>
 Email: engin.yapici@example.com<br>
 Password: password
