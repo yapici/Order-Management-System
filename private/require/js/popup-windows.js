@@ -11,7 +11,7 @@ $(function () {
     $("#vendors-popup-window-vendors-table tbody").on('blur', 'input', function () {
         if ($(this).val() !== initial_input_value) {
             var vendor_id = $(this).parent().parent().prop('id');
-            var input_id = $(this).prop('id');
+            var input_id = $(this).prop('class');
             updateVendorDetails(vendor_id, input_id);
         }
     });
@@ -20,7 +20,7 @@ $(function () {
         if (event.keyCode === 13) {
             if ($(this).val() !== initial_input_value) {
                 var vendor_id = $(this).parent().parent().prop('id');
-                var input_id = $(this).prop('id');
+                var input_id = $(this).prop('class');
                 updateVendorDetails(vendor_id, input_id);
                 initial_input_value = $(this).val();
                 $(this).blur();
@@ -35,7 +35,7 @@ $(function () {
     $("#projects-popup-window-projects-table tbody").on('blur', 'input', function () {
         if ($(this).val() !== initial_input_value) {
             var project_id = $(this).parent().parent().prop('id');
-            var input_id = $(this).prop('id');
+            var input_id = $(this).prop('class');
             updateProjectDetails(project_id, input_id);
         }
     });
@@ -44,7 +44,7 @@ $(function () {
         if (event.keyCode === 13) {
             if ($(this).val() !== initial_input_value) {
                 var project_id = $(this).parent().parent().prop('id');
-                var input_id = $(this).prop('id');
+                var input_id = $(this).prop('class');
                 updateProjectDetails(project_id, input_id);
                 initial_input_value = $(this).val();
                 $(this).blur();
@@ -59,7 +59,7 @@ $(function () {
     $("#cost-centers-popup-window-cost-centers-table tbody").on('blur', 'input', function () {
         if ($(this).val() !== initial_input_value) {
             var id = $(this).parent().parent().prop('id');
-            var input_id = $(this).prop('id');
+            var input_id = $(this).prop('class');
             updateCostCenterDetails(id, input_id);
         }
     });
@@ -68,7 +68,7 @@ $(function () {
         if (event.keyCode === 13) {
             if ($(this).val() !== initial_input_value) {
                 var id = $(this).parent().parent().prop('id');
-                var input_id = $(this).prop('id');
+                var input_id = $(this).prop('class');
                 updateCostCenterDetails(id, input_id);
                 initial_input_value = $(this).val();
                 $(this).blur();
@@ -83,7 +83,7 @@ $(function () {
     $("#users-popup-window-users-table tbody").on('blur', 'input', function () {
         if ($(this).val() !== initial_input_value) {
             var id = $(this).parent().parent().prop('id');
-            var input_id = $(this).prop('id');
+            var input_id = $(this).prop('class');
             updateUserDetails(id, input_id);
         }
     });
@@ -92,7 +92,7 @@ $(function () {
         if (event.keyCode === 13) {
             if ($(this).val() !== initial_input_value) {
                 var id = $(this).parent().parent().prop('id');
-                var input_id = $(this).prop('id');
+                var input_id = $(this).prop('class');
                 updateUserDetails(id, input_id);
                 initial_input_value = $(this).val();
                 $(this).blur();
@@ -102,13 +102,13 @@ $(function () {
 
     $("#users-popup-window-users-table tbody").on('change', 'select', function () {
         var id = $(this).parent().parent().prop('id');
-        var input_id = $(this).prop('id');
+        var input_id = $(this).prop('class');
         updateUserDetails(id, input_id);
     });
 
     $("#vendors-popup-window-vendors-table tbody").on('change', 'select', function () {
         var id = $(this).parent().parent().prop('id');
-        var input_id = $(this).prop('id');
+        var input_id = $(this).prop('class');
         updateVendorDetails(id, input_id);
     });
 });
