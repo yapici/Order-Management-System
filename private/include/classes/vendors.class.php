@@ -90,12 +90,12 @@ class Vendors {
 
             $tableBody .= "<tr id='$id'>";
             $tableBody .= "<td>$id</td>";
-            $tableBody .= "<td title='$vendorName'><span>$vendorName</span><input value='$vendorName' type='text'/></td>";
-            $tableBody .= "<td title='$vendorPhone'><span>$vendorPhone</span><input value='$vendorPhone' type='text'/></td>";
-            $tableBody .= "<td title='$vendorWebsite'><span>$vendorWebsite</span><input value='$vendorWebsite' type='text'/></td>";
-            $tableBody .= "<td title='$vendorAddress'><span>$vendorAddress</span><input value='$vendorAddress' type='text'/></td>";
-            $tableBody .= "<td title='$vendorContactPerson'><span>$vendorContactPerson</span><input value='$vendorContactPerson' type='text'/></td>";
-            $tableBody .= "<td title='$vendorAccountNo'><span>$vendorAccountNo</span><input value='$vendorAccountNo' type='text'/></td>";
+            $tableBody .= "<td title='$vendorName'><span>$vendorName</span><input id='vendors-popup-window-vendor-name' value='$vendorName' type='text'/></td>";
+            $tableBody .= "<td title='$vendorPhone'><span>$vendorPhone</span><input id='vendors-popup-window-vendor-phone' value='$vendorPhone' type='text'/></td>";
+            $tableBody .= "<td title='$vendorWebsite'><span>$vendorWebsite</span><input id='vendors-popup-window-vendor-website' value='$vendorWebsite' type='text'/></td>";
+            $tableBody .= "<td title='$vendorAddress'><span>$vendorAddress</span><input id='vendors-popup-window-vendor-address' value='$vendorAddress' type='text'/></td>";
+            $tableBody .= "<td title='$vendorContactPerson'><span>$vendorContactPerson</span><input id='vendors-popup-window-vendor-contact_person' value='$vendorContactPerson' type='text'/></td>";
+            $tableBody .= "<td title='$vendorAccountNo'><span>$vendorAccountNo</span><input id='vendors-popup-window-vendor-account_number' value='$vendorAccountNo' type='text'/></td>";
             $tableBody .= "<td title='$vendorAddedBy'>$vendorAddedBy</td>";
 
             $tableBody .= "<td title='Vendor Approval Status'>";

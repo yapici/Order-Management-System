@@ -60,7 +60,7 @@ class Users {
 
             $tableBody .= "<tr id='user-$userId'>";
             $tableBody .= "<td title='$userEmail'><a href='mailto:$userEmail'>$userEmail</a></td>";
-            $tableBody .= "<td title='$userPhone'><span>$userPhone</span><input value='$userPhone' type='text'/></td>";
+            $tableBody .= "<td title='$userPhone'><span>$userPhone</span><input id='users-popup-window-user-phone' value='$userPhone' type='text'/></td>";
             
             $tableBody .= "<td title='Account Status'>";
             if ($accountStatus == '0') {

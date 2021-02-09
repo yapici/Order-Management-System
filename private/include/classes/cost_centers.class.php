@@ -68,8 +68,8 @@ class CostCenters {
 
             $tableBody .= "<tr id='cost-center-$id'>";
             $tableBody .= "<td>$id</td>";
-            $tableBody .= "<td title='$costCenterName'><span>$costCenterName</span><input value='$costCenterName' type='text'/></td>";
-            $tableBody .= "<td title='$costCenterActive'><span>$costCenterActive</span><input value='$costCenterActive' type='text'/></td>";
+            $tableBody .= "<td title='$costCenterName'><span>$costCenterName</span><input id='projects-popup-window-project-name' value='$costCenterName' type='text'/></td>";
+            $tableBody .= "<td title='$costCenterActive'><span>$costCenterActive</span><input id='projects-popup-window-project-active' value='$costCenterActive' type='text'/></td>";
             $tableBody .= "</tr>";
         }
         echo $tableBody;
