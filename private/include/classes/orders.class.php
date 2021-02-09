@@ -257,7 +257,7 @@ class Orders {
                         $stmt->bindValue($paramName . $l, "%$keyword%", PDO::PARAM_STR);
                     }
                 } else {
-                    $stmt->bindValue($paramName, "%$keyword%", PDO::PARAM_INT);
+                    $stmt->bindValue($paramName, "%$keyword%", PDO::PARAM_STR);
                 }
             }
         }
