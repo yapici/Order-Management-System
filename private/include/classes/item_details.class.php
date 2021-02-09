@@ -123,15 +123,15 @@ class ItemDetails {
         $stmt = $this->Database->prepare($sql);
 
         $stmt->bindValue(':description', $description, PDO::PARAM_STR);
-        $stmt->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $stmt->bindValue(':quantity', $quantity, PDO::PARAM_INT);
         $stmt->bindValue(':uom', $uom, PDO::PARAM_STR);
         $stmt->bindValue(':vendor', $vendorId, PDO::PARAM_STR);
         $stmt->bindValue(':vendor_name', $vendorName, PDO::PARAM_STR);
         $stmt->bindValue(':catalog_no', $catalogNo, PDO::PARAM_STR);
         $stmt->bindValue(':price', $price, PDO::PARAM_STR);
         $stmt->bindValue(':weblink', $weblink, PDO::PARAM_STR);
-        $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_STR);
-        $stmt->bindValue(':project', $projectId, PDO::PARAM_STR);
+        $stmt->bindValue(':cost_center', $costCenter, PDO::PARAM_INT);
+        $stmt->bindValue(':project', $projectId, PDO::PARAM_INT);
         $stmt->bindValue(':comments', $comments, PDO::PARAM_STR);
         $stmt->bindValue(':sds', $sds, PDO::PARAM_STR);
 
