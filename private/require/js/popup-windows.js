@@ -134,7 +134,7 @@ function showUsersPopupWindow() {
 }
 
 function updateVendorDetails(vendor_id, input_id) {
-    var value = $("#" + vendor_id + " #" + input_id).val();
+    var value = $("#" + vendor_id + " ." + input_id).val();
     var field_name = input_id.split('-').pop().trim();
     var vendors_popup_window = $("#vendors-popup-window");
     var error_div = $("#vendors-popup-window-error-div");
@@ -296,7 +296,7 @@ function deleteVendor(vendor_id) {
 }
 
 function updateProjectDetails(tr_id, input_id) {
-    var value = $("#" + tr_id + " #" + input_id).val();
+    var value = $("#" + tr_id + " ." + input_id).val();
     var project_id = tr_id.split('-').pop().trim();
     var field_name = input_id.split('-').pop().trim();
     var projects_popup_window = $("#projects-popup-window");
@@ -377,7 +377,7 @@ function addNewProject() {
 }
 
 function updateCostCenterDetails(tr_id, input_id) {
-    var value = $("#" + tr_id + " #" + input_id).val();
+    var value = $("#" + tr_id + " ." + input_id).val();
     var cost_center_id = tr_id.split('-').pop().trim();
     var field_name = input_id.split('-').pop().trim();
     var cost_centers_popup_window = $("#cost-centers-popup-window");
@@ -453,7 +453,7 @@ function addNewCostCenter() {
 }
 
 function updateUserDetails(tr_id, input_id) {
-    var value = $("#" + tr_id + " #" + input_id).val();
+    var value = $("#" + tr_id + " ." + input_id).val();
     var user_id = tr_id.split('-').pop().trim();
     var field_name = input_id.split('-').pop().trim();
     var users_popup_window = $("#users-popup-window");

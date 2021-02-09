@@ -60,18 +60,18 @@ class Users {
 
             $tableBody .= "<tr id='user-$userId'>";
             $tableBody .= "<td title='$userEmail'><a href='mailto:$userEmail'>$userEmail</a></td>";
-            $tableBody .= "<td title='$userPhone'><span>$userPhone</span><input id='users-popup-window-user-phone' value='$userPhone' type='text'/></td>";
+            $tableBody .= "<td title='$userPhone'><span>$userPhone</span><input class='users-popup-window-user-phone' value='$userPhone' type='text'/></td>";
             
             $tableBody .= "<td title='Account Status'>";
             if ($accountStatus == '0') {
                 $tableBody .= "<span>Inactive</span>";
-                $tableBody .= "<select id='users-popup-window-user-account_status'>";
+                $tableBody .= "<select class='users-popup-window-user-account_status'>";
                 $tableBody .= "<option value='0' selected>Inactive</option>";
                 $tableBody .= "<option value='1'>Active</option>";
                 $tableBody .= "</select>";
             } else {
                 $tableBody .= "<span>Active</span>";
-                $tableBody .= "<select id='users-popup-window-user-account_status'>";
+                $tableBody .= "<select class='users-popup-window-user-account_status'>";
                 $tableBody .= "<option value='0'>Inactive</option>";
                 $tableBody .= "<option value='1' selected>Active</option>";
                 $tableBody .= "</select>";
@@ -81,13 +81,13 @@ class Users {
             $tableBody .= "<td title='User Type'>";
             if ($userType == '0') {
                 $tableBody .= "<span>End User</span>";
-                $tableBody .= "<select id='users-popup-window-user-user_type'>";
+                $tableBody .= "<select class='users-popup-window-user-user_type'>";
                 $tableBody .= "<option value='0' selected>End User</option>";
                 $tableBody .= "<option value='2'>Admin</option>";
                 $tableBody .= "</select>";
             } else {
                 $tableBody .= "<span>Admin</span>";
-                $tableBody .= "<select id='users-popup-window-user-user_type'>";
+                $tableBody .= "<select class='users-popup-window-user-user_type'>";
                 $tableBody .= "<option value='0'>End User</option>";
                 $tableBody .= "<option value='2' selected>Admin</option>";
                 $tableBody .= "</select>";

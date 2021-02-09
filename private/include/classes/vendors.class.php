@@ -90,31 +90,31 @@ class Vendors {
 
             $tableBody .= "<tr id='$id'>";
             $tableBody .= "<td>$id</td>";
-            $tableBody .= "<td title='$vendorName'><span>$vendorName</span><input id='vendors-popup-window-vendor-name' value='$vendorName' type='text'/></td>";
-            $tableBody .= "<td title='$vendorPhone'><span>$vendorPhone</span><input id='vendors-popup-window-vendor-phone' value='$vendorPhone' type='text'/></td>";
-            $tableBody .= "<td title='$vendorWebsite'><span>$vendorWebsite</span><input id='vendors-popup-window-vendor-website' value='$vendorWebsite' type='text'/></td>";
-            $tableBody .= "<td title='$vendorAddress'><span>$vendorAddress</span><input id='vendors-popup-window-vendor-address' value='$vendorAddress' type='text'/></td>";
-            $tableBody .= "<td title='$vendorContactPerson'><span>$vendorContactPerson</span><input id='vendors-popup-window-vendor-contact_person' value='$vendorContactPerson' type='text'/></td>";
-            $tableBody .= "<td title='$vendorAccountNo'><span>$vendorAccountNo</span><input id='vendors-popup-window-vendor-account_number' value='$vendorAccountNo' type='text'/></td>";
+            $tableBody .= "<td title='$vendorName'><span>$vendorName</span><input class='vendors-popup-window-vendor-name' value='$vendorName' type='text'/></td>";
+            $tableBody .= "<td title='$vendorPhone'><span>$vendorPhone</span><input class='vendors-popup-window-vendor-phone' value='$vendorPhone' type='text'/></td>";
+            $tableBody .= "<td title='$vendorWebsite'><span>$vendorWebsite</span><input class='vendors-popup-window-vendor-website' value='$vendorWebsite' type='text'/></td>";
+            $tableBody .= "<td title='$vendorAddress'><span>$vendorAddress</span><input class='vendors-popup-window-vendor-address' value='$vendorAddress' type='text'/></td>";
+            $tableBody .= "<td title='$vendorContactPerson'><span>$vendorContactPerson</span><input class='vendors-popup-window-vendor-contact_person' value='$vendorContactPerson' type='text'/></td>";
+            $tableBody .= "<td title='$vendorAccountNo'><span>$vendorAccountNo</span><input class='vendors-popup-window-vendor-account_number' value='$vendorAccountNo' type='text'/></td>";
             $tableBody .= "<td title='$vendorAddedBy'>$vendorAddedBy</td>";
 
             $tableBody .= "<td title='Vendor Approval Status'>";
             if ($vendorApproved == '2') {
                 $tableBody .= "<span>New Vendor</span>";
-                $tableBody .= "<select id='vendors-popup-window-vendor-approved'>";
+                $tableBody .= "<select class='vendors-popup-window-vendor-approved'>";
                 $tableBody .= "<option value='2' selected>New Vendor</option>";
                 $tableBody .= "<option value='0'>No</option>";
                 $tableBody .= "<option value='1'>Yes</option>";
                 $tableBody .= "</select>";
             } else if ($vendorApproved == '0') {
                 $tableBody .= "<span>No</span>";
-                $tableBody .= "<select id='vendors-popup-window-vendor-approved'>";
+                $tableBody .= "<select class='vendors-popup-window-vendor-approved'>";
                 $tableBody .= "<option value='0' selected>No</option>";
                 $tableBody .= "<option value='1'>Yes</option>";
                 $tableBody .= "</select>";
             } else if ($vendorApproved == '1') {
                 $tableBody .= "<span>Yes</span>";
-                $tableBody .= "<select id='vendors-popup-window-vendor-approved'>";
+                $tableBody .= "<select class='vendors-popup-window-vendor-approved'>";
                 $tableBody .= "<option value='0'>No</option>";
                 $tableBody .= "<option value='1' selected>Yes</option>";
                 $tableBody .= "</select>";
