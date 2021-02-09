@@ -1,6 +1,7 @@
-# OMS Version 2.1.2.508 Changes
-- Add auto login for admin and end-user links
-- Add a fix for PHP filter_input method for FastCGI<br><br>
+# OMS Version 2.1.3.632 Changes
+- Fixed search feature for orders table fields
+- Fixed vendor table horizontal overflow bug
+- Fix file upload and download issues<br><br>
 
 <b>For a live demo:</b>
 
