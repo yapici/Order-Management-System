@@ -71,9 +71,9 @@ class Projects {
 
             $tableBody .= "<tr id='project-$projectId'>";
             $tableBody .= "<td>$projectId</td>";
-            $tableBody .= "<td title='$projectName'><span>$projectName</span><input id='projects-popup-window-project-name' value='$projectName' type='text'/></td>";
-            $tableBody .= "<td title='$projectNumber'><span>$projectNumber</span><input id='projects-popup-window-project-number' value='$projectNumber' type='text'/></td>";
-            $tableBody .= "<td title='$projectActive'><span>$projectActive</span><input id='projects-popup-window-project-active' value='$projectActive' type='text'/></td>";
+            $tableBody .= "<td title='$projectName'><span>$projectName</span><input value='$projectName' type='text'/></td>";
+            $tableBody .= "<td title='$projectNumber'><span>$projectNumber</span><input value='$projectNumber' type='text'/></td>";
+            $tableBody .= "<td title='$projectActive'><span>$projectActive</span><input value='$projectActive' type='text'/></td>";
             $tableBody .= "</tr>";
         }
         echo $tableBody;
